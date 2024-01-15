@@ -1,0 +1,474 @@
+---
+import Layout from '~/layouts/PageLayoutSansFooter.astro';
+const lastModified = 'November 7, 2022';
+---
+
+<style>
+  a:link {
+    color: #900;
+  }
+  a:visited {
+    color: #900;
+  }
+  a:hover {
+    color: #e00;
+  }
+  a:active {
+    color: #e00;
+  }
+
+  div {
+    border-bottom: 0px;
+  }
+  .small,
+  .smaller {
+    font-size: small;
+  }
+  .smaller {
+    padding-left: 0.1em;
+  }
+
+  .resume {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .resume div p,
+  #centerfoot {
+    margin-bottom: 1em;
+  }
+  .resume div ul {
+    list-style: circle;
+    margin-top: -1em;
+    padding-left: 2rem;
+  }
+  .resume div li {
+    margin-bottom: 0;
+  }
+  .resume div.heading {
+    border-top: 1px solid #900;
+    color: #900;
+    font-size: small;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+  table.personaltable {
+    border-collapse: collapse;
+    border-spacing: 0px;
+  }
+  table.personaltable div {
+    padding-bottom: 0;
+  }
+  table.personaltable div.right,
+  table.personaltable div.right p {
+    text-align: right;
+  }
+
+  .caps,
+  .allcaps {
+    text-transform: uppercase;
+  }
+  .smallcaps,
+  .sc {
+    font-size: smaller;
+    text-transform: uppercase;
+  }
+  .smallercaps {
+    font-size: 72%;
+    text-transform: uppercase;
+  }
+  .xsmall,
+  .smallest,
+  .xsmalltd p {
+    font-size: x-small;
+  }
+  .toodamnlong {
+    letter-spacing: -0.5px;
+  }
+
+  #centerfoot {
+    color: #666;
+    font-size: x-small;
+  }
+
+  #container {
+    max-width: 40em;
+  }
+
+  .skills-section {
+    flex-wrap: nowrap;
+    margin-bottom: 0.5em !important;
+    margin-top: 0.5em !important;
+  }
+
+  .skills-section p {
+    border-top: 1px solid #d8d8d8;
+    font-size: x-small;
+    padding-bottom: 0.5em;
+    padding-right: 0;
+    text-transform: uppercase;
+  }
+
+  .resume div.skills-section ul.skills-list {
+    list-style: none;
+    margin-bottom: 0 !important;
+    padding-left: 0;
+  }
+
+  @media print {
+    .noprint,
+    #centerfoot,
+    #head {
+      display: none;
+    }
+    #center {
+      margin: auto;
+    }
+    .resume div {
+      padding-bottom: 0.2em;
+    }
+    .resume div a,
+    .resume div p a {
+      color: #000;
+      text-decoration: none;
+    }
+    .resume div.heading {
+      font-size: x-small;
+      letter-spacing: 0;
+    }
+    .resume div {
+      page-break-inside: avoid;
+    }
+
+    .resume div,
+    .resume div div,
+    .resume div p,
+    .resume div li {
+      font-size: small;
+    }
+
+    .resume div .skills-section p {
+      font-size: xx-small;
+    }
+  }
+</style>
+
+<Layout>
+  <div class="max-w-4xl mx-auto mb-4">
+    <div class="resume">
+      <div class="text-sm mt-4">
+        <span class="text-xl font-bold"><a href="/">Kevin Ashworth</a></span><br />
+        <span class="text-base">Front-End Developer</span><br />
+        <a href="mailto:kevinashworth@me.com">kevinashworth@me.com</a><br />
+        310-993-7136<br />
+        <a href="https://github.com/kevinashworth">GitHub</a>,
+        <a href="https://www.linkedin.com/in/iamkevinashworth/">LinkedIn</a>
+      </div>
+      <div class="heading">Objective</div>
+      <p>
+        <s>Seeking full-time opportunities to apply my varied background to web projects.</s>
+      </p>
+      <div class="heading">Summary of Qualifications</div>
+      <p class="mb-2">
+        Adept at <b>React and the modern web, full-stack JavaScript</b>. Reliant on good code structure, patience,
+        reference to documentation.
+      </p>
+      <p class="mb-2">
+        Passionate about user interfaces, an advocate for designing user experience first and foremost. An engineer who
+        can design, a designer who can build.
+      </p>
+      <p>
+        Quick learner, able to take on problems outside direct area of expertise and be successful. Easy-going, skillful
+        communicator, empathetic and thoughtful, in technical and non-technical communication. Detail-oriented, zealous
+        about quality.
+      </p>
+      <div class="heading">Education</div>
+      <p><b>Cornell University</b>, Master of Engineering, 3.86 GPA</p>
+      <p>
+        <b>Brigham Young University</b>, Bachelor of Science in Electrical Engineering, cum laude, 3.78 GPA<br />
+      </p>
+      <div class="heading">Skills</div>
+      <div class="flex gap-8 skills-section">
+        <div>
+          <p>Languages</p>
+          <ul class="skills-list">
+            <li>CSS <span class="small">(10 years)</span></li>
+            <li>HTML <span class="small">(10 years)</span></li>
+            <li>JavaScript <span class="small">(10 years)</span></li>
+            <li>TypeScript <span class="small">(1 year)</span></li>
+          </ul>
+        </div>
+        <div>
+          <p>Current Stack</p>
+          <ul class="skills-list">
+            <li>React <span class="small">(4 years)</span></li>
+            <li>Vite <span class="small">(1 year)</span></li>
+            <li>Tailwind CSS <span class="small">(1 year)</span></li>
+            <li>TanStack Query <span class="small">(3 years)</span></li>
+          </ul>
+        </div>
+        <div>
+          <p>Tools</p>
+          <ul class="skills-list">
+            <li>Cypress <span class="small">(1 year)</span></li>
+            <li>GitHub <span class="small">(10 years)</span></li>
+            <li>NodeJS <span class="small">(5 years)</span></li>
+          </ul>
+        </div>
+        <div>
+          <p>Other JS Tools</p>
+          <ul class="skills-list">
+            <li>React Redux <span class="small">(2 years)</span></li>
+            <li>react-bootstrap <span class="small">(3 years)</span></li>
+            <li>Material-UI <span class="small">(2 years)</span></li>
+            <li>Docker <span class="small">(2 years)</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="resume">
+      <div class="heading">Full-Time Experience</div>
+    </div>
+
+    <div class="resume flex flex-col gap-8">
+      <div>
+        <b>FreshLime, Lehi UT (remote)</b> &nbsp; <span class="small">March 2021 – present<br /></span>
+        <span class="font-medium">UI Software Engineer</span><br />
+        <p class="font-serif tracking-normal text-base">
+          Responsible for building revamped UI for small-business owners.
+        </p>
+        <ul class="font-serif tracking-normal text-base">
+          <li>React</li>
+          <li>Vite</li>
+          <li>NodeJS</li>
+          <li>Tailwind</li>
+        </ul>
+      </div>
+      <div>
+        <b>Ab Initio Software, Lexington MA</b><br />
+        <!-- <b>2001-2008</b> -->
+        <span class="font-medium">User-Interface Designer</span><br />
+        <p class="font-serif tracking-normal text-base">
+          Responsible for design of software applications, internal and external web sites, and web applications.
+        </p>
+        <ul class="font-serif tracking-normal text-base">
+          <li>
+            <b>Improved the previously-engineer-designed interface</b> of main web application, resulting in a good-looking
+            UI loved by managers, customers, and even engineers.
+          </li>
+          <li>Built and maintained main external site.</li>
+          <li>
+            Built and maintained employees-only intranet. With a high design concept, this Adobe AIR site was finicky,
+            but lovely.
+          </li>
+          <li>Coached new employees in using company&#8217;s software.</li>
+        </ul>
+      </div>
+      <div>
+        <b>Circle.com, New York NY</b><br />
+        <!-- <b>1999-2001</b> -->
+        <span class="font-medium">Production Manager</span><br />
+        <p class="font-serif tracking-normal text-base">Responsible for workload and personal growth of programmers.</p>
+        <ul class="list-disc list-inside pb-0 mb-0 font-serif tracking-normal text-base">
+          <li>Managed group of 5 programmers.</li>
+          <li>Hired 1 full-time and 6 freelance programmers.</li>
+          <li>
+            <b>Worked across disciplines</b>: Coordinated with 6 project managers, 4 design directors, technologists at
+            other offices and many client representatives.
+          </li>
+          <!--
+    <li>Encouraged personal development, fighting off outside pressures to allow them to concentrate on their jobs and to go home after 40 hours.</li>
+   -->
+        </ul>
+        <div class="font-serif tracking-normal text-base">
+          Partial client list: Schlumberger, Newsweek, HBO Screening Room, AOL @ School, Goldman Sachs intranet,
+          NetMarket, IBM intranet, Datek, Univision, Gateway.
+        </div>
+      </div>
+      <div>
+        <b>Hewlett-Packard, San Diego CA</b><br />
+        <span class="font-medium">Electrical Engineer, Design</span>
+        <!-- (1996-1998) -->
+        <p class="font-serif tracking-normal text-base">
+          Responsible for design of power supply for a new color copier product, prototype electronics, design of
+          copy-controlling functionality and mechanical interface for sensors and heater.
+        </p>
+        <ul class="list-disc list-inside font-serif tracking-normal text-base">
+          <li>
+            Created performance and regulatory specification and defined technical criteria to evaluate vendor
+            qualifications, resulting in selection and implementation of a power supply used world-wide.
+          </li>
+          <li>
+            Redesigned analog circuit and edited reference specification for clarity, achieving proper execution of
+            copy-controlling function on a color copier with no field failures and no customer complaints.
+          </li>
+          <li>
+            Redesigned paper sensor circuit, thus ensuring a smooth production ramp with no shutdowns for this sensor.
+          </li>
+        </ul>
+        <br />
+        <span class="font-medium">Electrical Engineer, Manufacturing</span>
+        <!-- (1994-1996) -->
+        <p class="font-serif tracking-normal text-base">
+          Responsible for main electronics boards for three printer and copier products, seeing to design quality, cost
+          and reliability improvements, warranty performance and support issues; also responsible for production-line
+          issues.
+        </p>
+        <ul class="list-disc list-inside font-serif tracking-normal text-base">
+          <li>
+            Improved functional test of electronics board at contract manufacturer through improvements to test
+            software, eliminating 2 failure modes of the board at top-level factory.
+          </li>
+          <li>
+            Reprogrammed DOS end-of-line testing for copier product, which resulted in an assembly-time reduction of 2
+            minutes per unit.
+          </li>
+          <li>Reduced high servo subsystem failure rate by over 90%.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="resume">
+      <div class="heading">Side Projects</div>
+    </div>
+
+    <div class="resume flex flex-col gap-8">
+      <div>
+        <b>Civic Tech Index</b><br />
+        <span class="font-medium">Front-end developer</span><br />
+        <p class="font-serif tracking-normal text-base">
+          Open-source React project from <a href="https://www.hackforla.org">Hack For LA</a>
+        </p>
+        <ul class="font-serif tracking-normal text-base">
+          <li>Brought cohesion to team’s use of Material-UI</li>
+          <li>Wrote Cypress tests, expanding code coverage from 50% to 91%</li>
+          <li>Wrote and edited documentation</li>
+          <li>
+            Within a month, became <a href="https://github.com/civictechindex/CTI-website-frontend/graphs/contributors"
+              >main contributor</a
+            >
+          </li>
+        </ul>
+      </div>
+      <div>
+        “<b><a href="https://github.com/kevinashworth/Octave">Octave</a></b>”<br />
+        <span class="font-medium">Full-stack developer</span><br />
+        <p class="font-serif tracking-normal text-base">React+GraphQL SPA, large side project</p>
+        <ul class="font-serif tracking-normal text-base">
+          <li>Built with Vulcan, which uses Meteor</li>
+          <li>
+            Wrote 71 React <a href="https://github.com/kevinashworth/Octave/tree/main/packages/octave/lib/components"
+              >components</a
+            >
+          </li>
+          <li>Used Redux, Apollo, Twilio, and many npm libraries</li>
+          <li>Used MongoDB with server-side data denormalization</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="resume">
+      <div class="heading">Freelance Highlights</div>
+    </div>
+
+    <div class="resume flex flex-col gap-8">
+      <div>
+        <b>UnionWorking, Los Angeles CA</b><br />
+        <span class="font-medium">WordPress Developer</span> — <a href="https://unionworking.com/">unionworking.com</a
+        ><br />
+        <p class="font-serif tracking-normal text-base">
+          Built this grassroots site, based on a client-selected WordPress template.
+        </p>
+        <ul class="font-serif tracking-normal text-base">
+          <li>Selected and deployed free plugins as needed.</li>
+          <li>Created additional graphics as needed.</li>
+          <li>Copy-edited as client allowed.</li>
+        </ul>
+      </div>
+
+      <div>
+        <b>Susannah B, Los Angeles CA</b><br />
+        <span class="font-medium">Squarespace Developer</span> — <a href="https://susannahb.squarespace.com/"
+          >susannahb.squarespace.com</a
+        >
+        <p class="font-serif tracking-normal text-base">
+          Built musician site, based on a client-selected Squarespace template.
+        </p>
+        <ul class="font-serif tracking-normal text-base">
+          <li>Improved limited Squarespace options with injected jQuery and CSS.</li>
+        </ul>
+      </div>
+
+      <div>
+        <b>AnalystSolutions, Greenwich CT</b><br />
+        <!-- <b>2013</b> -->
+        <span class="font-medium">LimeSurvey Programmer</span><br />
+        <p class="font-serif tracking-normal text-base">Upgraded new-client assessment.</p>
+        <ul class="font-serif tracking-normal text-base">
+          <li>Wrote jQuery scripts to work around LimeSurvey limitations.</li>
+          <li>Designed new templates to use in LimeSurvey.</li>
+          <li>Due to high quality of work, client offered 20% bonus.</li>
+        </ul>
+      </div>
+      <div>
+        <b>HotDocs, Lindon UT</b><br />
+        <span class="font-medium">Designer</span><!-- (2012)-->
+        <p class="font-serif tracking-normal text-base">Designed UI for new web distribution platform.</p>
+        <ul class="font-serif tracking-normal text-base">
+          <li>Expanded sections of HotDocs Server with existing design.</li>
+          <li>Designed new look for administrative section of web site.</li>
+        </ul>
+      </div>
+      <div>
+        <b>Formation Solutions, Los Angeles CA</b><br />
+        <!-- <b>2011-2012</b> -->
+        <span class="font-medium">SiteSpect Programmer</span><br />
+        <p class="font-serif tracking-normal text-base">Designed throughput improvements</p>
+        <ul class="font-serif tracking-normal text-base">
+          <li>Built A/B tests with SiteSpect to improve monetization of SEO-heavy web site.</li>
+        </ul>
+      </div>
+      <div>
+        <b>Resolve Market Research, Los Angeles CA</b><br />
+        <!-- <b>2010</b> -->
+        <span class="font-medium">LimeSurvey Programmer</span><br />
+        <p class="font-serif tracking-normal text-base">
+          Responsible for building survey for Resolve client Wikimedia.
+        </p>
+        <ul class="font-serif tracking-normal text-base">
+          <li>Built survey for all Wikipedia editors around the world.</li>
+          <li>Wrote jQuery scripts and rewrote CSS and HTML templates to work around LimeSurvey limitations.</li>
+          <li>Ensured translation was correct in 8 languages.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="resume">
+      <div class="heading">Additional Skills, Experiences &amp; Interests</div>
+    </div>
+
+    <div class="resume flex flex-col gap-8">
+      <p>
+        <span class="smallcaps">Languages</span><br />
+        <span class="font-serif tracking-normal text-base"
+          >Conversational Spanish. Some Italian, German, and French.</span
+        >
+      </p>
+
+      <p>
+        <span class="smallcaps">Other Professional Experiences</span><br />
+        <span class="font-serif tracking-normal text-base">
+          Electronics teacher at Middlesex Community College.<br />
+          Music director for Methodist church, chorus member of Boston Symphony Orchestra and La Jolla Symphony, piano teacher,
+          theater administrator in New York.<br />
+          Television, theater, and commercial actor in Los Angeles.<br />
+          Acting teacher in Los Angeles.
+        </span>
+      </p>
+      <div id="centerfoot">Last update: {lastModified}</div>
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,57 @@
+---
+import Header from '~/components/widgets/Header.astro';
+import Layout from '~/layouts/PageLayout.astro';
+import { textLinks } from '~/navigation';
+
+const metadata = {
+  title: 'Kevin Ashworth',
+};
+---
+
+<style>
+  a {
+    text-decoration: underline;
+  }
+</style>
+
+<Layout metadata={metadata}>
+  <Fragment slot="header">
+    <Header links={textLinks} isSticky showToggleTheme />
+  </Fragment>
+
+  <section class="relative not-prose" id="hero">
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="pt-12">
+        <div class="text-center max-w-5xl mx-auto">
+          <p class="text-base text-secondary dark:text-red-200 font-bold tracking-wide uppercase">
+            Front-end Developer, Actor, Acting Teacher
+          </p>
+          <h1 class="text-5xl md:text-6xl font-bold leading-tighter tracking-tighter font-heading dark:text-gray-200">
+            Kevin Ashworth
+          </h1>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="relative not-prose scroll-mt-[72px]" id="about">
+    <div class="relative px-4 md:px-6 text-default max-w-7xl mx-auto">
+      <div class="mx-auto max-w-7xl p-4 md:px-8">
+        <div class="">
+          <div aria-hidden="true" class="mt-10 md:mt-0">
+            <div class="relative m-auto max-w-2xl">
+              <img
+                src="https://live.staticflickr.com/1851/43865942064_3619609b01_z.jpg"
+                style="object-fit: cover; object-position: center; aspect-ratio: 1;"
+                class="mx-auto rounded-lg shadow-lg"
+                alt="Kevin Ashworth"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

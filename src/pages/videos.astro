@@ -1,0 +1,71 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+
+const metadata = {
+  title: 'Reels & Clips',
+};
+---
+
+<style>
+  a {
+    text-decoration: underline;
+  }
+  a:link {
+    color: #900;
+  }
+  a:visited {
+    color: #900;
+  }
+  a:hover {
+    color: #e00;
+  }
+  a:active {
+    color: #e00;
+  }
+</style>
+
+<Layout metadata={metadata}>
+  <section class="md:-mt-[76px] not-prose">
+    <div class="max-w-xl mx-auto px-4 sm:px-6">
+      <div class="py-12 md:py-20">
+        <div class="max-w-5xl mx-auto text-center">
+          <h1 class="text-3xl font-bold leading-tighter tracking-tighter mb-4 font-heading dark:text-gray-200">
+            Reels & Clips
+          </h1>
+        </div>
+        <div class="max-w-3xl mx-auto">
+          <h2 class="text-xl font-bold leading-tighter tracking-tighter mt-4 font-heading dark:text-gray-200">Reels</h2>
+          <div class="relative h-0 pb-[56.25%]">
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/videoseries?list=PLqsCty1A6DLALGsNx84BWgRheok_x8ldh"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              class="absolute top-0 left-0 w-full h-full"></iframe>
+          </div>
+          <h2 class="text-xl font-bold leading-tighter tracking-tighter mt-8 font-heading dark:text-gray-200">Clips</h2>
+          <div class="relative h-0 pb-[56.25%]">
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/videoseries?list=PLqsCty1A6DLBfhI8d5QQKmjl5H332kfp7"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              class="absolute top-0 left-0 w-full h-full"></iframe>
+          </div>
+          <h2 class="text-xl font-bold leading-tighter tracking-tighter mt-8 font-heading dark:text-gray-200">More</h2>
+          <p>
+            For more videos of (stellar) TV and film performances, see my <a
+              href="https://www.youtube.com/user/kevinashworth"
+              itemprop="sameAs"
+              style="display: inline-block;"><i class="fab fa-fw fa-youtube-square" aria-hidden="true"></i>YouTube</a
+            > and my <a href="https://vimeo.com/kevinashworth" itemprop="sameAs" style="display: inline-block;"
+              ><i class="fab fa-fw fa-vimeo" aria-hidden="true"></i>Vimeo</a
+            >.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>

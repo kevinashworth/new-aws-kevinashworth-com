@@ -1,0 +1,62 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import EmailSignup from '~/components/EmailSignup.astro';
+
+const metadata = {
+  title: 'About me',
+};
+---
+
+<style>
+  a,
+  ul li a {
+    text-decoration: underline;
+  }
+  a:link {
+    color: #900;
+  }
+  a:visited {
+    color: #900;
+  }
+  a:hover {
+    color: #e00;
+  }
+  a:active {
+    color: #e00;
+  }
+</style>
+
+<Layout metadata={metadata}>
+  <section class="md:-mt-[76px] not-prose">
+    <div class="max-w-xl mx-auto px-4 sm:px-6">
+      <div class="py-12 md:py-20">
+        <div class="max-w-5xl mx-auto text-center">
+          <p class="text-base text-secondary dark:text-red-200 font-bold tracking-wide uppercase">About me</p>
+          <h1 class="text-3xl font-bold leading-tighter tracking-tighter mb-4 font-heading dark:text-gray-200">
+            Kevin Ashworth
+          </h1>
+        </div>
+        <div class="max-w-3xl mx-auto mb-12">
+          <p>
+            Hi! My name is Kevin Ashworth. I’m an actor, an acting teacher and a web developer. I live in Los Angeles.
+          </p>
+          <br />
+          <p>
+            I like to say that I remind you of Tim DeKay, Peter Krause, Dick Sargeant, Bob Crane, or that <i>Barry</i>
+            guy.
+          </p>
+          <br />
+          <p>
+            You can learn more about me at a bunch of places, including
+            <a href="https://about.me/kevinashworth">about.me</a>,
+            <a href="https://github.com/kevinashworth">GitHub</a>,
+            <a href="https://imdb.me/kevinashworth">IMDb</a>, and
+            <a href="https://linkedin.com/in/iamkevinashworth">LinkedIn</a>.
+          </p>
+        </div>
+        <hr />
+        <EmailSignup />
+      </div>
+    </div>
+  </section>
+</Layout>

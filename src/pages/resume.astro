@@ -1,0 +1,581 @@
+---
+import Layout from '~/layouts/PageLayoutSansFooter.astro';
+const lastModified = 'November 7, 2022';
+---
+
+<style>
+  p {
+    margin-top: 0;
+  }
+  table {
+    border-collapse: collapse;
+    margin: 0 auto 1rem;
+  }
+  tr {
+    vertical-align: top;
+  }
+  td {
+    padding: 0;
+    padding-left: 6px;
+    padding-right: 6px;
+    white-space: nowrap;
+  }
+  p,
+  td {
+    border-bottom: 0px;
+    font-family: Georgia, serif;
+    font-size: medium;
+    text-align: left;
+  }
+  a:link {
+    color: #900;
+  }
+  a:visited {
+    color: #900;
+  }
+  a:hover {
+    color: #e00;
+  }
+  a:active {
+    color: #e00;
+  }
+
+  .small,
+  .smaller {
+    font-size: small;
+  }
+  .smaller {
+    padding-left: 0.1em;
+  }
+  table.resume td.heading {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: small;
+    font-weight: bold;
+  }
+  .leftheading {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: medium;
+    font-weight: bold;
+  }
+  .leftheading a {
+    text-decoration: none;
+  }
+  #td-left p,
+  #centerfoot,
+  .smallsans {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-size: small;
+    margin-bottom: 1.6em;
+  }
+  #td-left a,
+  #td-right a {
+    text-decoration: underline;
+  }
+  td.wrappable {
+    white-space: normal;
+  }
+  table.resume td.heading {
+    color: #900;
+    padding-top: 10px;
+    text-transform: uppercase;
+  }
+  table.resume td.heading span.smaller {
+    text-transform: none;
+  }
+  table.resume td.leftheading {
+    padding-top: 10px;
+    text-align: right;
+  }
+  .printonly {
+    display: none;
+  }
+  #td-right {
+    border-left: 1px solid #900;
+  }
+  #td-left,
+  #td-left p,
+  #td-left td {
+    text-align: right;
+  }
+  #td-left td {
+    padding-left: 0;
+  }
+  #td-left,
+  #td-right {
+    vertical-align: text-top;
+  }
+  #centerfoot {
+    color: #666;
+    font-size: x-small;
+    padding-bottom: 10px;
+    padding-top: 20px;
+  }
+
+  @media print {
+    p,
+    td {
+      color: #000;
+      font-size: small;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    .noprint {
+      display: none;
+    }
+    .printonly {
+      display: inline;
+    }
+    .printonlyfooter {
+      color: #666;
+      display: block;
+      font-family: 'Helvetica Neue', 'Lucida Grande', Tahoma, sans-serif;
+      font-size: x-small;
+      padding-bottom: 10px;
+    }
+    #td-left a,
+    #td-right a,
+    table.resume td a,
+    table.resume td p a,
+    table.resume td.heading {
+      color: #000;
+      text-decoration: none;
+    }
+    #td-left,
+    #td-left p,
+    #td-left td {
+      padding-left: 0;
+    }
+    td {
+      border: none;
+      border-bottom: 0px;
+    }
+    #td-left {
+      border: none;
+    }
+    #td-right {
+      border-left: thin solid #666;
+    }
+    table.resume td {
+      page-break-inside: avoid;
+    }
+    td {
+      border-bottom: 0px;
+    }
+  }
+</style>
+<script>
+  import tippy from 'tippy.js';
+  import 'tippy.js/dist/tippy.css';
+  import 'tippy.js/animations/shift-away.css';
+  import 'tippy.js/themes/light-border.css';
+  const template = document.getElementById('template');
+  tippy('#disney', {
+    content: template?.innerHTML,
+    allowHTML: true,
+    theme: 'light-border',
+    animation: 'shift-away',
+  });
+</script>
+<Layout>
+  <div id="template" style="display: none;">
+    A Public Reading of an Unproduced Screenplay About the Death of Walt&nbsp;Disney
+  </div>
+  <table>
+    <tbody>
+      <tr>
+        <td id="td-left">
+          <table class="resume">
+            <tbody>
+              <tr>
+                <td class="leftheading"><a href="/">Kevin Ashworth</a></td>
+              </tr>
+              <tr>
+                <td>
+                  <p>SAG-AFTRA / AEA</p>
+                  <p>
+                    <!-- <b>Direct</b><br /> -->
+                    <a href="mailto:kevinashworth@me.com">kevinashworth@me.com</a><br />
+                    310-993-7136
+                  </p>
+                  <p>
+                    <!-- <a href="headshots"> -->
+                    <img
+                      src="https://farm5.staticflickr.com/4448/37239033390_de3ffe3fe4_m_d.jpg"
+                      alt="Kevin Ashworth thumbnail of headshot"
+                      width="160"
+                      height="240"
+                    />
+                    <!-- </a> -->
+                  </p>
+                  <!-- <p class="noprint">
+                    <a href="headshots"><b>Headshots</b></a><br />
+                  </p>
+                  <p class="noprint">
+                    <a href="/videos/"><b>Demo Reels</b></a><br />
+                  </p> -->
+                  <p class="noprint">
+                    <br />
+                    <a href="https://www.imdb.com/name/nm2825198/" title="my profile on IMDb">IMDb</a><br />
+                    <br />
+                    <a href="/assets/pdf/kevin_ashworth_resume.pdf" title="my resumé in PDF format for printing">PDF</a
+                    ><br />
+                  </p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+        <td id="td-right">
+          <table class="resume">
+            <tbody>
+              <tr>
+                <td colspan="3" class="heading">Film</td>
+              </tr>
+              <tr>
+                <td>Lay in Wait</td>
+                <td>Lead</td>
+                <td>Jonathan Ade</td>
+              </tr>
+              <tr>
+                <td>Look in the Mirror</td>
+                <td>Lead</td>
+                <td>Jason Freedman / Dusable <span class="noprint">Films</span></td>
+              </tr>
+              <tr>
+                <td>Weekend with Molly</td>
+                <td>Supporting</td>
+                <td>John Brookbank / FaceHead <span class="noprint">Media</span></td>
+              </tr>
+              <!-- <tr>
+                <td>2012: Supernova</td>
+                <td>Supporting</td>
+                <td>Anthony Fankhauser / <span class="noprint">The</span> Asylum</td>
+              </tr>
+              <tr>
+                <td>Double Negative <small class="noprint">(LA Shorts Fest)</small></td>
+                <td>Supporting</td>
+                <td>Abiel Bruhn / Chapman</td>
+              </tr>
+              <tr>
+                <td>Ocean Shark <span class="smaller noprint">(<a href="/article/444/ocean-shark">watch</a>)</span></td>
+                <td>Supporting</td>
+                <td>Chris Whetstone / USC</td>
+              </tr> -->
+              <tr>
+                <td>A Short Love Story</td>
+                <td>Lead</td>
+                <td>Damien Chazelle<!-- , Harvard --></td>
+              </tr>
+              <!-- <tr>
+                <td>Damsel</td>
+                <td>Lead</td>
+                <td>Abiel Bruhn / Chapman Univ</td>
+              </tr> -->
+
+              <tr>
+                <td colspan="3" class="heading">Television</td>
+              </tr>
+              <tr>
+                <td>For the People</td>
+                <td>Guest Star</td>
+                <td>Valerie Weiss / ABC</td>
+              </tr>
+              <tr>
+                <td>
+                  NCIS <span class="smaller noprint">
+                    (<a href="https://youtu.be/CDMcQmGM3UA" target="_blank">clip</a>)
+                  </span>
+                </td>
+                <td>Guest Star</td>
+                <td>Tony Wharmby / CBS</td>
+              </tr>
+              <tr>
+                <td>
+                  <span class="noprint">The</span> Bold &amp; the Beautiful <span class="smaller noprint">
+                    (<a href="https://youtu.be/m2ERuufKceY" target="_blank">clip</a>)
+                  </span>
+                </td>
+                <td>Guest Star</td>
+                <td>Ed Scott / CBS</td>
+              </tr>
+              <tr>
+                <td>American Housewife</td>
+                <td>Co-star</td>
+                <td>Linda Mendoza / ABC</td>
+              </tr>
+              <tr>
+                <td>Scandal</td>
+                <td>Recurring</td>
+                <td>Tom Verica / ABC</td>
+              </tr>
+              <tr>
+                <td>Marvel’s Agent Carter</td>
+                <td>Recurring</td>
+                <td>Lawrence Trilling / ABC</td>
+              </tr>
+              <tr>
+                <td>Marry Me</td>
+                <td>Co-star</td>
+                <td>Seth Gordon / NBC</td>
+              </tr>
+              <tr>
+                <td>Jane the Virgin</td>
+                <td>Co-star</td>
+                <td>Norman Buckley / CW</td>
+              </tr>
+              <tr>
+                <td>Faking It</td>
+                <td>Co-star</td>
+                <td>Erin Ehrlich / MTV</td>
+              </tr>
+              <tr>
+                <td>CSI: Miami</td>
+                <td>Co-star</td>
+                <td>Gina Lamar / CBS</td>
+              </tr>
+              <tr>
+                <td><span class="noprint">The</span> Young &amp; the Restless</td>
+                <td>Recurring</td>
+                <td>Dean LaMont / CBS</td>
+              </tr>
+              <tr>
+                <td>90210</td>
+                <td>Co-star</td>
+                <td>Stuart Gillard / CW</td>
+              </tr>
+              <tr>
+                <td>Law &amp; Order: LA</td>
+                <td>Co-star</td>
+                <td>Constantine Makris / NBC</td>
+              </tr>
+              <tr>
+                <td>24</td>
+                <td>Co-star</td>
+                <td>Michael Klick / Fox</td>
+              </tr>
+              <tr>
+                <td>Brotherhood</td>
+                <td>Recurring</td>
+                <td>Thomas Carter / Showtime</td>
+              </tr>
+              <tr>
+                <td colspan="3" class="heading">Internet</td>
+              </tr>
+              <tr>
+                <td>
+                  Cost of Capital <span class="smaller noprint">
+                    (<a
+                      href="https://www.youtube.com/watch?v=IJKn4RdlBhA&list=PLTeo-v9-5XfWJE9Qovlanxpp-2VutpEoR"
+                      target="_blank">watch</a
+                    >)
+                  </span>
+                </td>
+                <td>Lead</td>
+                <td>
+                  Jorge Luis Urbina / <span class="noprint">Mergers &amp; Inquisitions</span>
+                  <span class="printonly">M&amp;I</span>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="3" class="heading">Theater</td>
+              </tr>
+              <tr>
+                <td>
+                  <button id="disney">...Death of Walt Disney</button>{' '}
+                  <sup>1, 2</sup>
+                </td>
+                <td>Walt Disney</td>
+                <td>Peter Richards / Odyssey <span class="noprint">Theatre</span></td>
+              </tr>
+              <tr>
+                <td>Straight White Men</td>
+                <td>Jake</td>
+                <td>Young Jean Lee / Kirk Douglas <span class="noprint">Theatre</span></td>
+              </tr>
+              <tr>
+                <td>The Power of Duff</td>
+                <td>Charlie Duff <small>(u/s)</small></td>
+                <td>Peter DuBois / Geffen Playhouse</td>
+              </tr>
+              <tr>
+                <td
+                  >Breath <span class="noprint">and</span><span class="printonly">&amp;</span> Imagination <sup
+                    >3, 4</sup
+                  ></td
+                >
+                <td>Accompanist <small>(8 roles)</small></td>
+                <td>Saundra McClain / Colony Theatre</td>
+              </tr>
+              <tr>
+                <td>Chapter Two <sup>5</sup></td>
+                <td>Leo</td>
+                <td>Andy Barnicle / Laguna Playhouse</td>
+              </tr>
+              <tr>
+                <td>Good People</td>
+                <td>Mike <small>(u/s)</small> / Priest</td>
+                <td>Matt Shakman / Geffen Playhouse</td>
+              </tr>
+              <tr>
+                <td>The Dinosaur Within</td>
+                <td>Ensemble <small>(7 roles)</small></td>
+                <td>Michael Michetti / <span class="noprint">Theatre @</span> Boston Court</td>
+              </tr>
+              <tr>
+                <td>All My Sons</td>
+                <td>Dr Jim Bayliss</td>
+                <td>Kiff Scholl / Raven Playhouse</td>
+              </tr>
+              <tr>
+                <td><span class="noprint">Tombs of the</span> Vanishing Indian</td>
+                <td>Dr Hansen</td>
+                <td>Luis Alfaro / Native Voices <span class="noprint">at the Autry</span></td>
+              </tr>
+              <tr>
+                <td><span class="noprint">A</span> Streetcar Named Desire</td>
+                <td>Mitch</td>
+                <td>Foothills Theatre, Boston</td>
+              </tr>
+              <tr>
+                <td><span class="noprint">The</span> Musical of Musicals</td>
+                <td>Pianist / Narrator</td>
+                <td>Foothills Theatre, Boston</td>
+              </tr>
+              <tr>
+                <td>How I Learned to Drive</td>
+                <td>Uncle Peck</td>
+                <td>Devanaughn Theatre, Boston</td>
+              </tr>
+              <tr>
+                <td>1776</td>
+                <td>John Hancock</td>
+                <td>Lyric Stage Company, Boston</td>
+              </tr>
+              <tr>
+                <td>Pygmalion</td>
+                <td>Henry Higgins</td>
+                <td>Longwood Players, Boston</td>
+              </tr>
+              <tr>
+                <td>Hamlet</td>
+                <td>King Claudius</td>
+                <td>Shakespeare Now, Boston</td>
+              </tr>
+              <!-- <tr>
+                  <td><span class="noprint">The</span> Merry Wives of Windsor</td>
+                  <td>Master Page</td>
+                  <td>Gazebo Players, Boston</td>
+                </tr>
+                <tr>
+                  <td>She Loves Me</td>
+                  <td>Sipos / Maraczek <small>(u/s)</small></td>
+                  <td>Huntington Theatre, Boston</td>
+                </tr>
+                <tr>
+                  <td>The Sisters Rosensweig</td>
+                  <td>Nicholas Pym <small>(u/s)</small></td>
+                  <td>Huntington Theatre, Boston</td>
+                </tr> -->
+              <tr>
+                <td>The Mistress of the Inn</td>
+                <td>Marquis <span class="noprint">of</span> Forlipopoli</td>
+                <td>Handcart Ensemble, NYC</td>
+              </tr>
+              <!-- <tr>
+                  <td>The Wild Ass&#8217;s Skin</td>
+                  <td>Cardot / Valentin</td>
+                  <td>Handcart Ensemble, NYC</td>
+                </tr> -->
+              <tr>
+                <td colspan="3" class="heading">Commercials, Industrials, V/O</td>
+              </tr>
+              <tr>
+                <td colspan="3">
+                  List available upon request<br />
+                </td>
+              </tr>
+              <tr class="noprint">
+                <td colspan="3" class="heading"> Training</td>
+              </tr>
+              <tr class="noprint">
+                <td colspan="3">Stephen Book — Improv<span class="noprint">isation</span> Technique</td>
+              </tr>
+              <tr class="noprint">
+                <td colspan="3">Mary Lou Belli — Sitcom Career Class</td>
+              </tr>
+              <!-- <tr>
+                  <td>Annie Grindlay</td>
+                  <td>Audition Technique</td>
+                  <td>Margie Haber Studios</td>
+                </tr>
+                <tr>
+                  <td>Will McLaughlin</td>
+                  <td>Improv 201</td>
+                  <td>Upright Citizens Brigade</td>
+                </tr>
+                <tr>
+                  <td>Amy Rhodes</td>
+                  <td>Improv 101</td>
+                  <td>Upright Citizens Brigade</td>
+                </tr>
+                <tr>
+                  <td>Bob Krakower</td>
+                  <td>Audition Technique</td>
+                  <td>One on One <small>(LA &amp; NYC)</small></td>
+                </tr>
+                <tr>
+                  <td>Jeff Hardwick</td>
+                  <td>Commercial Improv</td>
+                  <td>Jeff Hardwick Casting</td>
+                </tr>
+                <tr>
+                  <td>Terry Berland</td>
+                  <td>On-Camera Workshop</td>
+                  <td>Berland Casting</td>
+                </tr> -->
+              <tr>
+                <td colspan="3" class="heading">Special Skills</td>
+              </tr>
+              <tr>
+                <td colspan="3">Connoisseur of bad puns, crafter of fine limericks.</td>
+              </tr>
+              <tr>
+                <td colspan="3" class="heading">Quotes &amp; Awards</td>
+              </tr>
+              <tr>
+                <td colspan="3">
+                  <span style="margin-left:-0.5em"><sup>1</sup> LA Times: <i>The performance is note-perfect.</i></span
+                  ><br />
+                  <span style="margin-left:-0.5em"><sup>2</sup> Stage Raw Award, Lead Performance</span>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="3">
+                  <span style="margin-left:-0.5em"><sup>3</sup> BroadwayWorld: <i>Ashworth is a wonder.</i></span><br />
+                  <span style="margin-left:-0.5em"
+                    ><sup>4</sup> Ovation Awards nominee, Best Production of a Play (Large Theatre)
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="3">
+                  <span style="margin-left:-0.5em">
+                    <sup>5</sup> Backstage: <i>Kevin Ashworth transmutes his cliché-ridden role into gold.</i>
+                  </span>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="3">
+                  <div id="centerfoot">Last modified {lastModified}</div>
+                  <p class="printonly printonlyfooter">https://www.kevinashworth.com/resume/</p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</Layout>
