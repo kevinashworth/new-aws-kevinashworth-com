@@ -1,6 +1,6 @@
 ---
 import Layout from '~/layouts/PageLayoutSansFooter.astro';
-const lastModified = 'November 7, 2022';
+const lastModified = 'August 1, 2024';
 ---
 
 <style>
@@ -54,38 +54,13 @@ const lastModified = 'November 7, 2022';
     margin-bottom: 0.5rem;
     text-transform: uppercase;
   }
-  table.personaltable {
-    border-collapse: collapse;
-    border-spacing: 0px;
-  }
-  table.personaltable div {
-    padding-bottom: 0;
-  }
-  table.personaltable div.right,
-  table.personaltable div.right p {
-    text-align: right;
-  }
 
-  .caps,
-  .allcaps {
+  .caps {
     text-transform: uppercase;
   }
-  .smallcaps,
-  .sc {
+  .smallcaps {
     font-size: smaller;
     text-transform: uppercase;
-  }
-  .smallercaps {
-    font-size: 72%;
-    text-transform: uppercase;
-  }
-  .xsmall,
-  .smallest,
-  .xsmalltd p {
-    font-size: x-small;
-  }
-  .toodamnlong {
-    letter-spacing: -0.5px;
   }
 
   #centerfoot {
@@ -167,9 +142,7 @@ const lastModified = 'November 7, 2022';
         <a href="https://www.linkedin.com/in/iamkevinashworth/">LinkedIn</a>
       </div>
       <div class="heading">Objective</div>
-      <p>
-        <s>Seeking full-time opportunities to apply my varied background to web projects.</s>
-      </p>
+      <p>Seeking full-time opportunities to apply my varied background to web projects.</p>
       <div class="heading">Summary of Qualifications</div>
       <p class="mb-2">
         Adept at <b>React and the modern web, full-stack JavaScript</b>. Reliant on good code structure, patience,
@@ -197,16 +170,16 @@ const lastModified = 'November 7, 2022';
             <li>CSS <span class="small">(10 years)</span></li>
             <li>HTML <span class="small">(10 years)</span></li>
             <li>JavaScript <span class="small">(10 years)</span></li>
-            <li>TypeScript <span class="small">(1 year)</span></li>
+            <li>TypeScript <span class="small">(2 years)</span></li>
           </ul>
         </div>
         <div>
           <p>Current Stack</p>
           <ul class="skills-list">
             <li>React <span class="small">(4 years)</span></li>
-            <li>Vite <span class="small">(1 year)</span></li>
-            <li>Tailwind CSS <span class="small">(1 year)</span></li>
-            <li>TanStack Query <span class="small">(3 years)</span></li>
+            <li>Vite <span class="small">(2 years)</span></li>
+            <li>Tailwind CSS <span class="small">(2 year)</span></li>
+            <li>TanStack Query <span class="small">(4 years)</span></li>
           </ul>
         </div>
         <div>
@@ -235,16 +208,38 @@ const lastModified = 'November 7, 2022';
 
     <div class="resume flex flex-col gap-8">
       <div>
-        <b>FreshLime, Lehi UT (remote)</b> &nbsp; <span class="small">March 2021 – present<br /></span>
+        <b>FreshLime and GotYou, Remote</b> &nbsp; <span class="small">March 2021 – present<br /></span>
         <span class="font-medium">UI Software Engineer</span><br />
         <p class="font-serif tracking-normal text-base">
-          Responsible for building revamped UI for small-business owners.
+          Responsible for the UI for our small-business owners, first at FreshLime, then at GotYou. (Both companies
+          share resources and have the same CEO.)
         </p>
         <ul class="font-serif tracking-normal text-base">
-          <li>React</li>
+          <li>
+            Selected tech stack, built, and maintained web application for business owners to manage their accounts.
+            <ul class="font-serif tracking-normal text-sm pt-4 pb-2">
+              <li>React</li>
+              <li>Vite</li>
+              <li>TanStack Query</li>
+              <li>Tailwind CSS, Headless UI</li>
+              <li>shadcn/ui</li>
+              <li>Zustand</li>
+              <li>Cypress, vitest</li>
+            </ul>
+          </li>
+          <li>
+            Maintained original site for store owners to manage their accounts.
+            <ul class="font-serif tracking-normal text-sm pt-4">
+              <li>React</li>
+              <li>Material UI</li>
+              <li>Redux</li>
+              <li>Bootstrap</li>
+            </ul>
+          </li>
+          <!-- <li>React</li>
           <li>Vite</li>
           <li>NodeJS</li>
-          <li>Tailwind</li>
+          <li>Tailwind</li> -->
         </ul>
       </div>
       <div>
@@ -426,7 +421,7 @@ const lastModified = 'November 7, 2022';
         <b>Formation Solutions, Los Angeles CA</b><br />
         <!-- <b>2011-2012</b> -->
         <span class="font-medium">SiteSpect Programmer</span><br />
-        <p class="font-serif tracking-normal text-base">Designed throughput improvements</p>
+        <p class="font-serif tracking-normal text-base">Designed throughput improvements.</p>
         <ul class="font-serif tracking-normal text-base">
           <li>Built A/B tests with SiteSpect to improve monetization of SEO-heavy web site.</li>
         </ul>
@@ -453,22 +448,20 @@ const lastModified = 'November 7, 2022';
     <div class="resume flex flex-col gap-8">
       <p>
         <span class="smallcaps">Languages</span><br />
-        <span class="font-serif tracking-normal text-base"
-          >Conversational Spanish. Some Italian, German, and French.</span
-        >
+        <span class="font-serif tracking-normal text-base">Conversational Spanish</span>
       </p>
 
       <p>
         <span class="smallcaps">Other Professional Experiences</span><br />
         <span class="font-serif tracking-normal text-base">
+          Acting teacher in Los Angeles.<br />
+          Television, theater, and commercial actor in Los Angeles.<br />
           Electronics teacher at Middlesex Community College.<br />
           Music director for Methodist church, chorus member of Boston Symphony Orchestra and La Jolla Symphony, piano teacher,
           theater administrator in New York.<br />
-          Television, theater, and commercial actor in Los Angeles.<br />
-          Acting teacher in Los Angeles.
         </span>
       </p>
-      <div id="centerfoot">Last update: {lastModified}</div>
+      <div id="centerfoot">Last modified: {lastModified}</div>
     </div>
   </div>
 </Layout>

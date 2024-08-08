@@ -36,7 +36,7 @@ See a rudimentary React 17 demo repo in action at [CodeSandbox.io](https://codes
 
 ## Material UI V5 Tooltip
 
-With [Material UI V5](https://mui.com/), the Popper.js library has been updated to [V2](https://popper.js.org/docs/v2/). It has a `followCursor` option availabe, so all we need to do here is figure out the offset that we want.
+With [Material UI V5](https://mui.com/), the Popper.js library has been updated to [V2](https://popper.js.org/docs/v2/). It has a `followCursor` option available, so all we need to do here is figure out the offset that we want.
 
 ```javascript
 <Tooltip
