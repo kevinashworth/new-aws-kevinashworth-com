@@ -82,3 +82,11 @@
 [data-aw-toggle-menu].expanded g > path:last-child {
   @apply rotate-45 translate-y-[-8px] translate-x-[14px];
 }
+
+.astro-code code {
+  @apply block px-4 w-fit;
+}
+
+.astro-code code .highlighted {
+  @apply bg-yellow-800 inline-block px-4 -mx-4;
+}
