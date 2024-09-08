@@ -9,7 +9,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "format": "prettier -w .",
-    "lint:eslint": "eslint . --ext .js,.ts,.astro"
+    "lint:eslint": "eslint . --ext .js,.ts,.astro",
+    "postbuild": "pagefind --site dist"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.5",
@@ -41,6 +42,7 @@
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "js-yaml": "^4.1.0",
     "mdast-util-to-string": "^4.0.0",
+    "pagefind": "^1.1.0",
     "prettier": "3.1.1",
     "prettier-plugin-astro": "0.12.3",
     "reading-time": "^1.5.0",
