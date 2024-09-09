@@ -1,6 +1,7 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
 import EmailSignup from '~/components/EmailSignup.astro';
+import { version } from '../../package.json';
 
 const metadata = {
   title: 'About me',
@@ -59,4 +60,5 @@ const metadata = {
       </div>
     </div>
   </section>
+  <div class="text-xs text-center text-gray-300 dark:text-slate-600">v{version}</div>
 </Layout>
