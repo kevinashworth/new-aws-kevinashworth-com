@@ -13,7 +13,9 @@ export const headerData = {
   links: textLinks,
   // actions: [{ text: 'Download', href: 'https://github.com/onwidget/astrowind', target: '_blank' }],
 };
+
 const currentYear = new Date().getFullYear();
+
 export const footerData = {
   links: [],
   secondaryLinks: [

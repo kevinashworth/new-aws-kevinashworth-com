@@ -8,6 +8,7 @@ tags:
   - Astro
   - Development
   - JavaScript
+  - Programming
   - TailwindCSS
 ---
 
