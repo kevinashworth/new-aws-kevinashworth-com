@@ -47,19 +47,7 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
     <header>
       <div class="mb-1">
         <span class="text-sm">
-          <Icon name="tabler:clock" class="w-3.5 h-3.5 inline-block -mt-0.5 dark:text-gray-400" />
-          <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
-          {
-            post.category && (
-              <>
-                {' '}
-                ·{' '}
-                <a class="capitalize hover:underline" href={getPermalink(post.category, 'category')}>
-                  {post.category.replaceAll('-', ' ')}
-                </a>
-              </>
-            )
-          }
+          <time datetime={String(post.publishDate)} class="inline-block text-xs text-muted dark:text-slate-400">{getFormattedDate(post.publishDate)}</time>
         </span>
       </div>
       <h2 class="text-xl sm:text-2xl font-bold leading-tight font-heading dark:text-slate-300">
