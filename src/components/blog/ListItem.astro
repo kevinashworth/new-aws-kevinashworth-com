@@ -79,7 +79,7 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : 
     {post.excerpt && <p class="flex-grow text-muted dark:text-slate-400 text-lg">{post.excerpt}</p>}
 
     <footer class="mt-5">
-      <PostTags tags={post.tags} />
+      <PostTags tags={post.tags} class="text-xs" />
     </footer>
   </div>
 </article>
