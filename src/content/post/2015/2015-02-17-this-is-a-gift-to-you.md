@@ -34,6 +34,7 @@ And guess what? There’s another little gift, even if we don't like talking abo
 This is a gift -- seize it!
 
 [^2]: Council approved this unanimously, the vote is advisory only. Do the math. This gift is coming. Those who practice opposition at this point are spending energy for naught. Welcome it. Acceptance is the key.
+
 [^1]:
     I have yet to see anybody talk about the positive financial impact of all of the proposed changes. Consider these back-of-the-envelope calculations.
 

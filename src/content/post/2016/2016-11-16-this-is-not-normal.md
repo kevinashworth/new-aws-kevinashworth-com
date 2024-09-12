@@ -1,5 +1,5 @@
 ---
-title: '(This is not normal.)'
+title: "(This is not normal.)"
 excerpt: The Orange-elect needs a bassist
 publishDate: 2016-11-16
 category: Blog

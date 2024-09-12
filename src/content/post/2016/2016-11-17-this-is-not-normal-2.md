@@ -1,5 +1,5 @@
 ---
-title: '{This is not normal.}'
+title: "{This is not normal.}"
 excerpt: The Orange-elect isn’t wussy
 publishDate: 2016-11-17
 category: Blog

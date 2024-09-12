@@ -1,10 +1,10 @@
 ---
-import Header from '~/components/widgets/Header.astro';
-import Layout from '~/layouts/PageLayout.astro';
-import { textLinks } from '~/navigation';
+import Header from "~/components/widgets/Header.astro";
+import Layout from "~/layouts/PageLayout.astro";
+import { textLinks } from "~/navigation";
 
 const metadata = {
-  title: 'Kevin Ashworth',
+  title: "Kevin Ashworth",
 };
 ---
 
@@ -19,14 +19,14 @@ const metadata = {
     <Header links={textLinks} isSticky showToggleTheme />
   </Fragment>
 
-  <section class="relative not-prose" id="hero">
-    <div class="relative max-w-7xl mx-auto px-4 sm:px-6">
+  <section class="not-prose relative" id="hero">
+    <div class="relative mx-auto max-w-7xl px-4 sm:px-6">
       <div class="pt-12">
-        <div class="text-center max-w-5xl mx-auto">
-          <p class="text-base text-secondary dark:text-red-200 font-bold tracking-wide uppercase">
+        <div class="mx-auto max-w-5xl text-center">
+          <p class="text-base font-bold uppercase tracking-wide text-secondary dark:text-red-200">
             Front-end Developer, Actor, Acting Teacher
           </p>
-          <h1 class="text-5xl md:text-6xl font-bold leading-tighter tracking-tighter font-heading dark:text-gray-200">
+          <h1 class="leading-tighter font-heading text-5xl font-bold tracking-tighter dark:text-gray-200 md:text-6xl">
             Kevin Ashworth
           </h1>
         </div>
@@ -34,8 +34,8 @@ const metadata = {
     </div>
   </section>
 
-  <section class="relative not-prose scroll-mt-[72px]" id="about">
-    <div class="relative px-4 md:px-6 text-default max-w-7xl mx-auto">
+  <section class="not-prose relative scroll-mt-[72px]" id="about">
+    <div class="relative mx-auto max-w-7xl px-4 text-default md:px-6">
       <div class="mx-auto max-w-7xl p-4 md:px-8">
         <div class="">
           <div aria-hidden="true" class="mt-10 md:mt-0">

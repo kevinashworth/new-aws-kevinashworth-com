@@ -37,8 +37,8 @@ The most common on my list. This pattern is mostly used to trigger a process aft
 ```javascript
 /* this is the saga you are going to register */
 export function* aListenerOnlySaga() {
-  const somePossibleData = yield take('SOME_ACTION')
-  yield fork(someOtherSagaProcess)
+  const somePossibleData = yield take("SOME_ACTION");
+  yield fork(someOtherSagaProcess);
 }
 
 function* someOtherSagaProcess() {
@@ -79,16 +79,16 @@ Some details, like the render method and the reducers, will be omitted to go dir
 /* somewhere in your code... */
 export function* listenForChangeCompany() {
   /* this variable holds the argument passed \*/
-  const company = yield take('company_change')
-  yield fork(changeCompanySaga, company)
+  const company = yield take("company_change");
+  yield fork(changeCompanySaga, company);
 }
 
 function* changeCompanySaga(company) {
-  const branchesPerCompany = yield call(getBranchesByCompany, company)
+  const branchesPerCompany = yield call(getBranchesByCompany, company);
   yield put({
-    type: 'company_change_success',
+    type: "company_change_success",
     payload: branchesPerCompany,
-  })
+  });
 }
 ```
 
@@ -107,8 +107,8 @@ We need to make sure that Martha can change between companies as much as she nee
 ```javascript
 export function* listenForChangeCompany() {
   while (true) {
-    const company = yield take('company_change')
-    yield fork(changeCompanySaga, company)
+    const company = yield take("company_change");
+    yield fork(changeCompanySaga, company);
   }
 }
 /* eh viola! */
@@ -119,7 +119,7 @@ Pretty neat, eh? If you are not used to function generators, having a `while (tr
 ```javascript %
 /* Where you register the sagas */
 function* rootSagas() {
-  yield [takeEvery('company_change', changeCompanySaga)]
+  yield [takeEvery("company_change", changeCompanySaga)];
 }
 ```
 
@@ -143,9 +143,9 @@ This means our services library exposes a saga which looks like this:
 ```javascript
 export function* fetchDataOverFiveDifferentLocations() {
   while (true) {
-    yield put({ type: 'fetchSomeData_events_start' })
+    yield put({ type: "fetchSomeData_events_start" });
     /* computing stuff... \*/
-    yield put({ type: 'fetchSomeData_events_success' })
+    yield put({ type: "fetchSomeData_events_success" });
   }
 }
 ```
@@ -154,9 +154,7 @@ On your application, you can consume the service like this:
 
 ```javascript
 function* rootSagas() {
-  yield [
-    takeEvery('fetchSomeData_events', fetchDataOverFiveDifferentLocations)
-  ]
+  yield [takeEvery("fetchSomeData_events", fetchDataOverFiveDifferentLocations)];
 }
 ```
 
@@ -166,9 +164,9 @@ What if we need to extend that functionality?
 /* We create a manager saga */
 function* fetchDataManager() {
   /* we need to start the service/saga */
-  yield put({ type: 'fetchSomeData_events' })
+  yield put({ type: "fetchSomeData_events" });
   /* we need to wait/listen when it ends...*/
-  yield take('fetchSomeData_events_success')
+  yield take("fetchSomeData_events_success");
   /*
   fork another process,
   query info from the state,
@@ -180,15 +178,13 @@ function* fetchDataManager() {
 /* We create an orchestrator saga */
 function* orchestratorSaga() {
   while (true) {
-    yield fork(fetchDataManager)
+    yield fork(fetchDataManager);
   }
 }
 
 /* your root saga then looks like this */
 function* rootSagas() {
-  yield [
-    takeEvery('other_action_trigger', orchestratorSaga),
-  ]
+  yield [takeEvery("other_action_trigger", orchestratorSaga)];
 }
 ```
 
@@ -218,11 +214,11 @@ This is when the `for...of` loop comes to the rescue. Let’s solve this problem
 ```javascript
 function* someSagaName() {
   /* code omitted for convenience */
-  const events = yield call(fetchEvents)
+  const events = yield call(fetchEvents);
   for (event of events) {
-    yield put({ type: 'some_action', payload: event })
+    yield put({ type: "some_action", payload: event });
     /* or maybe something like: \*/
-    yield fork(someOtherSagaOrService, event)
+    yield fork(someOtherSagaOrService, event);
   }
 }
 ```
@@ -247,15 +243,15 @@ Let’s go back to our event manager service:
 ```javascript
 /* Case 1, service that manages the error */
 export function* fetchDataOverFiveDifferentLocations() {
-try {
-  while (true) {
-    yield put({ type: 'fetchSomeData_events_start' })
-    /* computing stuff... \*/
-    yield put({ type: 'fetchSomeData_events_success' })
+  try {
+    while (true) {
+      yield put({ type: "fetchSomeData_events_start" });
+      /* computing stuff... \*/
+      yield put({ type: "fetchSomeData_events_success" });
+    }
+  } catch (error) {
+    yield put({ type: "fetchSomeData_events_error", error });
   }
-} catch (error) {
-  yield put({ type: 'fetchSomeData_events_error', error })
-}
 }
 ```
 
@@ -264,9 +260,10 @@ In this case, we are coupled to the service error, so we need to create a servic
 ```javascript
 function* rootSagas() {
   yield [
-    takeEvery('fetchSomeData_events_error', yourErrorHandlerService),
-    /* ... \*/,
-  ]
+    takeEvery("fetchSomeData_events_error", yourErrorHandlerService),
+    /* ... \*/
+    ,
+  ];
 }
 ```
 

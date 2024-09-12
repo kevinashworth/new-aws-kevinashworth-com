@@ -1,5 +1,5 @@
 ---
-title: 'On Teaching'
+title: "On Teaching"
 publishDate: 2019-07-19
 category: Blog
 tags:

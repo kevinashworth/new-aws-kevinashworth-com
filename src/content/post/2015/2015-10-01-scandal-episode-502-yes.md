@@ -1,6 +1,6 @@
 ---
 title: 'Scandal episode 502, "Yes"'
-excerpt: 'I asked a simple question, and I got a simple answer.'
+excerpt: "I asked a simple question, and I got a simple answer."
 publishDate: 2015-10-01
 category: Acting
 tags:

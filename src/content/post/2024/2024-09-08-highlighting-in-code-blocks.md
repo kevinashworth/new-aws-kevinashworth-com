@@ -23,8 +23,8 @@ const fizz = "buzz";
 But how do you <mark>highlight</mark> part of the code?
 
 ```javascript
-const fizz = 'buzz'; // [!code highlight]
-const foo = 'baz';
+const fizz = "buzz"; // [!code highlight]
+const foo = "baz";
 ```
 
 I did a little digging to learn that Astro uses Shiki to highlight code blocks. And it turns out that Shiki offers some transformers. But, from their documentation, "Transformers only applies classes and does not come with styles; you can provide your own CSS rules to style them properly."
@@ -47,7 +47,7 @@ npm i -D @shikijs/transformers
 2. Modify your Astro config
 
 ```javascript
-import { transformerNotationHighlight } from '@shikijs/transformers';
+import { transformerNotationHighlight } from "@shikijs/transformers";
 ```
 
 ```javascript
@@ -62,11 +62,11 @@ Here are styles I added at the end of my tailwind.css file:
 
 ```css
 .astro-code code {
-  @apply block px-4 w-fit;
+  @apply block w-fit px-4;
 }
 
 .astro-code code .highlighted {
-  @apply bg-yellow-800 inline-block px-4 -mx-4;
+  @apply -mx-4 inline-block bg-yellow-800 px-4;
 }
 ```
 
@@ -82,8 +82,8 @@ const foo = 'baz'; // [!code highlight]
 ```</code></pre>
 
 ```javascript
-const fizz = 'buzz';
-const foo = 'baz'; // [!code highlight]
+const fizz = "buzz";
+const foo = "baz"; // [!code highlight]
 ```
 
 For more info, including instructions on how to highlight many lines with just one comment, see the [Shiki site](https://shiki.style/packages/transformers#transformernotationhighlight).
