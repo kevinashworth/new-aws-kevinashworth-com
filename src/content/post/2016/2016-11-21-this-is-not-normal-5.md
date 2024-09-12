@@ -1,6 +1,6 @@
 ---
 title: This is not normal.
-excerpt: 'Herr Drumpf does not “see guile”'
+excerpt: "Herr Drumpf does not “see guile”"
 publishDate: 2016-11-21
 category: Blog
 tags:

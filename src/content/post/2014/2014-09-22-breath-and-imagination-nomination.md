@@ -1,6 +1,6 @@
 ---
-title: 'Breath and Imagination: Nomination'
-excerpt: 'We learned tonight that Breath and Imagination has been nominated for the 2014 Ovation Awards in the category of Best Play (Large Theatre).'
+title: "Breath and Imagination: Nomination"
+excerpt: "We learned tonight that Breath and Imagination has been nominated for the 2014 Ovation Awards in the category of Best Play (Large Theatre)."
 publishDate: 2014-09-22
 category: Acting
 tags:

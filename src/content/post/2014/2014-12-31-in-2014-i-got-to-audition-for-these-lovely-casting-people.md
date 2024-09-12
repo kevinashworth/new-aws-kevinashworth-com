@@ -1,5 +1,5 @@
 ---
-title: 'In 2014, I got to audition for these lovely casting people (in reverse alphabetical order):'
+title: "In 2014, I got to audition for these lovely casting people (in reverse alphabetical order):"
 publishDate: 2014-12-31
 category: Acting
 ---

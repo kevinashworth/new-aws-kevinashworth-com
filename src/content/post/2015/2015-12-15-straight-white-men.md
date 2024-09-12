@@ -1,6 +1,6 @@
 ---
 title: Straight White Men
-excerpt: 'I’ve been understudying Straight White Men at the Kirk Douglas Theatre in Culver City, and I’ve just learned that I’m going on for tonight’s performance!'
+excerpt: "I’ve been understudying Straight White Men at the Kirk Douglas Theatre in Culver City, and I’ve just learned that I’m going on for tonight’s performance!"
 publishDate: 2015-12-16
 category: Acting
 tags:
