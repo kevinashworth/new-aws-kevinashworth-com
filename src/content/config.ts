@@ -34,14 +34,6 @@ const metadataDefinition = () =>
           type: z.string().optional(),
         })
         .optional(),
-
-      twitter: z
-        .object({
-          handle: z.string().optional(),
-          site: z.string().optional(),
-          cardType: z.string().optional(),
-        })
-        .optional(),
     })
     .optional();
 

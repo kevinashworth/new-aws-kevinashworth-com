@@ -21,7 +21,6 @@ const {
   robots = {},
   description,
   openGraph = {},
-  twitter = {},
 } = Astro.props;
 
 const seoProps: AstroSeoProps = merge(
@@ -39,9 +38,6 @@ const seoProps: AstroSeoProps = merge(
       locale: I18N?.language || "en",
       type: "website",
     },
-    twitter: {
-      cardType: openGraph?.images?.length ? "summary_large_image" : "summary",
-    },
   },
   {
     title: METADATA?.title?.default,
@@ -50,7 +46,6 @@ const seoProps: AstroSeoProps = merge(
     nofollow: typeof METADATA?.robots?.follow !== "undefined" ? !METADATA.robots.follow : undefined,
     description: METADATA?.description,
     openGraph: METADATA?.openGraph,
-    twitter: METADATA?.twitter,
   },
   {
     title: title,
@@ -60,7 +55,6 @@ const seoProps: AstroSeoProps = merge(
     nofollow: typeof robots?.follow !== "undefined" ? !robots.follow : undefined,
     description: description,
     openGraph: { url: canonical, ...openGraph },
-    twitter: twitter,
   },
 );
 ---
