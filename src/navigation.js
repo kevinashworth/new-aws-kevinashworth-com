@@ -36,7 +36,6 @@ export const footerData = {
       href: "https://stackoverflow.com/users/7082724/kevin-ashworth",
     },
     { ariaLabel: "Threads", icon: "tabler:brand-threads", href: "https://www.threads.net/@iamkevinashworth" },
-    { ariaLabel: "Twitter", icon: "tabler:brand-twitter", href: "https://twitter.com/kevinashworth" },
     { ariaLabel: "Vimeo", icon: "tabler:brand-vimeo", href: "https://vimeo.com/kevinashworth" },
     { ariaLabel: "YouTube", icon: "tabler:brand-youtube", href: "https://www.youtube.com/user/kevinashworth" },
   ],

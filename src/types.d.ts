@@ -60,7 +60,6 @@ export interface MetaData {
   description?: string;
 
   openGraph?: MetaDataOpenGraph;
-  twitter?: MetaDataTwitter;
 }
 
 export interface MetaDataRobots {
@@ -80,12 +79,6 @@ export interface MetaDataOpenGraph {
   images?: Array<MetaDataImage>;
   locale?: string;
   type?: string;
-}
-
-export interface MetaDataTwitter {
-  handle?: string;
-  site?: string;
-  cardType?: string;
 }
 
 export interface Image {
