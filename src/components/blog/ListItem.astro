@@ -19,6 +19,8 @@ const { post } = Astro.props;
 const image = (await findImage(post.image)) as ImageMetadata | undefined;
 
 const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, "post") : "";
+
+const alt = post?.imageAlt || post.title;
 ---
 
 <article class={`max-w-md mx-auto md:max-w-none grid gap-6 md:gap-8 ${image ? "md:grid-cols-2" : ""}`}>
@@ -33,7 +35,7 @@ const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, "post") : 
               widths={[400, 900]}
               width={900}
               sizes="(max-width: 900px) 400px, 900px"
-              alt={post.title}
+              alt={alt}
               aspectRatio="16:9"
               loading="lazy"
               decoding="async"

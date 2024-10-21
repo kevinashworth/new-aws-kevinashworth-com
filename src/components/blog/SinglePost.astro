@@ -17,6 +17,8 @@ export interface Props {
 
 const { post, url } = Astro.props;
 const { Content } = post;
+
+const alt = post?.imageAlt || post?.excerpt || "";
 ---
 
 <section class="mx-auto py-8 sm:py-16 lg:py-20">
@@ -53,7 +55,7 @@ const { Content } = post;
         class="mx-auto mb-6 max-w-full rounded-lg shadow-lg lg:max-w-[900px]"
         widths={[400, 900]}
         sizes="(max-width: 900px) 400px, 900px"
-        alt={post?.excerpt || ""}
+        alt={alt}
         width={900}
         height={506}
         loading="eager"

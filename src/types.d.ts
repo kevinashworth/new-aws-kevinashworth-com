@@ -27,6 +27,7 @@ export interface Post {
 
   /**  */
   image?: ImageMetadata | string;
+  imageAlt: string;
 
   /**  */
   category?: string;
