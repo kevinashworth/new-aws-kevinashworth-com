@@ -4,7 +4,7 @@ excerpt: Not just showing a code block, but highlighting one or more lines withi
 publishDate: 2024-09-08
 category: Blog
 image: /assets/images/pexels-yaroslav-shuraev-9489804.jpg
-imageAlt: Photo by Yaroslav Shuraev
+imageAlt: "Photo by Yaroslav Shuraev: https://www.pexels.com/photo/pexels-yaroslav-shuraev-9489804/"
 tags:
   - Astro
   - Development
