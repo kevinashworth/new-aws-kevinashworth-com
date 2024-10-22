@@ -3,7 +3,8 @@ title: Aligning the inner contents in a Table column
 subtitle: Wherein I present a `colSpan=2` idea for TanStack Table when you want to line up verticaly something that is in the middle of the column’s cells.
 publishDate: 2024-10-08
 category: Blog
-# image: /assets/images/tanstack.webp
+image: /assets/images/pexels-rdne-7947846.jpg
+imageAlt: "Photo by RDNE Stock project: https://www.pexels.com/photo/overhead-shot-of-various-charts-7947846/"
 tags:
   - Development
   - JavaScript
