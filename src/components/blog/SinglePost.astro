@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import clsx from "clsx";
 
 import Image from "~/components/common/Image.astro";
 import PostTags from "~/components/blog/Tags.astro";
@@ -23,32 +24,30 @@ const alt = post?.imageAlt || post?.excerpt || "";
 
 <section class="mx-auto py-8 sm:py-16 lg:py-20">
   <article>
-    <header class={post.image ? "" : ""}>
-      <div class="mx-auto mb-2 mt-0 flex max-w-3xl flex-col justify-between px-4 sm:flex-row sm:items-center sm:px-6">
-        <p>
-          <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
-          {
-            post.category && (
-              <>
-                {" "}
-                ·{" "}
-                <a class="inline-block capitalize hover:underline" href={getPermalink(post.category, "category")}>
-                  {post.category.replaceAll("-", " ")}
-                </a>
-              </>
-            )
-          }
-          {post.readingTime && <> · {post.readingTime} min read</>}
-        </p>
+    <header>
+      <div class="mx-auto mb-2 mt-0 max-w-3xl px-4 sm:px-6">
+        <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
+        {
+          post.category && (
+            <>
+              {" "}
+              ·{" "}
+              <a class="inline-block capitalize hover:underline" href={getPermalink(post.category, "category")}>
+                {post.category.replaceAll("-", " ")}
+              </a>
+            </>
+          )
+        }
+        {post.readingTime && <> · {post.readingTime} min read</>}
       </div>
-      <h1
-        class="leading-tighter mx-auto max-w-3xl px-4 font-heading text-4xl font-bold tracking-tighter sm:px-6 md:text-5xl"
-      >
+      <h1 class="mx-auto max-w-3xl px-4 font-heading text-2xl font-bold tracking-tight sm:px-6 sm:text-4xl md:text-5xl">
         {post.title}
       </h1>
-      <p class="mx-auto mb-8 mt-4 max-w-3xl px-4 text-xl text-muted dark:text-slate-400 sm:px-6 md:text-2xl">
+      <h2
+        class="mx-auto mb-8 mt-4 max-w-3xl px-4 text-base text-muted dark:text-slate-400 sm:px-6 sm:text-lg md:text-xl"
+      >
         {post.subtitle}
-      </p>
+      </h2>
 
       <Image
         src={post.image}
@@ -63,7 +62,13 @@ const alt = post?.imageAlt || post?.excerpt || "";
       />
     </header>
     <div
-      class="prose-md prose-headings:leading-tighter prose prose-lg mx-auto mt-8 max-w-3xl px-6 dark:prose-invert lg:prose-xl prose-headings:scroll-mt-[80px] prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tighter prose-a:text-primary prose-img:rounded-md prose-img:shadow-lg dark:prose-headings:text-slate-300 dark:prose-a:text-blue-400 sm:px-6"
+      class={clsx(
+        "mx-auto mt-8 max-w-3xl px-6",
+        "prose prose-sm sm:prose-base prose-a:text-primary",
+        "prose-img:rounded-md prose-img:shadow-lg",
+        "prose-headings:leading-tighter prose-headings:scroll-mt-[80px] prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tighter",
+        "dark:prose-invert dark:prose-headings:text-slate-300 dark:prose-a:text-blue-400",
+      )}
     >
       {Content ? <Content /> : <Fragment set:html={post.content || ""} />}
     </div>
