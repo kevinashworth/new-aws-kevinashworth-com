@@ -18,7 +18,7 @@ const BASE_PATHNAME = SITE.base || "/";
 export const cleanSlug = (text = "") =>
   trimSlash(text)
     .split("/")
-    .map((slug) => slugify(slug, { maintainCase: true }))
+    .map((slug) => slugify(slug))
     .join("/");
 
 export const BLOG_BASE = cleanSlug(APP_BLOG?.list?.pathname);
