@@ -17,6 +17,8 @@ import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin } from "./src/uti
 
 import { ANALYTICS, SITE } from "./src/utils/config.ts";
 
+import react from "@astrojs/react";
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const whenExternalScripts = (items = []) =>
@@ -57,14 +59,13 @@ export default defineConfig({
         ],
       },
     }),
-
     ...whenExternalScripts(() =>
       partytown({
         config: { forward: ["dataLayer.push"] },
       }),
     ),
-
     tasks(),
+    react(),
   ],
 
   image: {
