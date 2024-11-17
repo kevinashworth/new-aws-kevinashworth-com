@@ -9,24 +9,29 @@
     "build": "astro build",
     "preview": "astro preview",
     "format": "prettier -w .",
-    "lint:eslint": "eslint . --ext .js,.ts,.astro"
+    "lint:eslint": "eslint ."
   },
   "dependencies": {
+    "@astrojs/react": "3.6.2",
     "@astrojs/rss": "4.0.9",
     "@astrojs/sitemap": "3.2.1",
     "@astrolib/analytics": "0.6.1",
     "@astrolib/seo": "1.0.0-beta.8",
     "@fontsource-variable/inter": "5.1.0",
+    "@types/react": "18.3.12",
+    "@types/react-dom": "18.3.1",
     "astro": "4.16.6",
     "astro-icon": "1.1.1",
     "limax": "4.1.0",
     "lodash.merge": "4.6.2",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
     "tippy.js": "6.3.7",
     "typescript-esbuild": "0.4.10",
     "unpic": "3.18.0"
   },
   "devDependencies": {
-    "@astrojs/mdx": "3.1.8",
+    "@astrojs/mdx": "3.1.9",
     "@astrojs/partytown": "2.1.2",
     "@astrojs/tailwind": "5.1.2",
     "@iconify-json/flat-color-icons": "1.2.0",

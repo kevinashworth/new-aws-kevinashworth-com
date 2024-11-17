@@ -13,6 +13,8 @@ module.exports = {
     sourceType: "module",
   },
   rules: {},
+  files: ["*..js,.ts,.tsx,.astro"],
+  ignores: ["node_modules", "dist", ".github", "types.generated.d.ts"],
   overrides: [
     {
       files: ["*.js"],
