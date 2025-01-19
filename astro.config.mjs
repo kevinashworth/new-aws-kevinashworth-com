@@ -1,23 +1,22 @@
+// Astro and external packages
+import { defineConfig, squooshImageService } from "astro/config";
+import mdx from "@astrojs/mdx";
+import partytown from "@astrojs/partytown";
+import react from "@astrojs/react";
+import sitemap from "@astrojs/sitemap";
+import tailwind from "@astrojs/tailwind";
+import icon from "astro-icon";
+import pagefind from "astro-pagefind";
+import { transformerNotationHighlight } from "@shikijs/transformers";
+
+// Node.js built-in modules
 import path from "path";
 import { fileURLToPath } from "url";
 
-import { defineConfig, squooshImageService } from "astro/config";
-
-import sitemap from "@astrojs/sitemap";
-import tailwind from "@astrojs/tailwind";
-import mdx from "@astrojs/mdx";
-import partytown from "@astrojs/partytown";
-import icon from "astro-icon";
-
-import { transformerNotationHighlight } from "@shikijs/transformers";
-
-import tasks from "./src/utils/tasks";
-
-import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin } from "./src/utils/frontmatter.mjs";
-
+// Local imports (./src/utils)
 import { ANALYTICS, SITE } from "./src/utils/config.ts";
-
-import react from "@astrojs/react";
+import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin } from "./src/utils/frontmatter.mjs";
+import tasks from "./src/utils/tasks";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -29,6 +28,9 @@ const whenExternalScripts = (items = []) =>
     : [];
 
 export default defineConfig({
+  build: {
+    format: "file",
+  },
   site: SITE.site,
   base: SITE.base,
   trailingSlash: SITE.trailingSlash ? "always" : "never",
@@ -66,6 +68,7 @@ export default defineConfig({
     ),
     tasks(),
     react(),
+    pagefind(),
   ],
 
   image: {

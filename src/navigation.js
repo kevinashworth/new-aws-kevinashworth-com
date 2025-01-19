@@ -7,6 +7,7 @@ export const textLinks = [
   { text: "Blog", href: "/blog" },
   { text: "Videos", href: "/videos" },
   { text: "Web Resumé", href: "/web" },
+  { text: "Search", href: "/search" },
 ];
 
 export const headerData = {
