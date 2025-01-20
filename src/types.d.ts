@@ -222,10 +222,6 @@ export interface Stats extends Headline, Widget {
   stats?: Array<Stat>;
 }
 
-export interface Pricing extends Headline, Widget {
-  prices?: Array<Price>;
-}
-
 export interface Testimonials extends Headline, Widget {
   testimonials?: Array<Testimonial>;
   callToAction?: CallToAction;
@@ -234,26 +230,6 @@ export interface Testimonials extends Headline, Widget {
 export interface Brands extends Headline, Widget {
   icons?: Array<string>;
   images?: Array<Image>;
-}
-
-export interface Features extends Headline, Widget {
-  image?: string | unknown;
-  video?: Video;
-  items: Array<Item>;
-  columns: number;
-  defaultIcon?: string;
-  callToAction1?: CallToAction;
-  callToAction2?: CallToAction;
-  isReversed?: boolean;
-  isBeforeContent?: boolean;
-  isAfterContent?: boolean;
-}
-
-export interface Faqs extends Headline, Widget {
-  iconUp?: string;
-  iconDown?: string;
-  items?: Array<Item>;
-  columns?: number;
 }
 
 export interface Steps extends Headline, Widget {

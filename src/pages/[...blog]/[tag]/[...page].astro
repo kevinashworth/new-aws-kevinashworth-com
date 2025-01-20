@@ -1,11 +1,12 @@
 ---
+// Tag page
 import type { InferGetStaticPropsType, GetStaticPaths } from "astro";
 import { blogTagRobots, getStaticPathsBlogTag } from "~/utils/blog";
 
 import Layout from "~/layouts/PageLayout.astro";
 import BlogList from "~/components/blog/List.astro";
-import Headline from "~/components/blog/Headline.astro";
 import Pagination from "~/components/blog/Pagination.astro";
+import Rubric from "~/components/blog/Rubric.astro";
 
 export const prerender = true;
 
@@ -26,11 +27,13 @@ const metadata = {
     follow: blogTagRobots?.follow,
   },
 };
+
+const rubric = "Tag";
 ---
 
 <Layout metadata={metadata}>
-  <section class="mx-auto max-w-4xl px-4 py-12 sm:py-16 md:px-6 lg:py-20">
-    <Headline>Tag: {tag}</Headline>
+  <section class="mx-auto max-w-4xl px-4 py-6 md:px-6">
+    <Rubric rubric={rubric} headline={tag} />
     <BlogList posts={page.data} />
     <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
   </section>

@@ -1,11 +1,12 @@
 ---
+// Category page
 import type { InferGetStaticPropsType, GetStaticPaths } from "astro";
 import { blogCategoryRobots, getStaticPathsBlogCategory } from "~/utils/blog";
 
 import Layout from "~/layouts/PageLayout.astro";
 import BlogList from "~/components/blog/List.astro";
-import Headline from "~/components/blog/Headline.astro";
 import Pagination from "~/components/blog/Pagination.astro";
+import Rubric from "~/components/blog/Rubric.astro";
 
 export const prerender = true;
 
@@ -27,15 +28,26 @@ const metadata = {
   },
 };
 
+// Currently, I only have two categories: "Acting" and "Blog", and it's lowercased by the time it gets here.
 let categoryString = category.replaceAll("-", " ");
-if (categoryString === "Acting") {
-  categoryString = "Acting Updates";
+switch (category) {
+  case "acting":
+    categoryString = "Acting Updates";
+    break;
+  case "blog":
+    categoryString = "Blog Posts";
+    break;
+  default:
+    break;
 }
+
+const rubric = "Blog Posts by Category";
+const headline = categoryString;
 ---
 
 <Layout metadata={metadata}>
-  <section class="mx-auto max-w-3xl px-4 py-6 sm:py-8 md:px-6 lg:py-10">
-    <Headline><span class="capitalize">{categoryString}</span></Headline>
+  <section class="mx-auto max-w-4xl px-4 py-6 md:px-6">
+    <Rubric rubric={rubric} headline={headline} />
     <BlogList posts={page.data} />
     <Pagination prevUrl={page.url.prev} nextUrl={page.url.next} />
   </section>
