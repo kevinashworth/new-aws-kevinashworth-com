@@ -1,9 +1,13 @@
 ---
+import Rubric from "~/components/blog/Rubric.astro";
 import Layout from "~/layouts/PageLayout.astro";
 
 const metadata = {
   title: "Reels & Clips",
 };
+
+const rubric = "Videos";
+const headline = "Reels & Clips";
 ---
 
 <style>
@@ -25,46 +29,40 @@ const metadata = {
 </style>
 
 <Layout metadata={metadata}>
-  <section class="not-prose md:-mt-[76px]">
-    <div class="mx-auto max-w-xl px-4 sm:px-6">
-      <div class="py-12 md:py-20">
-        <div class="mx-auto max-w-5xl text-center">
-          <h1 class="leading-tighter mb-4 font-heading text-3xl font-bold tracking-tighter dark:text-gray-200">
-            Reels & Clips
-          </h1>
+  <section class="not-prose">
+    <div class="mx-auto max-w-4xl px-4 py-6 md:px-6">
+      <Rubric rubric={rubric} headline={headline} />
+      <div class="mx-auto max-w-3xl">
+        <h2 class="leading-tighter mt-4 font-heading text-xl font-bold tracking-tighter dark:text-gray-200">Reels</h2>
+        <div class="relative h-0 pb-[56.25%]">
+          <iframe
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/videoseries?list=PLqsCty1A6DLALGsNx84BWgRheok_x8ldh"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            class="absolute left-0 top-0 h-full w-full"></iframe>
         </div>
-        <div class="mx-auto max-w-3xl">
-          <h2 class="leading-tighter mt-4 font-heading text-xl font-bold tracking-tighter dark:text-gray-200">Reels</h2>
-          <div class="relative h-0 pb-[56.25%]">
-            <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/videoseries?list=PLqsCty1A6DLALGsNx84BWgRheok_x8ldh"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-              class="absolute left-0 top-0 h-full w-full"></iframe>
-          </div>
-          <h2 class="leading-tighter mt-8 font-heading text-xl font-bold tracking-tighter dark:text-gray-200">Clips</h2>
-          <div class="relative h-0 pb-[56.25%]">
-            <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/videoseries?list=PLqsCty1A6DLBfhI8d5QQKmjl5H332kfp7"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-              class="absolute left-0 top-0 h-full w-full"></iframe>
-          </div>
-          <h2 class="leading-tighter mt-8 font-heading text-xl font-bold tracking-tighter dark:text-gray-200">More</h2>
-          <p>
-            For more videos of (stellar) TV and film performances, see my <a
-              href="https://www.youtube.com/user/kevinashworth"
-              itemprop="sameAs"
-              style="display: inline-block;"><i class="fab fa-fw fa-youtube-square" aria-hidden="true"></i>YouTube</a
-            > and my <a href="https://vimeo.com/kevinashworth" itemprop="sameAs" style="display: inline-block;"
-              ><i class="fab fa-fw fa-vimeo" aria-hidden="true"></i>Vimeo</a
-            >.
-          </p>
+        <h2 class="leading-tighter mt-8 font-heading text-xl font-bold tracking-tighter dark:text-gray-200">Clips</h2>
+        <div class="relative h-0 pb-[56.25%]">
+          <iframe
+            width="560"
+            height="315"
+            src="https://www.youtube.com/embed/videoseries?list=PLqsCty1A6DLBfhI8d5QQKmjl5H332kfp7"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            class="absolute left-0 top-0 h-full w-full"></iframe>
         </div>
+        <h2 class="leading-tighter mt-8 font-heading text-xl font-bold tracking-tighter dark:text-gray-200">More</h2>
+        <p>
+          For more videos of (stellar) TV and film performances, see my <a
+            href="https://www.youtube.com/user/kevinashworth"
+            itemprop="sameAs"
+            style="display: inline-block;"><i class="fab fa-fw fa-youtube-square" aria-hidden="true"></i>YouTube</a
+          > and my <a href="https://vimeo.com/kevinashworth" itemprop="sameAs" style="display: inline-block;"
+            ><i class="fab fa-fw fa-vimeo" aria-hidden="true"></i>Vimeo</a
+          >.
+        </p>
       </div>
     </div>
   </section>
