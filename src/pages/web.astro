@@ -1,6 +1,11 @@
 ---
 import Layout from "~/layouts/PageLayoutSansFooter.astro";
 const lastModified = "August 1, 2024";
+
+const metadata = {
+  title: "My web resumé",
+  description: "Kevin Ashworth's Web Resumé (Front-End Developer)",
+};
 ---
 
 <style>
@@ -130,7 +135,7 @@ const lastModified = "August 1, 2024";
   }
 </style>
 
-<Layout>
+<Layout metadata={metadata}>
   <div class="mx-auto mb-4 max-w-4xl">
     <div class="resume">
       <div class="mt-4 text-sm">
