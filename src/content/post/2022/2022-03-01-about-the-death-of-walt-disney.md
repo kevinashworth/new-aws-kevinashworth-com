@@ -3,6 +3,9 @@ title: A Public Reading of an Unproduced Screenplay About the Death of Walt Disn
 excerpt: Wherein I play Walt
 publishDate: 2022-03-01 15:17:59
 category: Acting
+# image: https://ca-times.brightspotcdn.com/dims4/default/e894040/2147483647/strip/true/crop/2100x1103+0+149/resize/1200x630!/quality/75/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2Fc1%2F9a%2F0545409f461b85e3759c26d10858%2F2022-disney-0022.jpg
+image: https://california-times-brightspot.s3.amazonaws.com/c1/9a/0545409f461b85e3759c26d10858/2022-disney-0022.jpg
+
 tags:
   - Acting
   - Theater
