@@ -28,9 +28,6 @@ const whenExternalScripts = (items = []) =>
     : [];
 
 export default defineConfig({
-  build: {
-    format: "file",
-  },
   site: SITE.site,
   base: SITE.base,
   trailingSlash: SITE.trailingSlash ? "always" : "never",
