@@ -1,6 +1,11 @@
 ---
 import Layout from "~/layouts/PageLayoutSansFooter.astro";
 const lastModified = "November 7, 2022";
+
+const metadata = {
+  title: "My acting resumé",
+  description: "Kevin Ashworth's Acting Resumé",
+};
 ---
 
 <style>
@@ -178,7 +183,7 @@ const lastModified = "November 7, 2022";
     animation: "shift-away",
   });
 </script>
-<Layout>
+<Layout metadata={metadata}>
   <div id="template" style="display: none;">
     A Public Reading of an Unproduced Screenplay About the Death of Walt&nbsp;Disney
   </div>
