@@ -3,7 +3,7 @@ title: New year, new tool
 subtitle: New year, new tool to build this website
 publishDate: 2024-01-03
 category: Blog
-image: https://astrowind.vercel.app/_astro/hero-image.DwIC_L_T_mwfNo.webp
+image: https://astrowind.vercel.app/_astro/hero-image.DwIC_L_T_Z22iUar.webp
 tags:
   - Astro
   - Development

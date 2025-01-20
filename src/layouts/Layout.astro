@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 import CommonMeta from "~/components/common/CommonMeta.astro";
 import Favicons from "~/components/Favicons.astro";
 import CustomStyles from "~/components/CustomStyles.astro";
@@ -30,7 +30,7 @@ const { language, textDirection } = I18N;
     <Metadata {...metadata} />
     <SiteVerification />
     <Analytics />
-    <ViewTransitions fallback="swap" />
+    <ClientRouter fallback="swap" />
   </head>
 
   <body class="bg-page text-default" data-pagefind-body>

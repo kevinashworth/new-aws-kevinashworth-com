@@ -1,5 +1,5 @@
 // Astro and external packages
-import { defineConfig, squooshImageService } from "astro/config";
+import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
 import partytown from "@astrojs/partytown";
 import react from "@astrojs/react";
@@ -67,10 +67,6 @@ export default defineConfig({
     react(),
     pagefind(),
   ],
-
-  image: {
-    service: squooshImageService(),
-  },
 
   markdown: {
     remarkPlugins: [readingTimeRemarkPlugin],
