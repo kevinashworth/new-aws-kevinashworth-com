@@ -8,13 +8,14 @@ import { headerData, footerData } from "~/navigation";
 import type { MetaData } from "~/types";
 
 export interface Props {
+  disablePagefind?: boolean;
   metadata?: MetaData;
 }
 
-const { metadata } = Astro.props;
+const { disablePagefind = false, metadata } = Astro.props;
 ---
 
-<Layout metadata={metadata}>
+<Layout metadata={metadata} disablePagefind={disablePagefind}>
   <slot name="header">
     <Header {...headerData} isSticky showRssFeed showToggleTheme />
   </slot>

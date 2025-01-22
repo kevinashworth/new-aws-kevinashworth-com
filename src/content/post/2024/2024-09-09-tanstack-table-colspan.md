@@ -17,7 +17,7 @@ Aligning a decimal point, or a currency symbol, or a date-time separating space,
 
 ![Table Alignment Example](/assets/images/Table-1-Screenshot.png)
 
-(See my example in full at [StackBlitz](https://stackblitz.com/~/github.com/kevinashworth/vite-tanstack-table-columns?file=src/components/table/PersonTable1.tsx).)
+(See my example in full at [StackBlitz](https://stackblitz.com/~/github.com/kevinashworth/vite-tanstack-table-columns?file=src/components/table/PersonTable1.tsx), or see my [GitHub repository](https://github.com/kevinashworth/vite-tanstack-table-columns).)
 
 <b>Table 1</b> is my intervention into the guts of a TanStack Table to create <code className="text-sm">colSpan=2</code> in the table headers.
 
@@ -125,3 +125,5 @@ And, to wrap this up, here’s an excerpt showing the key piece of code in the t
 ```
 
 Hope this helps!
+
+(Again, see a working example at [StackBlitz](https://stackblitz.com/~/github.com/kevinashworth/vite-tanstack-table-columns?file=src/components/table/PersonTable1.tsx), or see the code at my [GitHub repository](https://github.com/kevinashworth/vite-tanstack-table-columns).)

@@ -7,7 +7,22 @@ const metadata = {
 };
 ---
 
-<Layout metadata={metadata}>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchQuery = urlParams.get("q");
+
+    if (searchQuery) {
+      const searchInput = document.querySelector(".pagefind-ui input") as HTMLInputElement;
+      if (searchInput) {
+        searchInput.value = searchQuery;
+        searchInput.dispatchEvent(new Event("input")); // Trigger the input event to start the search
+      }
+    }
+  });
+</script>
+
+<Layout metadata={metadata} disablePagefind={true}>
   <section class="not-prose">
     <div class="mx-auto max-w-4xl px-4 py-6 md:px-6">
       <div class="mx-auto max-w-5xl text-center">

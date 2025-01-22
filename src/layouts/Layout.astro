@@ -13,10 +13,11 @@ import { I18N } from "~/utils/config";
 import "~/assets/styles/tailwind.css";
 
 export interface Props {
+  disablePagefind?: boolean;
   metadata?: MetaDataType;
 }
 
-const { metadata = {} } = Astro.props;
+const { disablePagefind = false, metadata = {} } = Astro.props;
 const { language, textDirection } = I18N;
 ---
 
@@ -33,7 +34,7 @@ const { language, textDirection } = I18N;
     <ClientRouter fallback="swap" />
   </head>
 
-  <body class="bg-page text-default" data-pagefind-body>
+  <body class="bg-page text-default" {...!disablePagefind && { "data-pagefind-body": "" }}>
     <slot />
 
     <BasicScripts />
