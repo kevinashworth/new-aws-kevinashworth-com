@@ -1,31 +1,16 @@
-a:link {
+.resume a:link {
   color: #900;
 }
-a:visited {
+.resume a:visited {
   color: #900;
 }
-a:hover {
+.resume a:hover {
   color: #e00;
 }
-a:active {
+.resume a:active {
   color: #e00;
 }
 
-div {
-  border-bottom: 0px;
-}
-.small,
-.smaller {
-  font-size: small;
-}
-.smaller {
-  padding-left: 0.1em;
-}
-
-.resume {
-  margin-left: auto;
-  margin-right: auto;
-}
 .resume div p,
 #centerfoot {
   margin-bottom: 1em;
@@ -49,21 +34,15 @@ div {
   text-transform: uppercase;
 }
 
-.caps {
-  text-transform: uppercase;
-}
 .smallcaps {
   font-size: smaller;
+  font-weight: 500;
   text-transform: uppercase;
 }
 
 #centerfoot {
   color: #666;
   font-size: x-small;
-}
-
-#container {
-  max-width: 40em;
 }
 
 .skills-section {
