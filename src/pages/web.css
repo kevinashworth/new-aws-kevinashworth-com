@@ -1,0 +1,104 @@
+.resume a:link {
+  color: #900;
+}
+.resume a:visited {
+  color: #900;
+}
+.resume a:hover {
+  color: #e00;
+}
+.resume a:active {
+  color: #e00;
+}
+
+.resume div p,
+#centerfoot {
+  margin-bottom: 1em;
+}
+.resume div ul {
+  list-style: circle;
+  margin-top: -1em;
+  padding-left: 2rem;
+}
+.resume div li {
+  margin-bottom: 0;
+}
+.resume div.heading {
+  border-top: 1px solid #900;
+  color: #900;
+  font-size: small;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.smallcaps {
+  font-size: smaller;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+#centerfoot {
+  color: #666;
+  font-size: x-small;
+}
+
+.skills-section {
+  flex-wrap: nowrap;
+  margin-bottom: 0.5em !important;
+  margin-top: 0.5em !important;
+}
+
+.skills-section p {
+  border-top: 1px solid #d8d8d8;
+  font-size: x-small;
+  font-weight: 600;
+  padding-bottom: 0.825em;
+  padding-right: 0;
+  text-transform: uppercase;
+}
+
+.resume div.skills-section ul.skills-list {
+  list-style: none;
+  margin-bottom: 0 !important;
+  padding-left: 0;
+}
+
+@media print {
+  .noprint,
+  #centerfoot,
+  #head {
+    display: none;
+  }
+  #center {
+    margin: auto;
+  }
+  .resume div {
+    padding-bottom: 0.2em;
+  }
+  .resume div a,
+  .resume div p a {
+    color: #000;
+    text-decoration: none;
+  }
+  .resume div.heading {
+    font-size: x-small;
+    letter-spacing: 0;
+  }
+  .resume div {
+    page-break-inside: avoid;
+  }
+
+  .resume div,
+  .resume div div,
+  .resume div p,
+  .resume div li {
+    font-size: small;
+  }
+
+  .resume div .skills-section p {
+    font-size: xx-small;
+  }
+}

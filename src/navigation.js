@@ -26,6 +26,7 @@ export const footerData = {
   socialLinks: [
     { ariaLabel: "Bitbucket", icon: "tabler:brand-bitbucket", href: "https://bitbucket.org/kevinashworth" },
     { ariaLabel: "Facebook", icon: "tabler:brand-facebook", href: "https://facebook.com/kevinashworth" },
+    { ariaLabel: "Flickr", icon: "tabler:brand-flickr", href: "https://flickr.com/photos/kevinashworth" },
     { ariaLabel: "Github", icon: "tabler:brand-github", href: "https://github.com/kevinashworth" },
     { ariaLabel: "IMDb", icon: "tabler:movie", href: "https://www.imdb.com/name/nm2825198" },
     { ariaLabel: "Instagram", icon: "tabler:brand-instagram", href: "https://www.instagram.com/iamkevinashworth/" },
