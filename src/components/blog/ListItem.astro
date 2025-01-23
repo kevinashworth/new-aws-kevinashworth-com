@@ -27,11 +27,11 @@ const alt = post?.imageAlt || post.title;
   {
     image && (
       <a class="group relative block" href={link ?? "javascript:void(0)"}>
-        <div class="relative h-0 overflow-hidden rounded pb-[56.25%] shadow-lg md:h-72 md:pb-[75%] lg:pb-[56.25%]">
+        <div class="relative h-0 overflow-hidden rounded-sm pb-[56.25%] shadow-lg md:h-72 md:pb-[75%] lg:pb-[56.25%]">
           {image && (
             <Image
               src={image}
-              class="absolute inset-0 mb-6 h-full w-full rounded object-cover shadow-lg"
+              class="absolute inset-0 mb-6 h-full w-full rounded-sm object-cover shadow-lg"
               widths={[400, 900]}
               width={900}
               sizes="(max-width: 900px) 400px, 900px"
@@ -67,8 +67,8 @@ const alt = post?.imageAlt || post.title;
       </h2>
     </header>
 
-    {!post.excerpt && post.subtitle && <p class="flex-grow text-lg text-muted dark:text-slate-400">{post.subtitle}</p>}
-    {post.excerpt && <p class="flex-grow text-lg text-muted dark:text-slate-400">{post.excerpt}</p>}
+    {!post.excerpt && post.subtitle && <p class="grow text-lg text-muted dark:text-slate-400">{post.subtitle}</p>}
+    {post.excerpt && <p class="grow text-lg text-muted dark:text-slate-400">{post.excerpt}</p>}
 
     <footer class="mt-5">
       <PostTags tags={post.tags} class="text-xs" />

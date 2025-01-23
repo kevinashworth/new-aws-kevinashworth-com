@@ -4,10 +4,11 @@ import mdx from "@astrojs/mdx";
 import partytown from "@astrojs/partytown";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
-import tailwind from "@astrojs/tailwind";
+// import tailwind from "@astrojs/tailwind";
 import icon from "astro-icon";
 import pagefind from "astro-pagefind";
 import { transformerNotationHighlight } from "@shikijs/transformers";
+import tailwindcss from "@tailwindcss/vite";
 
 // Node.js built-in modules
 import path from "path";
@@ -35,9 +36,6 @@ export default defineConfig({
   output: "static",
 
   integrations: [
-    tailwind({
-      applyBaseStyles: false,
-    }),
     sitemap({
       filter: (page) => !page.includes("ldr"),
     }),
@@ -66,6 +64,7 @@ export default defineConfig({
   },
 
   vite: {
+    plugins: [tailwindcss()],
     resolve: {
       alias: {
         "~": path.resolve(__dirname, "./src"),
