@@ -59,7 +59,11 @@ export default defineConfig({
     remarkPlugins: [readingTimeRemarkPlugin],
     rehypePlugins: [responsiveTablesRehypePlugin],
     shikiConfig: {
-      transformers: [transformerNotationHighlight()],
+      transformers: [
+        transformerNotationHighlight({
+          matchAlgorithm: "v3",
+        }),
+      ],
     },
   },
 
