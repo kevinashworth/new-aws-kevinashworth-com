@@ -16,13 +16,13 @@ const image = await findImage(post.image);
 ---
 
 <article class="mb-6 transition">
-  <div class="relative mb-6 rounded bg-gray-400 shadow-lg dark:bg-slate-700 md:h-64">
+  <div class="relative mb-6 rounded-sm bg-gray-400 shadow-lg dark:bg-slate-700 md:h-64">
     {
       image && (
         <a href={getPermalink(post.permalink, "post")}>
           <Image
             src={image}
-            class="w-full rounded bg-gray-400 shadow-lg dark:bg-slate-700 md:h-full"
+            class="w-full rounded-sm bg-gray-400 shadow-lg dark:bg-slate-700 md:h-full"
             widths={[400, 900]}
             width={400}
             sizes="(max-width: 900px) 400px, 900px"
