@@ -72,17 +72,17 @@ function FirstLetterTool() {
         value={inputText}
         ref={inputTextareaRef}
       />
-      <div className="flex flex-col justify-between xs:flex-row">
+      <div className="xs:flex-row flex flex-col justify-between">
         <button
           onClick={convert}
-          className="w-min whitespace-nowrap rounded-md bg-black px-4 py-0 text-base text-white dark:border"
+          className="w-min rounded-md bg-black px-4 py-0 text-base whitespace-nowrap text-white dark:border"
         >
           <span className="hidden sm:inline">↑ Converts Text Above to First Letters Below ↓</span>
           <span className="inline sm:hidden">↑ Converts to First Letters ↓</span>
         </button>
         <button
           onClick={handleClear}
-          className="w-min whitespace-nowrap rounded-md bg-black px-4 py-0 text-base text-white dark:border"
+          className="w-min rounded-md bg-black px-4 py-0 text-base whitespace-nowrap text-white dark:border"
         >
           Clear All Fields
         </button>

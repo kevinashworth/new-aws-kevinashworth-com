@@ -11,6 +11,7 @@
     "format": "prettier -w .",
     "lint:eslint": "eslint ."
   },
+  "type": "module",
   "dependencies": {
     "@astrojs/react": "4.4.1",
     "@astrojs/rss": "4.0.13",
