@@ -31,6 +31,7 @@
   If we ever want to remove these styles, we need to add an explicit border
   color utility to any element that depends on these defaults.
 */
+
 @layer base {
   *,
   ::after,
@@ -103,6 +104,14 @@
   display: block;
 }
 
+.footnotes {
+  @apply my-8 border-t border-b border-gray-300 py-4;
+}
+
+.footnotes p {
+  font-size: small;
+}
+
 [astro-icon].icon-light > * {
   stroke-width: 1.2;
 }
@@ -117,7 +126,6 @@
 [data-aw-toggle-menu].expanded g > path:first-child {
   @apply translate-x-[-3px] translate-y-[15px] -rotate-45;
 }
-
 [data-aw-toggle-menu].expanded g > path:last-child {
   @apply translate-x-[14px] translate-y-[-8px] rotate-45;
 }
