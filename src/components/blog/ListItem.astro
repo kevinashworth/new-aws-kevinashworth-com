@@ -49,15 +49,15 @@ const alt = post?.imageAlt || post.title;
     <header>
       <div class="mb-1">
         <span class="text-sm">
-          <time datetime={String(post.publishDate)} class="inline-block text-xs text-muted dark:text-slate-400"
+          <time datetime={String(post.publishDate)} class="text-muted inline-block text-xs dark:text-slate-400"
             >{getFormattedDate(post.publishDate)}</time
           >
         </span>
       </div>
-      <h2 class="font-heading text-xl font-bold leading-tight dark:text-slate-300 sm:text-2xl">
+      <h2 class="font-heading text-xl leading-tight font-bold sm:text-2xl dark:text-slate-300">
         {
           link ? (
-            <a class="transition duration-200 ease-in hover:text-primary dark:hover:text-red-700" href={link}>
+            <a class="hover:text-primary transition duration-200 ease-in dark:hover:text-red-700" href={link}>
               {post.title}
             </a>
           ) : (
@@ -67,8 +67,8 @@ const alt = post?.imageAlt || post.title;
       </h2>
     </header>
 
-    {!post.excerpt && post.subtitle && <p class="grow text-lg text-muted dark:text-slate-400">{post.subtitle}</p>}
-    {post.excerpt && <p class="grow text-lg text-muted dark:text-slate-400">{post.excerpt}</p>}
+    {!post.excerpt && post.subtitle && <p class="text-muted grow text-lg dark:text-slate-400">{post.subtitle}</p>}
+    {post.excerpt && <p class="text-muted grow text-lg dark:text-slate-400">{post.excerpt}</p>}
 
     <footer class="mt-5">
       <PostTags tags={post.tags} class="text-xs" />

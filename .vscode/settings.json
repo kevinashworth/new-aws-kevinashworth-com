@@ -8,7 +8,8 @@
     "typescriptreact" // Enable .tsx
   ],
   "files.associations": {
-    "*.mdx": "markdown"
+    "*.mdx": "markdown",
+    "*.css": "tailwindcss"
   },
   "prettier.documentSelectors": ["**/*.astro"],
   "[astro]": {
