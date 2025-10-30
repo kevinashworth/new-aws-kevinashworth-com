@@ -25,7 +25,7 @@ const alt = post?.imageAlt || post?.excerpt || "";
 <section class="mx-auto py-8 sm:py-16 lg:py-20">
   <article>
     <header>
-      <div class="mx-auto mb-2 mt-0 max-w-3xl px-4 sm:px-6">
+      <div class="mx-auto mt-0 mb-2 max-w-3xl px-4 sm:px-6">
         <time datetime={String(post.publishDate)} class="inline-block">{getFormattedDate(post.publishDate)}</time>
         {
           post.category && (
@@ -40,11 +40,11 @@ const alt = post?.imageAlt || post?.excerpt || "";
         }
         {post.readingTime && <> · {post.readingTime} min read</>}
       </div>
-      <h1 class="mx-auto max-w-3xl px-4 font-heading text-2xl font-bold tracking-tight sm:px-6 sm:text-4xl md:text-5xl">
+      <h1 class="font-heading mx-auto max-w-3xl px-4 text-2xl font-bold tracking-tight sm:px-6 sm:text-4xl md:text-5xl">
         {post.title}
       </h1>
       <h2
-        class="mx-auto mb-8 mt-4 max-w-3xl px-4 text-base text-muted dark:text-slate-400 sm:px-6 sm:text-lg md:text-xl"
+        class="text-muted mx-auto mt-4 mb-8 max-w-3xl px-4 text-base sm:px-6 sm:text-lg md:text-xl dark:text-slate-400"
       >
         {post.subtitle}
       </h2>
@@ -73,8 +73,8 @@ const alt = post?.imageAlt || post?.excerpt || "";
       {Content ? <Content /> : <Fragment set:html={post.content || ""} />}
     </div>
     <div class="mx-auto mt-8 flex max-w-3xl flex-col justify-between px-6 sm:flex-row sm:px-6">
-      <PostTags tags={post.tags} class="mr-5 text-xs rtl:ml-5 rtl:mr-0" />
-      <SocialShare url={url} text={post.title} class="mt-5 align-middle text-gray-500 dark:text-slate-600 sm:mt-1" />
+      <PostTags tags={post.tags} class="mr-5 text-xs rtl:mr-0 rtl:ml-5" />
+      <SocialShare url={url} text={post.title} class="mt-5 align-middle text-gray-500 sm:mt-1 dark:text-slate-600" />
     </div>
   </article>
 </section>

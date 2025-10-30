@@ -3,8 +3,8 @@ const { rubric = await Astro.slots.render("rubric"), headline = await Astro.slot
 ---
 
 <header class="mx-auto max-w-5xl text-center">
-  <p class="text-base font-bold uppercase tracking-wide text-secondary dark:text-red-200">{rubric}</p>
-  <h1 class="leading-tighter mb-4 font-heading text-3xl font-bold tracking-tighter dark:text-gray-200">
+  <p class="text-secondary text-base font-bold tracking-wide uppercase dark:text-red-200">{rubric}</p>
+  <h1 class="leading-tighter font-heading mb-4 text-3xl font-bold tracking-tighter dark:text-gray-200">
     {headline}
   </h1>
 </header>
