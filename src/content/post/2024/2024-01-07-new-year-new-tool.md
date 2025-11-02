@@ -12,6 +12,6 @@ tags:
   - TailwindCSS
 ---
 
-Recently, the tools I was using to build and host my website needed some serious updating. Instead of digging into Jekyll and Rugy gems, and any other stuff I do not otherwise use, I ditched them. Instead of digging into those again to figure out the updates, I went and dug into [Astro](https://astro.build/). _Voilà!_ This simple site of mine is now built with tools more in keeping with my professional experience. That said, it's Astro, including [Tailwind](https://tailwindcss.com), but it's not yet built with React or another JS framework.
+Recently, the tools I was using to build and host my website needed some serious updating. Instead of digging into Jekyll and Ruby gems, and any other stuff I do not otherwise use, I ditched them. Instead of digging into those again to figure out the updates, I went and dug into [Astro](https://astro.build/). _Voilà!_ This simple site of mine is now built with tools more in keeping with my professional experience. That said, it's Astro, including [Tailwind](https://tailwindcss.com), but it's not yet built with React or another JS framework.
 
 Thanks to [Astrowind](https://astrowind.vercel.app) for helping me get started.
