@@ -37,7 +37,7 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
 ---
 
 <style lang="scss">
-  @media (width >= 48rem) {
+  @media (width >= 64rem) {
     a.menu-link {
       position: relative;
 
@@ -73,31 +73,28 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
   {...id ? { id } : {}}
 >
   <div class="absolute inset-0"></div>
-  <div class="text-default relative mx-auto w-full max-w-7xl px-3 py-3 md:flex md:justify-between md:px-6">
+  <div class="text-default relative mx-auto w-full max-w-7xl px-3 py-3 lg:flex lg:justify-between lg:px-6">
     <div class:list={[{ "mr-auto rtl:mr-0 rtl:ml-auto": position === "right" }, "flex justify-between"]}>
-      <a
-        class="home-link ml-2 flex items-center text-2xl font-bold whitespace-nowrap md:text-xl"
-        href={getHomePermalink()}
-      >
+      <a class="home-link flex items-center text-2xl font-bold whitespace-nowrap lg:text-xl" href={getHomePermalink()}>
         {SITE?.name}
       </a>
-      <div class="flex items-center md:hidden">
+      <div class="flex items-center lg:hidden">
         <ToggleMenu />
       </div>
     </div>
     <nav
-      class="text-default hidden w-full items-center overflow-x-hidden overflow-y-auto md:mx-5 md:flex md:w-auto md:overflow-x-auto md:overflow-y-visible"
+      class="text-default hidden w-full items-center overflow-x-hidden overflow-y-auto lg:mx-5 lg:flex lg:w-auto lg:overflow-x-auto lg:overflow-y-visible"
       aria-label="Main navigation"
     >
       <ul
-        class="flex w-full flex-col text-xl font-medium tracking-[0.01rem] md:w-auto md:flex-row md:self-center md:text-[0.9375rem]"
+        class="flex w-full flex-col text-xl font-medium tracking-[0.01rem] lg:w-auto lg:flex-row lg:self-center lg:text-[0.9375rem]"
       >
         {
           links.map(({ text, href }) => (
             <li>
               <a
                 class:list={[
-                  "menu-link mx-2 my-1 flex items-center px-1 whitespace-nowrap max-md:decoration-[#900] max-md:decoration-4 max-md:hover:underline dark:hover:text-white",
+                  "menu-link mx-2 my-1 flex items-center px-1 whitespace-nowrap max-lg:decoration-[#900] max-lg:decoration-4 max-lg:hover:underline dark:hover:text-white",
                   { "aw-link-active": href === currentPath },
                 ]}
                 href={href}
@@ -112,12 +109,12 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
     <div
       class:list={[
         { "ml-auto rtl:mr-auto rtl:ml-0": position === "left" },
-        "fixed bottom-0 left-0 hidden w-full items-center justify-end p-3 md:static md:mb-0 md:flex md:w-auto md:self-center md:justify-self-end md:p-0 rtl:right-0 rtl:left-auto",
+        "fixed bottom-0 left-0 hidden w-full items-center justify-end p-3 lg:static lg:mb-0 lg:flex lg:w-auto lg:self-center lg:justify-self-end lg:p-0 rtl:right-0 rtl:left-auto",
       ]}
     >
-      <div class="flex w-full items-center justify-between md:w-auto">
+      <div class="flex w-full items-center justify-between lg:w-auto">
         <div class="flex">
-          {showToggleTheme && <ToggleTheme iconClass="w-6 h-6 md:w-5 md:h-5 md:inline-block" />}
+          {showToggleTheme && <ToggleTheme iconClass="w-6 h-6 lg:w-5 lg:h-5 lg:inline-block" />}
         </div>
       </div>
     </div>
