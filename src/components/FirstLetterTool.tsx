@@ -17,17 +17,17 @@ function FirstLetterTool() {
     setOutputText(converted);
   }, []);
 
-  const inputTextareaRef = useRef<HTMLTextAreaElement>(null);
-  const outputTextareaRef = useRef<HTMLTextAreaElement>(null);
+  const inputTextareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const outputTextareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-  function adjustTextareaHeight(ref: React.RefObject<HTMLTextAreaElement>) {
+  function adjustTextareaHeight(ref: React.RefObject<HTMLTextAreaElement | null>) {
     if (!ref.current) return;
     ref.current.style.height = "auto"; // Reset height to auto to get the correct scrollHeight
     const height = Math.min(Math.max(ref.current.scrollHeight, minScrollHeight), maxScrollHeight);
     ref.current.style.height = `${height}px`;
   }
 
-  function resetTextareaHeight(ref: React.RefObject<HTMLTextAreaElement>) {
+  function resetTextareaHeight(ref: React.RefObject<HTMLTextAreaElement | null>) {
     if (!ref.current) return;
     ref.current.style.height = `${minScrollHeight}px`;
   }

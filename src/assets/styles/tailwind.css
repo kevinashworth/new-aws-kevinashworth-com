@@ -9,6 +9,8 @@
   --color-primary: var(--aw-color-primary);
   --color-secondary: var(--aw-color-secondary);
   --color-accent: var(--aw-color-accent);
+  --color-hover: var(--aw-color-text-hover);
+  --color-heading: var(--aw-color-text-heading);
   --color-default: var(--aw-color-text-default);
   --color-muted: var(--aw-color-text-muted);
 
@@ -39,6 +41,39 @@
   ::backdrop,
   ::file-selector-button {
     border-color: var(--color-gray-200, currentColor);
+  }
+
+  a {
+    @apply text-secondary underline;
+  }
+  a:visited {
+    @apply text-secondary;
+  }
+  a:hover,
+  a:active {
+    @apply text-hover;
+  }
+
+  /* menu-link style for nav in Header on narrow screens */
+  a.menu-link {
+    @apply text-default no-underline;
+  }
+  a.menu-link:visited,
+  a.menu-link:hover,
+  a.menu-link:active {
+    @apply text-default;
+  }
+
+  /* home-link style for site name in Header and Footer */
+  a.home-link {
+    @apply text-default no-underline;
+  }
+  a.home-link:visited {
+    @apply text-default;
+  }
+  a.home-link:hover,
+  a.home-link:active {
+    @apply text-secondary no-underline;
   }
 }
 

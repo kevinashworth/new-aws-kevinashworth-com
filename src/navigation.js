@@ -12,7 +12,6 @@ export const textLinks = [
 
 export const headerData = {
   links: textLinks,
-  // actions: [{ text: 'Download', href: 'https://github.com/onwidget/astrowind', target: '_blank' }],
 };
 
 const currentYear = new Date().getFullYear();
@@ -31,13 +30,13 @@ export const footerData = {
     { ariaLabel: "IMDb", icon: "tabler:movie", href: "https://www.imdb.com/name/nm2825198" },
     { ariaLabel: "Instagram", icon: "tabler:brand-instagram", href: "https://www.instagram.com/iamkevinashworth/" },
     { ariaLabel: "LinkedIn", icon: "tabler:brand-linkedin", href: "https://www.linkedin.com/in/iamkevinashworth/" },
-    { ariaLabel: "Mastodon", icon: "tabler:brand-mastodon", href: "https://toot.community/@kevinashworth" },
+    { ariaLabel: "Mastodon", icon: "tabler:brand-mastodon", href: "https://mastodon.social/@kevinashworth" },
     {
       ariaLabel: "Stack Overflow",
       icon: "tabler:brand-stackoverflow",
       href: "https://stackoverflow.com/users/7082724/kevin-ashworth",
     },
-    { ariaLabel: "Threads", icon: "tabler:brand-threads", href: "https://www.threads.net/@iamkevinashworth" },
+    { ariaLabel: "Threads", icon: "tabler:brand-threads", href: "https://www.threads.com/@iamkevinashworth" },
     { ariaLabel: "Vimeo", icon: "tabler:brand-vimeo", href: "https://vimeo.com/kevinashworth" },
     { ariaLabel: "YouTube", icon: "tabler:brand-youtube", href: "https://www.youtube.com/user/kevinashworth" },
   ],
