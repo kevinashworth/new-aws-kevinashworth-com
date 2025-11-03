@@ -3,345 +3,280 @@ import Layout from "~/layouts/PageLayout.astro";
 
 import "./_web.css";
 
-const lastModified = "January 14, 2025";
+const lastModified = "October 4, 2025";
 
 const metadata = {
   title: "My web resumé",
-  description: "Kevin Ashworth's Web Resumé (Front-End Developer)",
+  description: "Kevin Ashworth’s Web Resumé (Front-End Developer)",
 };
 ---
 
 <Layout metadata={metadata}>
-  <div class="mx-auto mb-4 max-w-3xl">
-    <div class="resume">
-      <div class="mt-4 text-sm">
-        <span class="text-xl font-bold"><a href="/">Kevin Ashworth</a></span><br />
-        <span class="text-base">Front-End Developer</span><br />
-        <a href="mailto:kevinashworth@me.com">kevinashworth@me.com</a><br />
-        310-993-7136<br />
-        <a href="https://github.com/kevinashworth">GitHub</a>,
-        <a href="https://www.linkedin.com/in/iamkevinashworth/">LinkedIn</a>
-      </div>
-      <div class="heading">Objective</div>
-      <p>Seeking full-time opportunities to apply my varied background to web projects.</p>
-      <div class="heading">Summary of Qualifications</div>
-      <p class="mb-2">
-        Adept at <b>React and the modern web, full-stack JavaScript</b>. Reliant on good code structure, patience,
-        reference to documentation.
-      </p>
-      <p class="mb-2">
-        Passionate about user interfaces, an advocate for designing user experience first and foremost. An engineer who
-        can design, a designer who can build.
-      </p>
-      <p>
-        Quick learner, able to take on problems outside direct area of expertise and be successful. Easy-going, skillful
-        communicator, empathetic and thoughtful, in technical and non-technical communication. Detail-oriented, zealous
-        about quality.
-      </p>
-      <div class="heading">Education</div>
-      <p><b>Cornell University</b>, Master of Engineering, 3.86 GPA</p>
-      <p>
-        <b>Brigham Young University</b>, Bachelor of Science in Electrical Engineering, cum laude, 3.78 GPA<br />
-      </p>
-      <div class="heading">Skills</div>
-      <div class="skills-section flex gap-8">
+  <div class="mx-2">
+    <div class="mx-auto mb-4 max-w-3xl">
+      <div class="resume">
+        <div class="mt-4 text-sm">
+          <span class="text-xl font-bold"><a href="/">Kevin Ashworth</a></span><br />
+          <span class="text-base">Front-End Developer</span><br />
+          <a href="mailto:kevinashworth@gmail.com">kevinashworth@gmail.com</a><br />
+          310-993-7136<br />
+          <a href="https://github.com/kevinashworth">GitHub</a>,
+          <a href="https://www.linkedin.com/in/iamkevinashworth/">LinkedIn</a>
+        </div>
+        <div class="heading">Objective</div>
+        <p>Seeking full-time opportunities to apply my varied background to web projects and mobile apps.</p>
+        <div class="heading">Summary of Qualifications</div>
+        <p class="mb-2">
+          Adept at <span class="font-semibold">React and the modern web</span>, full-stack JavaScript. Reliant on good
+          code structure, patience, reference to documentation.
+        </p>
+        <p class="mb-2">
+          Passionate about user interfaces, an advocate for designing user experience first and foremost. An engineer
+          who can design, a designer who can build.
+        </p>
+        <p>
+          Quick learner, able to take on problems outside direct area of expertise and be successful. Easy-going,
+          skillful communicator, empathetic and thoughtful, in technical and non-technical communication.
+          Detail-oriented, zealous about quality.
+        </p>
+        <div class="heading">Education</div>
+        <p><b>Cornell University</b>, Master of Engineering, 3.86 GPA</p>
+        <p>
+          <b>Brigham Young University</b>, Bachelor of Science in Electrical Engineering, cum laude, 3.78 GPA<br />
+        </p>
+        <div class="heading">Skills</div>
         <div>
-          <p>Languages</p>
-          <ul class="skills-list">
-            <li>CSS <span class="text-xs">(10+ years)</span></li>
-            <li>HTML <span class="text-xs">(10+ years)</span></li>
-            <li>JavaScript <span class="text-xs">(10+ years)</span></li>
-            <li>TypeScript <span class="text-xs">(2 years)</span></li>
-          </ul>
+          <p>
+            <span class="font-semibold">Front-End Development:</span> CSS, HTML, JavaScript; TypeScript, React, <span
+              class="text-nowrap">Tailwind CSS</span
+            >, <span class="text-nowrap">TanStack Query</span> and <span class="text-nowrap">TanStack Table</span>,
+            React Hook Form, Zod, Zustand
+          </p>
+
+          <p><span class="font-semibold">Mobile Development:</span> React-Native, Expo</p>
+
+          <p><span class="font-semibold">Testing &amp; Debugging:</span> Cypress, Vitest, Jest, DevTools, Postman</p>
+
+          <p>
+            <span class="font-semibold">Development Tools:</span> Git, Docker, Bitbucket, GitHub, NodeJS, Agile/Scrum methodologies
+          </p>
         </div>
+      </div>
+
+      <div class="resume">
+        <div class="heading">Full-Time Experience</div>
+      </div>
+
+      <div class="resume flex flex-col gap-8">
         <div>
-          <p>Current Stack</p>
-          <ul class="skills-list">
-            <li>React <span class="text-xs">(5 years)</span></li>
-            <li>Vite <span class="text-xs">(2 years)</span></li>
-            <li>Tailwind CSS <span class="text-xs">(2 years)</span></li>
-            <li>TanStack Query <span class="text-xs">(4 years)</span></li>
+          <div class="flex flex-row justify-between">
+            <div class="text-base font-bold">FreshLime &amp; GotYou, Lehi UT (full-time, remote)</div>
+            <div class="text-sm font-medium">2021 &ndash; current position</div>
+          </div>
+
+          <div class="font-medium">Mobile App Developer</div>
+          <p class="font-serif text-base">
+            Successfully transitioned to mobile app development utilizing React Native and Expo, contributing
+            significantly to the re-launch of our flagship iOS/Android app for the customers of GotYou businesses.
+          </p>
+          <p class="font-serif text-base">Played a key role in modernizing the UI and improving performance:</p>
+          <ul class="mb-4 font-serif text-base">
+            <li>
+              Designed and implemented a new section of the mobile app called the Daily Deal, resulting in <span
+                class="font-semibold"
+              >
+                user engagement rates of over 50%
+              </span>.
+            </li>
+            <li>
+              Migrated our process from Expo Go to development builds, incorporating <code class="text-sm text-nowrap"
+                >expo-font</code
+              >, <code class="text-sm text-nowrap">expo-notifications</code>, and other libraries not available in Expo
+              Go.
+            </li>
+            <li>Migrated app from email authentication to mobile OTP sign in.</li>
+            <li>
+              Used state management with <code class="text-sm text-nowrap">easy-peasy</code> to improve code quality and
+              maintainability.
+            </li>
+            <li>
+              Contributed to the documentation of new features and best practices for React Native development within
+              the team.
+            </li>
           </ul>
-        </div>
-        <div>
-          <p>Tools</p>
-          <ul class="skills-list">
-            <li>Bitbucket <span class="text-xs">(4 years)</span></li>
-            <li>Cypress <span class="text-xs">(2 years)</span></li>
-            <li>GitHub <span class="text-xs">(10+ years)</span></li>
-            <li>NodeJS <span class="text-xs">(5 years)</span></li>
-          </ul>
-        </div>
-        <div>
-          <p>Other JS Tools</p>
-          <ul class="skills-list">
-            <li>React Redux <span class="text-xs">(2 years)</span></li>
-            <li>react-bootstrap <span class="text-xs">(3 years)</span></li>
-            <li>Material-UI <span class="text-xs">(2 years)</span></li>
-            <li>Docker <span class="text-xs">(2 years)</span></li>
-          </ul>
-        </div>
-      </div>
-    </div>
 
-    <div class="resume">
-      <div class="heading">Full-Time Experience</div>
-    </div>
-
-    <div class="resume flex flex-col gap-8">
-      <div>
-        <div class="flex flex-row justify-between">
-          <div class="text-base font-bold">GotYou, Lehi UT (full-time remote)</div>
-          <div class="text-sm font-medium">2023 – current position</div>
-        </div>
-        <div class="font-medium">Front-end Web Developer</div>
-        <p class="font-serif text-base">
-          Selected the entire front-end tech stack, then built and maintained React web application for GotYou business
-          owners to log in and manage their accounts.
-        </p>
-        <ul class="font-serif text-base">
-          <li>React, Vite, TypeScript</li>
-          <li>TanStack Query, TanStack Table, zustand, Zod, React Hook Form</li>
-          <li>Tailwind CSS, Headless UI, shadcn/ui</li>
-          <li>Cypress, Vitest</li>
-        </ul>
-        <br />
-        <div class="font-medium">Mobile App Developer</div>
-        <p class="font-serif text-base">
-          Using React Native, maintained iOS/Android app for the customers of GotYou businesses.
-        </p>
-        <ul class="font-serif text-base">
-          <li>React, React Native</li>
-          <li>easy-peasy</li>
-        </ul>
-      </div>
-
-      <div>
-        <div class="flex flex-row justify-between">
-          <div class="text-base font-bold">FreshLime, Lehi UT (full-time remote)</div>
-          <div class="text-sm font-medium">2021 – 2023</div>
-        </div>
-        <div class="font-medium">UI Software Engineer</div>
-        <p class="font-serif text-base">
-          Maintained React site for store owners to log in and manage their accounts. Improved UI in many ways.
-        </p>
-        <ul class="font-serif text-base">
-          <li>React</li>
-          <li>Material-UI</li>
-          <li>Redux</li>
-        </ul>
-      </div>
-
-      <div>
-        <b>Ab Initio Software, Lexington MA</b><br />
-        <span class="font-medium">User-Interface Designer</span><br />
-        <p class="font-serif text-base">
-          Responsible for design of software applications, internal and external web sites, and web applications.
-        </p>
-        <ul class="font-serif text-base">
-          <li>
-            <b>Improved the previously-engineer-designed interface</b> of main web application, resulting in a good-looking
-            UI loved by managers, customers, and even engineers.
-          </li>
-          <li>Built and maintained main external site.</li>
-          <li>
-            Built and maintained employees-only intranet. With a high design concept, this Adobe AIR site was finicky,
-            but lovely.
-          </li>
-          <li>Coached new employees in using company&#8217;s software.</li>
-        </ul>
-      </div>
-
-      <div>
-        <b>Circle.com, New York NY</b><br />
-        <span class="font-medium">Production Manager</span><br />
-        <p class="font-serif text-base">Responsible for workload and personal growth of programmers.</p>
-        <ul class="mb-0 list-inside list-disc pb-0 font-serif text-base">
-          <li>Managed group of 5 programmers.</li>
-          <li>Hired 1 full-time and 6 freelance programmers.</li>
-          <li>
-            <b>Worked across disciplines</b>: Coordinated with 6 project managers, 4 design directors, technologists at
-            other offices and many client representatives.
-          </li>
-        </ul>
-        <div class="font-serif text-base">
-          Partial client list: Schlumberger, Newsweek, HBO Screening Room, AOL @ School, Goldman Sachs intranet,
-          NetMarket, IBM intranet, Datek, Univision, Gateway.
-        </div>
-      </div>
-
-      <div>
-        <b>Hewlett-Packard, San Diego CA</b><br />
-        <span class="font-medium">Electrical Engineer, Design</span>
-        <p class="font-serif text-base">
-          Responsible for design of power supply for a new color copier product, prototype electronics, design of
-          copy-controlling functionality and mechanical interface for sensors and heater.
-        </p>
-        <ul class="list-inside list-disc font-serif text-base">
-          <li>
-            Created performance and regulatory specification and defined technical criteria to evaluate vendor
-            qualifications, resulting in selection and implementation of a power supply used world-wide.
-          </li>
-          <li>
-            Redesigned analog circuit and edited reference specification for clarity, achieving proper execution of
-            copy-controlling function on a color copier with no field failures and no customer complaints.
-          </li>
-          <li>
-            Redesigned paper sensor circuit, thus ensuring a smooth production ramp with no shutdowns for this sensor.
-          </li>
-        </ul>
-        <br />
-        <span class="font-medium">Electrical Engineer, Manufacturing</span>
-        <p class="font-serif text-base">
-          Responsible for main electronics boards for three printer and copier products, seeing to design quality, cost
-          and reliability improvements, warranty performance and support issues; also responsible for production-line
-          issues.
-        </p>
-        <ul class="list-inside list-disc font-serif text-base">
-          <li>
-            Improved functional test of electronics board at contract manufacturer through improvements to test
-            software, eliminating 2 failure modes of the board at top-level factory.
-          </li>
-          <li>
-            Reprogrammed DOS end-of-line testing for copier product, which resulted in an assembly-time reduction of 2
-            minutes per unit.
-          </li>
-          <li>Reduced high servo subsystem failure rate by over 90%.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="resume">
-      <div class="heading">Side Projects</div>
-    </div>
-
-    <div class="resume flex flex-col gap-8">
-      <div>
-        <b>Civic Tech Index</b><br />
-        <span class="font-medium">Front-end developer</span><br />
-        <p class="font-serif text-base">
-          Open-source React project from <a href="https://www.hackforla.org">Hack For LA</a>
-        </p>
-        <ul class="font-serif text-base">
-          <li>Brought cohesion to team’s use of Material-UI</li>
-          <li>Wrote Cypress tests, expanding code coverage from 50% to 91%</li>
-          <li>Wrote and edited documentation</li>
-          <li>
-            Within a month, became <a href="https://github.com/civictechindex/CTI-website-frontend/graphs/contributors"
-              >main contributor</a
+          <div class="font-medium">Front-End Web Developer</div>
+          <p class="font-serif text-base">
+            In a challenging, under-funded startup environment, <span class="font-semibold"
+              >selected the front-end tech stack, built, and maintained</span
             >
-          </li>
-        </ul>
+            a new web application to manage small-business owner accounts and billing.
+          </p>
+          <p class="mb-0 pb-0 font-serif text-base">
+            Also maintained and improved a pre-existing React JavaScript Material-UI web app from the sister business,
+            which had been built for similar purposes.
+          </p>
+          <p class="font-serif text-base">
+            Led the development of a completely new, fully-type-checked React TypeScript Tailwind web app, proactively
+            addressing design gaps and implementing missing UI elements to ensure a polished UX:
+          </p>
+          <ul class="font-serif text-base">
+            <li>Ensured front-end launched successfully and on time.</li>
+            <li>
+              Filled in design details such as missing icons and overlooked UI elements, and error handling and most of
+              the design work off the “happy path.”
+            </li>
+            <li>
+              Utilized TypeScript to address complex state management requirements, and to improve code quality and
+              maintainability
+            </li>
+            <li>Collaborated with the backend team, and built type-checking for all endpoints.</li>
+          </ul>
+        </div>
+
+        <div>
+          <b>Ab Initio Software, Lexington MA</b><br />
+          <span class="font-medium">User-Interface Designer</span><br />
+          <p class="font-serif text-base">
+            Responsible for design of software applications, internal and external web sites, and web applications.
+          </p>
+          <ul class="font-serif text-base">
+            <li>
+              <span class="font-semibold">Improved the previously-engineer-designed interface</span> of main web application,
+              resulting in a good-looking UI loved by managers, customers, and even engineers.
+            </li>
+            <li>Built and maintained main external site.</li>
+            <li>
+              Built and maintained employees-only intranet. With a high design concept, this Adobe AIR site was finicky,
+              but lovely.
+            </li>
+            <li>Coached new employees in using company’s software.</li>
+          </ul>
+        </div>
+
+        <div>
+          <b>Circle.com, New York NY</b><br />
+          <span class="font-medium">Production Manager</span><br />
+          <p class="font-serif text-base">Responsible for workload and personal growth of programmers.</p>
+          <ul class="mb-0 list-inside list-disc pb-0 font-serif text-base">
+            <li>Managed group of 5 programmers.</li>
+            <li>Hired 1 full-time and 6 freelance programmers.</li>
+            <li>
+              <span class="font-semibold">Worked across disciplines</span>: Coordinated with 6 project managers, 4
+              design directors, technologists at other offices and many client representatives.
+            </li>
+          </ul>
+          <div class="font-serif text-base">
+            Partial client list: Schlumberger, Newsweek, HBO Screening Room, AOL @ School, Goldman Sachs intranet,
+            NetMarket, IBM intranet, Datek, Univision, Gateway.
+          </div>
+        </div>
+
+        <div>
+          <b>Hewlett-Packard, San Diego CA</b><br />
+          <span class="font-medium">Electrical Engineer, Design</span>
+          <p class="font-serif text-base">
+            Responsible for design of power supply for a new color copier product, prototype electronics, design of
+            copy-controlling functionality and mechanical interface for sensors and heater.
+          </p>
+          <ul class="list-inside list-disc font-serif text-base">
+            <li>
+              Created performance and regulatory specification and defined technical criteria to evaluate vendor
+              qualifications, resulting in selection and implementation of a power supply used world-wide.
+            </li>
+            <li>
+              Redesigned analog circuit and edited reference specification for clarity, achieving proper execution of
+              copy-controlling function on a color copier with no field failures and no customer complaints.
+            </li>
+            <li>
+              Redesigned paper sensor circuit, thus ensuring a smooth production ramp with no shutdowns for this sensor.
+            </li>
+          </ul>
+          <br />
+          <span class="font-medium">Electrical Engineer, Manufacturing</span>
+          <p class="font-serif text-base">
+            Responsible for main electronics boards for three printer and copier products, seeing to design quality,
+            cost and reliability improvements, warranty performance and support issues; also responsible for
+            production-line issues.
+          </p>
+          <ul class="list-inside list-disc font-serif text-base">
+            <li>
+              Improved functional test of electronics board at contract manufacturer through improvements to test
+              software, eliminating 2 failure modes of the board at top-level factory.
+            </li>
+            <li>
+              Reprogrammed DOS end-of-line testing for copier product, which resulted in an assembly-time reduction of 2
+              minutes per unit.
+            </li>
+            <li>Reduced high servo subsystem failure rate by over 90%.</li>
+          </ul>
+        </div>
       </div>
 
-      <div>
-        “<b><a href="https://github.com/kevinashworth/Octave">Octave</a></b>”<br />
-        <span class="font-medium">Full-stack developer</span><br />
-        <p class="font-serif text-base">React+GraphQL SPA, large side project</p>
-        <ul class="font-serif text-base">
-          <li>Built with Vulcan, which uses Meteor</li>
-          <li>
-            Wrote 71 React <a href="https://github.com/kevinashworth/Octave/tree/main/packages/octave/lib/components"
-              >components</a
-            >
-          </li>
-          <li>Used Redux, Apollo, Twilio, and many npm libraries</li>
-          <li>Used MongoDB with server-side data denormalization</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="resume">
-      <div class="heading">Freelance Highlights</div>
-    </div>
-
-    <div class="resume flex flex-col gap-8">
-      <div>
-        <b>UnionWorking, Los Angeles CA</b><br />
-        <span class="font-medium">WordPress Developer</span> — <a href="https://unionworking.com/">unionworking.com</a
-        ><br />
-        <p class="font-serif text-base">Built this grassroots site, based on a client-selected WordPress template.</p>
-        <ul class="font-serif text-base">
-          <li>Selected and deployed free plugins as needed.</li>
-          <li>Created additional graphics as needed.</li>
-          <li>Copy-edited as client allowed.</li>
-        </ul>
+      <div class="resume">
+        <div class="heading">Side Projects</div>
       </div>
 
-      <div>
-        <b>Susannah B, Los Angeles CA</b><br />
-        <span class="font-medium">Squarespace Developer</span> — <a href="https://susannahb.squarespace.com/"
-          >susannahb.squarespace.com</a
-        >
-        <p class="font-serif text-base">Built musician site, based on a client-selected Squarespace template.</p>
-        <ul class="font-serif text-base">
-          <li>Improved limited Squarespace options with injected jQuery and CSS.</li>
-        </ul>
+      <div class="resume flex flex-col gap-8">
+        <div>
+          <b>Civic Tech Index</b><br />
+          <span class="font-medium">Front-End Developer</span><br />
+          <p class="font-serif text-base">
+            Open-source React project from <a href="https://www.hackforla.org">Hack For LA</a>
+          </p>
+          <ul class="font-serif text-base">
+            <li>Brought cohesion to team’s use of Material-UI</li>
+            <li>Wrote Cypress tests, expanding code coverage from 50% to 91%</li>
+            <li>Wrote and edited documentation</li>
+            <li>
+              Within a month, became <a
+                href="https://github.com/civictechindex/CTI-website-frontend/graphs/contributors">main contributor</a
+              >
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          “<b><a href="https://github.com/kevinashworth/Octave">Octave</a></b>”<br />
+          <span class="font-medium">Full-stack developer</span><br />
+          <p class="font-serif text-base">React+GraphQL SPA, large side project</p>
+          <ul class="font-serif text-base">
+            <li>Built with Vulcan, which uses Meteor</li>
+            <li>
+              Wrote 71 React <a href="https://github.com/kevinashworth/Octave/tree/main/packages/octave/lib/components"
+                >components</a
+              >
+            </li>
+            <li>Used Redux, Apollo, Twilio, and many npm libraries</li>
+            <li>Used MongoDB with server-side data denormalization</li>
+          </ul>
+        </div>
       </div>
 
-      <div>
-        <b>AnalystSolutions, Greenwich CT</b><br />
-        <span class="font-medium">LimeSurvey Programmer</span><br />
-        <p class="font-serif text-base">Upgraded new-client assessment.</p>
-        <ul class="font-serif text-base">
-          <li>Wrote jQuery scripts to work around LimeSurvey limitations.</li>
-          <li>Designed new templates to use in LimeSurvey.</li>
-          <li>Due to high quality of work, client offered 20% bonus.</li>
-        </ul>
+      <div class="resume">
+        <div class="heading">Additional Skills, Experiences &amp; Interests</div>
       </div>
 
-      <div>
-        <b>HotDocs, Lindon UT</b><br />
-        <span class="font-medium">Designer</span>
-        <p class="font-serif text-base">Designed UI for new web distribution platform.</p>
-        <ul class="font-serif text-base">
-          <li>Expanded sections of HotDocs Server with existing design.</li>
-          <li>Designed new look for administrative section of web site.</li>
-        </ul>
+      <div class="resume flex flex-col gap-8">
+        <div>
+          <div class="smallcaps mb-1 block">LANGUAGES</div>
+          <div class="font-serif text-base">Conversational Spanish</div>
+        </div>
+
+        <div>
+          <div class="smallcaps mb-5 block">OTHER PROFESSIONAL EXPERIENCES</div>
+          <ul class="font-serif text-base">
+            <li>Acting teacher in Los Angeles.</li>
+            <li>Television, theater, and commercial actor in Los Angeles.</li>
+            <li>Electronics teacher at Middlesex Community College.</li>
+            <li>
+              Music director for Methodist church, chorus member of Boston Symphony Orchestra and
+              <span class="text-nowrap">La Jolla Symphony</span>, piano teacher, theater administrator in New York.
+            </li>
+          </ul>
+        </div>
+        <div id="centerfoot">Last modified: {lastModified}</div>
       </div>
-
-      <div>
-        <b>Formation Solutions, Los Angeles CA</b><br />
-        <span class="font-medium">SiteSpect Programmer</span><br />
-        <p class="font-serif text-base">Designed throughput improvements.</p>
-        <ul class="font-serif text-base">
-          <li>Built A/B tests with SiteSpect to improve monetization of SEO-heavy web site.</li>
-        </ul>
-      </div>
-
-      <div>
-        <b>Resolve Market Research, Los Angeles CA</b><br />
-        <span class="font-medium">LimeSurvey Programmer</span><br />
-        <p class="font-serif text-base">Responsible for building survey for Resolve client Wikimedia.</p>
-        <ul class="font-serif text-base">
-          <li>Built survey for all Wikipedia editors around the world.</li>
-          <li>Wrote jQuery scripts and rewrote CSS and HTML templates to work around LimeSurvey limitations.</li>
-          <li>Ensured translation was correct in 8 languages.</li>
-        </ul>
-      </div>
-    </div>
-
-    <div class="resume">
-      <div class="heading">Additional Skills, Experiences &amp; Interests</div>
-    </div>
-
-    <div class="resume flex flex-col gap-8">
-      <p>
-        <span class="smallcaps">Languages</span><br />
-        <span class="font-serif text-base">Conversational Spanish</span>
-      </p>
-
-      <p>
-        <span class="smallcaps">Other Professional Experiences</span><br />
-        <span class="font-serif text-base">
-          Acting teacher in Los Angeles.<br />
-          Television, theater, and commercial actor in Los Angeles.<br />
-          Electronics teacher at Middlesex Community College.<br />
-          Music director for Methodist church, chorus member of Boston Symphony Orchestra and La Jolla Symphony, piano teacher,
-          theater administrator in New York.<br />
-        </span>
-      </p>
-      <div id="centerfoot">Last modified: {lastModified}</div>
     </div>
   </div>
 </Layout>
