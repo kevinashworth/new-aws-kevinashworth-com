@@ -1,13 +1,12 @@
 ---
 import { Icon } from "astro-icon/components";
-import Logo from "~/components/Logo.astro";
+
 import ToggleTheme from "~/components/common/ToggleTheme.astro";
 import ToggleMenu from "~/components/common/ToggleMenu.astro";
-import Button from "~/components/ui/Button.astro";
 
+import { SITE } from "~/utils/config";
 import { getHomePermalink } from "~/utils/permalinks";
 import { trimSlash, getAsset } from "~/utils/permalinks";
-import type { CallToAction } from "~/types";
 
 interface Link {
   text?: string;
@@ -16,27 +15,21 @@ interface Link {
   icon?: string;
 }
 
-interface ActionLink extends CallToAction {}
-
 export interface Props {
   id?: string;
   links?: Array<Link>;
-  actions?: Array<ActionLink>;
   isSticky?: boolean;
   isDark?: boolean;
   showToggleTheme?: boolean;
-  showRssFeed?: boolean;
   position?: string;
 }
 
 const {
   id = "header",
   links = [],
-  actions = [],
   isSticky = false,
   isDark = false,
   showToggleTheme = false,
-  showRssFeed = false,
   position = "center",
 } = Astro.props;
 
@@ -52,9 +45,9 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
         content: "";
         position: absolute;
         left: 0;
-        bottom: 0;
-        height: 4px;
-        background: #900;
+        bottom: -2px;
+        height: 3px;
+        background: var(--color-secondary);
         width: 100%;
         transition: all 0.2s ease-in-out;
         transform: scaleX(0) translate3d(0, 0, 0);
@@ -82,8 +75,11 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
   <div class="absolute inset-0"></div>
   <div class="text-default relative mx-auto w-full max-w-7xl px-3 py-3 md:flex md:justify-between md:px-6">
     <div class:list={[{ "mr-auto rtl:mr-0 rtl:ml-auto": position === "right" }, "flex justify-between"]}>
-      <a class="flex items-center" href={getHomePermalink()}>
-        <Logo />
+      <a
+        class="home-link ml-2 flex items-center text-2xl font-bold whitespace-nowrap md:text-xl"
+        href={getHomePermalink()}
+      >
+        {SITE?.name}
       </a>
       <div class="flex items-center md:hidden">
         <ToggleMenu />
@@ -101,7 +97,7 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
             <li>
               <a
                 class:list={[
-                  "menu-link mx-2 my-1 flex items-center px-1 whitespace-nowrap max-md:hover:underline dark:hover:text-white",
+                  "menu-link mx-2 my-1 flex items-center px-1 whitespace-nowrap max-md:decoration-[#900] max-md:decoration-4 max-md:hover:underline dark:hover:text-white",
                   { "aw-link-active": href === currentPath },
                 ]}
                 href={href}
@@ -122,29 +118,7 @@ const currentPath = `/${trimSlash(new URL(Astro.url).pathname)}`;
       <div class="flex w-full items-center justify-between md:w-auto">
         <div class="flex">
           {showToggleTheme && <ToggleTheme iconClass="w-6 h-6 md:w-5 md:h-5 md:inline-block" />}
-          {
-            showRssFeed && (
-              <a
-                class="text-muted inline-flex items-center rounded-lg p-2.5 text-sm hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 focus:outline-hidden dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
-                aria-label="RSS Feed"
-                href={getAsset("/rss.xml")}
-              >
-                <Icon name="tabler:rss" class="h-5 w-5" />
-              </a>
-            )
-          }
         </div>
-        {
-          actions?.length ? (
-            <span class="ml-4 rtl:mr-4 rtl:ml-0">
-              {actions.map((btnProps) => (
-                <Button {...btnProps} class="ml-2 w-auto px-5.5 py-2.5 text-sm font-semibold shadow-none md:px-6" />
-              ))}
-            </span>
-          ) : (
-            ""
-          )
-        }
       </div>
     </div>
   </div>

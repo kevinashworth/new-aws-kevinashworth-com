@@ -32,18 +32,6 @@ const metadata = {
     font-size: medium;
     text-align: left;
   }
-  a:link {
-    color: #900;
-  }
-  a:visited {
-    color: #900;
-  }
-  a:hover {
-    color: #e00;
-  }
-  a:active {
-    color: #e00;
-  }
 
   .small,
   .smaller {
@@ -80,7 +68,7 @@ const metadata = {
     white-space: normal;
   }
   table.resume td.heading {
-    color: #900;
+    color: var(--color-secondary);
     padding-top: 10px;
     text-transform: uppercase;
   }
@@ -95,7 +83,7 @@ const metadata = {
     display: none;
   }
   #td-right {
-    border-left: 1px solid #900;
+    border-left: 1px solid var(--color-secondary);
   }
   #td-left,
   #td-left p,
@@ -185,7 +173,7 @@ const metadata = {
 </script>
 <Layout metadata={metadata}>
   <div id="template" style="display: none;">
-    A Public Reading of an Unproduced Screenplay About the Death of Walt&nbsp;Disney
+    Full Title: A Public Reading of an Unproduced Screenplay About the Death of Walt&nbsp;Disney, by Lucas Hnath
   </div>
   <table>
     <tbody>

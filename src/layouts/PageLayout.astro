@@ -17,7 +17,7 @@ const { disablePagefind = false, metadata } = Astro.props;
 
 <Layout metadata={metadata} disablePagefind={disablePagefind}>
   <slot name="header">
-    <Header {...headerData} isSticky showRssFeed showToggleTheme />
+    <Header {...headerData} isSticky showToggleTheme />
   </slot>
   <main>
     <slot />
