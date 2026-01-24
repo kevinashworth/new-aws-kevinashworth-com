@@ -2,9 +2,11 @@
 import Layout from "~/layouts/PageLayout.astro";
 
 import type { MetaData } from "~/types";
+import { getFormattedDate } from "~/utils/utils";
 
 export interface Props {
   frontmatter: {
+    publishDate?: Date;
     title?: string;
   };
 }
@@ -14,10 +16,20 @@ const { frontmatter } = Astro.props;
 const metadata: MetaData = {
   title: frontmatter?.title,
 };
+
+const formattedDateString = frontmatter?.publishDate ? String(frontmatter.publishDate) : "";
+const formattedDate = getFormattedDate(frontmatter?.publishDate as any);
 ---
 
 <Layout metadata={metadata}>
   <section class="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8 lg:py-20">
+    {
+      formattedDate ? (
+        <time datetime={formattedDateString} class="inline-block">
+          {formattedDate}
+        </time>
+      ) : null
+    }
     <h1 class="leading-tighter font-heading text-4xl font-bold tracking-tighter md:text-5xl">{frontmatter.title}</h1>
     <div
       class="prose-md prose-headings:leading-tighter prose prose-lg dark:prose-invert prose-headings:font-heading prose-headings:font-bold prose-headings:tracking-tighter prose-a:text-red-600 prose-img:rounded-md prose-img:shadow-lg dark:prose-headings:text-slate-300 dark:prose-a:text-red-400 mx-auto mt-8 max-w-4xl"

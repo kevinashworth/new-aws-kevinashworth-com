@@ -9,7 +9,12 @@ const formatter: Intl.DateTimeFormat =
     timeZone: "UTC",
   });
 
-export const getFormattedDate = (date: Date): string => (date ? formatter.format(date) : "");
+export const getFormattedDate = (date?: Date | string | number | null): string => {
+  if (!date) return "";
+  const d = date instanceof Date ? date : new Date(date);
+  if (isNaN(d.getTime())) return "";
+  return formatter.format(d);
+};
 
 export const trim = (str = "", ch?: string) => {
   let start = 0,
