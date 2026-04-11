@@ -9,5 +9,14 @@
       "addWords": true
     }
   ],
-  "ignorePaths": [".astro", ".cspell/custom-words.txt", ".git", ".vscode", "dist", "node_modules", "package.json"]
+  "ignorePaths": [
+    ".astro",
+    ".cspell/custom-words.txt",
+    ".git",
+    ".vscode",
+    "dist",
+    "node_modules",
+    "package.json",
+    "public/_hidden/scrabblem.html"
+  ]
 }
