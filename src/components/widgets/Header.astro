@@ -1,12 +1,10 @@
 ---
-import { Icon } from "astro-icon/components";
-
 import ToggleTheme from "~/components/common/ToggleTheme.astro";
 import ToggleMenu from "~/components/common/ToggleMenu.astro";
 
 import { SITE } from "~/utils/config";
 import { getHomePermalink } from "~/utils/permalinks";
-import { trimSlash, getAsset } from "~/utils/permalinks";
+import { trimSlash } from "~/utils/permalinks";
 
 interface Link {
   text?: string;

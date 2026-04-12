@@ -1,18 +1,17 @@
 ---
+import type { MetaData } from "~/types";
 import Layout from "~/layouts/Layout.astro";
 import Header from "~/components/widgets/Header.astro";
 import Footer from "~/components/widgets/Footer.astro";
 
 import { headerData, footerData } from "~/navigation";
 
-import type { MetaData } from "~/types";
-
 export interface Props {
   disablePagefind?: boolean;
   metadata?: MetaData;
 }
 
-const { disablePagefind = false, metadata } = Astro.props;
+const { disablePagefind = false, metadata } = Astro.props as Props;
 ---
 
 <Layout metadata={metadata} disablePagefind={disablePagefind}>

@@ -1,5 +1,5 @@
 import type { PaginateFunction } from "astro";
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 import type { CollectionEntry } from "astro:content";
 import type { Post } from "~/types";
 import { APP_BLOG } from "~/utils/config";
@@ -41,8 +41,14 @@ const generatePermalink = async ({
 };
 
 const getNormalizedPost = async (post: CollectionEntry<"post">): Promise<Post> => {
-  const { id, slug: rawSlug = "", data } = post;
-  const { Content, remarkPluginFrontmatter } = await post.render();
+  const { id, filePath, data } = post;
+  const { Content, remarkPluginFrontmatter } = await render(post);
+
+  const rawSlug =
+    (filePath || id)
+      .split("/")
+      .pop()
+      ?.replace(/\.[^/.]+$/, "") || String(id);
 
   const {
     publishDate: rawPublishDate = new Date(),
@@ -192,8 +198,10 @@ export const getStaticPathsBlogCategory = async ({ paginate }: { paginate: Pagin
 
   const posts = await fetchPosts();
   const categories = new Set<string>();
-  posts.map((post) => {
-    typeof post.category === "string" && categories.add(post.category);
+  posts.forEach((post) => {
+    if (typeof post.category === "string") {
+      categories.add(post.category);
+    }
   });
 
   return Array.from(categories).flatMap((category) =>
@@ -214,8 +222,10 @@ export const getStaticPathsBlogTag = async ({ paginate }: { paginate: PaginateFu
 
   const posts = await fetchPosts();
   const tags = new Set<string>();
-  posts.map((post) => {
-    Array.isArray(post.tags) && post.tags.map((tag) => tags.add(tag));
+  posts.forEach((post) => {
+    if (Array.isArray(post.tags)) {
+      post.tags.forEach((tag) => tags.add(tag));
+    }
   });
 
   return Array.from(tags).flatMap((tag) =>
@@ -233,23 +243,13 @@ export const getStaticPathsBlogTag = async ({ paginate }: { paginate: PaginateFu
 /** */
 export const findTags = async (): Promise<Array<string>> => {
   const posts = await fetchPosts();
-  const tags = posts.reduce((acc, post: Post) => {
-    if (post.tags && Array.isArray(post.tags)) {
-      return [...acc, ...post.tags];
-    }
-    return acc;
-  }, []);
+  const tags = posts.flatMap((post: Post) => (Array.isArray(post.tags) ? post.tags : []));
   return [...new Set(tags)];
 };
 
 /** */
 export const findCategories = async (): Promise<Array<string>> => {
   const posts = await fetchPosts();
-  const categories = posts.reduce((acc, post: Post) => {
-    if (post.category) {
-      return [...acc, post.category];
-    }
-    return acc;
-  }, []);
+  const categories = posts.flatMap((post: Post) => (post.category ? [post.category] : []));
   return [...new Set(categories)];
 };

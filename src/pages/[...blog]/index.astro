@@ -40,7 +40,7 @@ const metadata = merge(
         : {}),
     },
   },
-  { ...(post?.metadata ? { ...post.metadata, canonical: post.metadata?.canonical || url } : {}) },
+  post?.metadata ? { ...post.metadata, canonical: post.metadata?.canonical || url } : {},
 ) as MetaData;
 ---
 
