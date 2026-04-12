@@ -9,6 +9,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "check:astro": "astro check",
+    "check:spell": "npx cspell --config cspell.json --no-progress --show-suggestions --relative .",
     "check:types": "tsc --noEmit",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",

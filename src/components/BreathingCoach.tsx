@@ -47,13 +47,8 @@ const BreathingCoach: React.FC = () => {
 
   const getPreferredVoice = (voices: SpeechSynthesisVoice[]) => {
     const englishVoices = voices.filter(isAllowedVoice);
-    return (
-      englishVoices.find((voice) => voice.name.toLowerCase().includes("karen")) ||
-      englishVoices[0] ||
-      null
-    );
+    return englishVoices.find((voice) => voice.name.toLowerCase().includes("karen")) || englishVoices[0] || null;
   };
-
 
   const loadVoices = () => {
     if (!speechSynthesisRef.current) return;
@@ -97,12 +92,7 @@ const BreathingCoach: React.FC = () => {
     return availableVoices.find((voice) => voice.name === selectedVoiceName) || null;
   };
 
-  const speak = (
-    text: string,
-    interrupt = false,
-    volume = 1,
-    onEnd?: () => void,
-  ) => {
+  const speak = (text: string, interrupt = false, volume = 1, onEnd?: () => void) => {
     if (!speechSynthesisRef.current) return;
     if (interrupt) {
       speechSynthesisRef.current.cancel();
@@ -219,7 +209,7 @@ const BreathingCoach: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      <div className="grid gap-3 grid-cols-4">
+      <div className="grid grid-cols-4 gap-3">
         <label className="flex flex-col gap-2">
           <span>Inhale</span>
           <input
@@ -253,7 +243,6 @@ const BreathingCoach: React.FC = () => {
           />
         </label>
 
-
         <label className="flex flex-col gap-2">
           <span>Hold</span>
           <input
@@ -278,7 +267,7 @@ const BreathingCoach: React.FC = () => {
       </div>
 
       <div className="flex flex-col gap-4">
-        <label className="flex flex-col gap-2 max-w-xl">
+        <label className="flex max-w-xl flex-col gap-2">
           <span>Pacing</span>
           <div className="flex items-center gap-3">
             <input
@@ -301,7 +290,7 @@ const BreathingCoach: React.FC = () => {
           </div>
         </label>
 
-        <label className="flex flex-col gap-2 max-w-xl">
+        <label className="flex max-w-xl flex-col gap-2">
           <span>Voice</span>
           <select
             value={selectedVoiceName}
