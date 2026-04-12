@@ -1,7 +1,6 @@
 // Astro and external packages
 import { defineConfig } from "astro/config";
 import mdx from "@astrojs/mdx";
-import partytown from "@astrojs/partytown";
 import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import icon from "astro-icon";
@@ -14,18 +13,11 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 // Local imports (./src/utils)
-import { ANALYTICS, SITE } from "./src/utils/config.ts";
+import { SITE } from "./src/utils/config.ts";
 import { readingTimeRemarkPlugin, responsiveTablesRehypePlugin } from "./src/utils/frontmatter.mjs";
 import tasks from "./src/utils/tasks";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-const whenExternalScripts = (items = []) =>
-  ANALYTICS.vendors.googleAnalytics.id && ANALYTICS.vendors.googleAnalytics.partytown
-    ? Array.isArray(items)
-      ? items.map((item) => item())
-      : [items()]
-    : [];
 
 export default defineConfig({
   site: SITE.site,
@@ -44,11 +36,6 @@ export default defineConfig({
         tabler: ["*"],
       },
     }),
-    ...whenExternalScripts(() =>
-      partytown({
-        config: { forward: ["dataLayer.push"] },
-      }),
-    ),
     tasks(),
     react(),
     pagefind(),
