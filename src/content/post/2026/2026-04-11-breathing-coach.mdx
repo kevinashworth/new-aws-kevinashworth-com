@@ -1,14 +1,22 @@
 ---
 title: Breathing Coach
 excerpt: A web tool to coach you through breathing cycles.
-publishDate: 2026-04-11
+publishDate: 2026-04-12
+image: /assets/images/pexels-towfiqu-barbhuiya-3440682-9862247.jpg
 category: Blog
 tags:
+  - breathing
   - Development
   - JavaScript
   - React
 ---
 
 import BreathingCoach from "~/components/BreathingCoach";
+
+This "Breathing Coach" guides you through a breathing session by speaking inhale/hold/exhale counts. You can choose one of the voices on your computer, for the selected number of cycles, for the breath pattern of your choosing. It provides controls for breath durations, hold times, cycle count, pacing, and start/stop.
+
+Just press **Start** to see if it's something you might find useful!
+
+This is very much a work-in-progress. My hope is that if you do 4-7-8 breath cycles, or box breathing, or something meditative like that, that it can be nice to have a guided recording. This is an initial attempt to make a flexible browser-based breathing coach that counts you through the cycles. To be clear, the voices are what's available through your browser, and will vary a lot from browser to browser, from OS to OS. Let me know if there is a key feature that you find missing.
 
 <BreathingCoach client:only />

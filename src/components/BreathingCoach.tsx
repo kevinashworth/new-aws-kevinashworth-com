@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 function logVoice(voice: SpeechSynthesisVoice | null) {
   if (!voice) {
@@ -8,54 +8,57 @@ function logVoice(voice: SpeechSynthesisVoice | null) {
   console.log(`${voice.name} (${voice.lang}) — ${voice.voiceURI}`);
 }
 
-const BreathingCoach: React.FC = () => {
+type ScheduledEvent = {
+  text: string;
+  interrupt: boolean;
+  volume: number;
+  pacing: boolean;
+};
+
+// Some voices are "synthetic" and unpleasant, so we filter them out. We also prefer certain voices when available.
+const isAllowedVoice = (voice: SpeechSynthesisVoice) => {
+  const isEnglish = voice.lang.toLowerCase().startsWith("en");
+  if (!isEnglish) return false;
+
+  const uri = (voice.voiceURI ?? "").toLowerCase();
+  if (uri.includes("com.apple")) {
+    if (uri.includes("com.apple.voice")) return true;
+    return false;
+  }
+
+  return true;
+};
+
+const getPreferredVoice = (voices: SpeechSynthesisVoice[]) => {
+  const englishVoices = voices.filter(isAllowedVoice);
+  return englishVoices.find((voice) => voice.name.toLowerCase().includes("karen")) || englishVoices[0] || null;
+};
+
+function BreathingCoach() {
   const [inhalationCount, setInhalationCount] = useState<number>(4);
-  const [holdCount, setHoldCount] = useState<number>(7);
+  const [holdAfterInhaleCount, setHoldAfterInhaleCount] = useState<number>(7);
   const [exhalationCount, setExhalationCount] = useState<number>(8);
   const [holdAfterExhaleCount, setHoldAfterExhaleCount] = useState<number>(0);
-  const [repetitions, setRepetitions] = useState<number>(1);
+  const [repetitions, setRepetitions] = useState<number>(2);
   const [beatDuration, setBeatDuration] = useState<number>(1000);
-  const beatDurationRef = useRef<number>(1000);
+
   const [isRunning, setIsRunning] = useState<boolean>(false);
+
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [selectedVoiceName, setSelectedVoiceName] = useState<string>("");
 
-  const speechSynthesisRef = useRef<SpeechSynthesis | null>(null);
-  type ScheduledEvent = {
-    text: string;
-    interrupt: boolean;
-    volume: number;
-    pacing: boolean;
-  };
+  const beatDurationRef = useRef<number>(1000);
   const eventQueueRef = useRef<ScheduledEvent[]>([]);
   const intervalIdRef = useRef<number | null>(null);
   const lastTickRef = useRef<number>(0);
+  const speechSynthesisRef = useRef<SpeechSynthesis | null>(null);
 
-  // Some voices are very "synthetic" and unpleasant, so we filter them out. We also prefer certain voices when available.
-  const isAllowedVoice = (voice: SpeechSynthesisVoice) => {
-    const isEnglish = voice.lang.toLowerCase().startsWith("en");
-    if (!isEnglish) return false;
+  const quarterNoteBpm = Math.round(60000 / beatDuration);
 
-    const uri = (voice.voiceURI ?? "").toLowerCase();
-    if (uri.includes("com.apple")) {
-      if (uri.includes("com.apple.voice")) return true;
-      return false;
-    }
-
-    return true;
-  };
-
-  const getPreferredVoice = (voices: SpeechSynthesisVoice[]) => {
-    const englishVoices = voices.filter(isAllowedVoice);
-    return englishVoices.find((voice) => voice.name.toLowerCase().includes("karen")) || englishVoices[0] || null;
-  };
-
-  const loadVoices = () => {
+  const loadVoices = useCallback(() => {
     if (!speechSynthesisRef.current) return;
     const loadedVoices = speechSynthesisRef.current.getVoices();
-    // console.log("loaded voices:", loadedVoices);
     const englishVoices = loadedVoices.filter(isAllowedVoice).sort((a, b) => a.name.localeCompare(b.name));
-    // console.log("en voices:", englishVoices);
     console.group("Available English Voices");
     englishVoices.forEach(logVoice);
     console.groupEnd();
@@ -66,7 +69,7 @@ const BreathingCoach: React.FC = () => {
         setSelectedVoiceName((current) => current || preferred.name);
       }
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -85,6 +88,10 @@ const BreathingCoach: React.FC = () => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    beatDurationRef.current = beatDuration;
+  }, [beatDuration]);
 
   const getSelectedVoice = () => {
     if (!speechSynthesisRef.current) return null;
@@ -186,7 +193,7 @@ const BreathingCoach: React.FC = () => {
   };
 
   const breathe = () => {
-    if (isNaN(inhalationCount) || isNaN(holdCount) || isNaN(exhalationCount) || isNaN(repetitions)) {
+    if (isNaN(inhalationCount) || isNaN(holdAfterInhaleCount) || isNaN(exhalationCount) || isNaN(repetitions)) {
       alert("Please enter valid numbers.");
       return;
     }
@@ -198,7 +205,7 @@ const BreathingCoach: React.FC = () => {
 
     for (let i = 0; i < repetitions; i++) {
       eventQueueRef.current.push(...schedulePhase("Inhale", inhalationCount));
-      eventQueueRef.current.push(...schedulePhase("Hold", holdCount));
+      eventQueueRef.current.push(...schedulePhase("Hold", holdAfterInhaleCount));
       eventQueueRef.current.push(...schedulePhase("Exhale", exhalationCount));
       eventQueueRef.current.push(...schedulePhase("Hold", holdAfterExhaleCount));
     }
@@ -208,123 +215,164 @@ const BreathingCoach: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="grid grid-cols-4 gap-3">
-        <label className="flex flex-col gap-2">
-          <span>Inhale</span>
-          <input
-            type="number"
-            value={inhalationCount}
-            min={1}
-            onChange={(e) => setInhalationCount(Number(e.target.value))}
-            className="w-16 rounded border px-3 py-2"
-          />
-        </label>
-
-        <label className="flex flex-col gap-2">
-          <span>Hold</span>
-          <input
-            type="number"
-            value={holdCount}
-            min={1}
-            onChange={(e) => setHoldCount(Number(e.target.value))}
-            className="w-16 rounded border px-3 py-2"
-          />
-        </label>
-
-        <label className="flex flex-col gap-2">
-          <span>Exhale</span>
-          <input
-            type="number"
-            value={exhalationCount}
-            min={1}
-            onChange={(e) => setExhalationCount(Number(e.target.value))}
-            className="w-16 rounded border px-3 py-2"
-          />
-        </label>
-
-        <label className="flex flex-col gap-2">
-          <span>Hold</span>
-          <input
-            type="number"
-            value={holdAfterExhaleCount}
-            min={0}
-            onChange={(e) => setHoldAfterExhaleCount(Number(e.target.value))}
-            className="w-16 rounded border px-3 py-2"
-          />
-        </label>
-
-        <label className="col-span-4 flex flex-col gap-2">
-          <span>Number of Cycles to Speak</span>
-          <input
-            type="number"
-            value={repetitions}
-            min={1}
-            onChange={(e) => setRepetitions(Number(e.target.value))}
-            className="w-16 rounded border px-3 py-2"
-          />
-        </label>
-      </div>
-
-      <div className="flex flex-col gap-4">
-        <label className="flex max-w-xl flex-col gap-2">
-          <span>Pacing</span>
-          <div className="flex items-center gap-3">
-            <input
-              type="range"
-              min={400}
-              max={1600}
-              step={100}
-              value={beatDuration}
-              onChange={(e) => {
-                const next = Number(e.target.value);
-                setBeatDuration(next);
-                beatDurationRef.current = next;
-                if (intervalIdRef.current !== null) {
-                  lastTickRef.current = performance.now();
-                }
-              }}
-              className="w-full"
-            />
-            <span className="min-w-16 text-right">{beatDuration}ms</span>
+    <div className="space-y-6 rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm shadow-slate-200/20">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <div className="text-xl font-semibold text-slate-900">Counting Coach</div>
+          <div className="mt-1 text-sm text-slate-500">
+            Set your breath counts, tempo, and voice for a guided breathing session.
           </div>
-        </label>
-
-        <label className="flex max-w-xl flex-col gap-2">
-          <span>Voice</span>
-          <select
-            value={selectedVoiceName}
-            onChange={(e) => setSelectedVoiceName(e.target.value)}
-            className="w-96 rounded border px-3 py-2"
-          >
-            {voices.length === 0 ? (
-              <option>Loading voices...</option>
-            ) : (
-              voices.map((voice) => (
-                <option key={voice.voiceURI} value={voice.name}>
-                  {voice.name} ({voice.lang})
-                </option>
-              ))
-            )}
-          </select>
-        </label>
+        </div>
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="grid gap-4 lg:grid-cols-[1fr_360px]">
+        <section className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
+          <div className="mb-3 border-b border-slate-200 pb-2">
+            <div className="text-sm font-semibold text-slate-500 uppercase">Breath timing</div>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="flex flex-col items-center gap-2 rounded-3xl border border-slate-200 bg-white p-3">
+              <span className="text-xs font-semibold text-slate-500 uppercase">
+                <br />
+                Inhale
+              </span>
+              <input
+                type="number"
+                value={inhalationCount}
+                min={1}
+                onChange={(e) => setInhalationCount(Number(e.target.value))}
+                className="w-20 rounded-xl border border-slate-300 px-3 py-2"
+              />
+            </label>
+
+            <label className="flex flex-col items-center gap-2 rounded-3xl border border-slate-200 bg-white p-3">
+              <span className="text-center text-xs font-semibold text-nowrap text-slate-500 uppercase">
+                Hold <br />
+                after inhale
+              </span>
+              <input
+                type="number"
+                value={holdAfterInhaleCount}
+                min={1}
+                onChange={(e) => setHoldAfterInhaleCount(Number(e.target.value))}
+                className="w-20 rounded-xl border border-slate-300 px-3 py-2"
+              />
+            </label>
+
+            <label className="flex flex-col items-center gap-2 rounded-3xl border border-slate-200 bg-white p-3">
+              <span className="text-xs font-semibold text-slate-500 uppercase">
+                <br />
+                Exhale
+              </span>
+              <input
+                type="number"
+                value={exhalationCount}
+                min={1}
+                onChange={(e) => setExhalationCount(Number(e.target.value))}
+                className="w-20 rounded-xl border border-slate-300 px-3 py-2"
+              />
+            </label>
+
+            <label className="flex flex-col items-center gap-2 rounded-3xl border border-slate-200 bg-white p-3">
+              <span className="text-center text-xs font-semibold text-nowrap text-slate-500 uppercase">
+                Hold <br />
+                after exhale
+              </span>
+              <input
+                type="number"
+                value={holdAfterExhaleCount}
+                min={0}
+                onChange={(e) => setHoldAfterExhaleCount(Number(e.target.value))}
+                className="w-20 rounded-xl border border-slate-300 px-3 py-2"
+              />
+            </label>
+
+            <label className="col-span-2 flex flex-col items-center gap-2 rounded-3xl border border-slate-200 bg-white p-3">
+              <span className="text-xs font-semibold text-slate-500 uppercase">Number of Counting Cycles</span>
+              <input
+                type="number"
+                value={repetitions}
+                min={1}
+                onChange={(e) => setRepetitions(Number(e.target.value))}
+                className="w-20 rounded-xl border border-slate-300 px-3 py-2"
+              />
+            </label>
+          </div>
+        </section>
+
+        <section className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
+          <div className="mb-4 border-b border-slate-200 pb-3">
+            <div className="text-sm font-semibold text-slate-500  uppercase">Session settings</div>
+          </div>
+          <div className="space-y-6">
+            <label className="flex flex-col items-center gap-2 rounded-3xl border border-slate-200 bg-white p-3">
+              <span className="text-xs font-semibold text-slate-500 uppercase">Pacing</span>
+              <div className="w-full px-2">
+                <input
+                  type="range"
+                  min={400}
+                  max={1600}
+                  step={50}
+                  value={beatDuration}
+                  onChange={(e) => {
+                    setBeatDuration(Number(e.target.value));
+                    if (intervalIdRef.current !== null) {
+                      lastTickRef.current = performance.now();
+                    }
+                  }}
+                  className="w-full"
+                />
+              </div>
+              <div className="flex w-full flex-row justify-around text-xs font-medium text-slate-700">
+                <div>{beatDuration}ms</div>
+                <div>Tempo ♩ = {quarterNoteBpm}</div>
+              </div>
+            </label>
+
+            <label className="flex flex-col items-center gap-2 rounded-3xl border border-slate-200 bg-white p-3">
+              <span className="text-xs font-semibold text-slate-500 uppercase">Voice</span>
+              <div className="w-full px-2">
+                <select
+                  className="w-full rounded-xl border border-slate-300 text-sm disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={isRunning}
+                  onChange={(e) => setSelectedVoiceName(e.target.value)}
+                  value={selectedVoiceName}
+                >
+                  {voices.length === 0 ? (
+                    <option>Loading voices...</option>
+                  ) : (
+                    voices.map((voice) => (
+                      <option key={voice.voiceURI} value={voice.name}>
+                        {voice.name} ({voice.lang})
+                      </option>
+                    ))
+                  )}
+                </select>
+              </div>
+            </label>
+          </div>
+        </section>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-3">
         <button
-          type="button"
-          onClick={breathe}
+          className="rounded-3xl bg-blue-800 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-900 disabled:cursor-not-allowed disabled:opacity-50"
           disabled={isRunning}
-          className="rounded bg-black px-4 py-2 text-white disabled:opacity-50"
+          onClick={breathe}
+          type="button"
         >
-          Start the Coaching
+          Start
         </button>
-        <button type="button" onClick={stop} className="rounded bg-red-500 px-4 py-2 text-white">
+        <button
+          className="rounded-3xl bg-red-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-800"
+          onClick={stop}
+          type="button"
+        >
           Stop
         </button>
       </div>
     </div>
   );
-};
+}
 
 export default BreathingCoach;
