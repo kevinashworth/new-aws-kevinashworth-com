@@ -1,21 +1,14 @@
 {
   "css.customData": ["./vscode.tailwind.json"],
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "astro", // Enable .astro
-    "typescript", // Enable .ts
-    "typescriptreact" // Enable .tsx
-  ],
   "files.associations": {
     "*.mdx": "markdown",
     "*.css": "tailwindcss"
   },
-  "prettier.documentSelectors": ["**/*.astro"],
-  "[astro]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
   "yaml.schemas": {
     "./.vscode/astrowind/config-schema.json": "/src/config.yaml"
+  },
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
   }
 }

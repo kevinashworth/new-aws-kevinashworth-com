@@ -6,16 +6,11 @@
   "tabWidth": 2,
   "trailingComma": "all",
   "useTabs": false,
-  "sortTailwindcss": {},
+  "sortTailwindcss": {
+    "stylesheet": "./src/assets/styles/tailwind.css",
+    "functions": ["clsx", "cn"],
+    "preserveWhitespace": true
+  },
   "sortPackageJson": false,
-  "ignorePatterns": [
-    "dist",
-    "node_modules",
-    ".github",
-    ".changeset",
-    ".oxlintrc.json",
-    ".oxfmtrc.json",
-    "package.json",
-    "public/_hidden/**/*"
-  ]
+  "ignorePatterns": ["dist", "node_modules", ".github", ".changeset", "package.json", "public/_hidden/**/*"]
 }

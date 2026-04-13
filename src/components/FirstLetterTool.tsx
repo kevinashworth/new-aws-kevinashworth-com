@@ -72,7 +72,7 @@ function FirstLetterTool() {
         value={inputText}
         ref={inputTextareaRef}
       />
-      <div className="xs:flex-row flex flex-col justify-between">
+      <div className="flex flex-col justify-between xs:flex-row">
         <button
           onClick={convert}
           className="w-min rounded-md bg-black px-4 py-0 text-base whitespace-nowrap text-white dark:border"
