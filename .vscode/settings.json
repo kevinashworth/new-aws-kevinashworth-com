@@ -4,11 +4,5 @@
     "*.mdx": "markdown",
     "*.css": "tailwindcss"
   },
-  "yaml.schemas": {
-    "./.vscode/astrowind/config-schema.json": "/src/config.yaml"
-  },
-  "editor.defaultFormatter": "oxc.oxc-vscode",
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "oxc.oxc-vscode"
-  }
+  "editor.defaultFormatter": "oxc.oxc-vscode"
 }

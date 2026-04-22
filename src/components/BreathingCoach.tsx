@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
+const PRESETS = [
+  { name: "4-7-8 Breathing", inhale: 4, holdIn: 7, exhale: 8, holdOut: 0, tempo: 1000, cycles: 10 },
+  { name: "Box Breathing", inhale: 3, holdIn: 3, exhale: 3, holdOut: 3, tempo: 1600, cycles: 10 },
+  { name: "Slow Breathing", inhale: 6, holdIn: 0, exhale: 6, holdOut: 0, tempo: 1100, cycles: 5 },
+] as const;
+
 function logVoice(voice: SpeechSynthesisVoice | null) {
   if (!voice) {
     console.log("No voice selected");
@@ -39,8 +45,10 @@ function BreathingCoach() {
   const [holdAfterInhaleCount, setHoldAfterInhaleCount] = useState<number>(7);
   const [exhalationCount, setExhalationCount] = useState<number>(8);
   const [holdAfterExhaleCount, setHoldAfterExhaleCount] = useState<number>(0);
-  const [repetitions, setRepetitions] = useState<number>(2);
+  const [cycles, setCycles] = useState<number>(2);
   const [beatDuration, setBeatDuration] = useState<number>(1000);
+
+  const [activePresetIndex, setActivePresetIndex] = useState<number | null>(0);
 
   const [isRunning, setIsRunning] = useState<boolean>(false);
 
@@ -93,6 +101,18 @@ function BreathingCoach() {
     beatDurationRef.current = beatDuration;
   }, [beatDuration]);
 
+  useEffect(() => {
+    const matchedIndex = PRESETS.findIndex(
+      (p) =>
+        p.inhale === inhalationCount &&
+        p.holdIn === holdAfterInhaleCount &&
+        p.exhale === exhalationCount &&
+        p.holdOut === holdAfterExhaleCount &&
+        p.tempo === beatDuration,
+    );
+    setActivePresetIndex(matchedIndex === -1 ? null : matchedIndex);
+  }, [inhalationCount, holdAfterInhaleCount, exhalationCount, holdAfterExhaleCount, beatDuration]);
+
   const getSelectedVoice = () => {
     if (!speechSynthesisRef.current) return null;
     const availableVoices = voices.length ? voices : speechSynthesisRef.current.getVoices();
@@ -136,6 +156,16 @@ function BreathingCoach() {
     clearScheduled();
     speechSynthesisRef.current?.cancel();
     setIsRunning(false);
+  };
+
+  const applyPreset = (index: number) => {
+    const preset = PRESETS[index];
+    setInhalationCount(preset.inhale);
+    setHoldAfterInhaleCount(preset.holdIn);
+    setExhalationCount(preset.exhale);
+    setHoldAfterExhaleCount(preset.holdOut);
+    setBeatDuration(preset.tempo);
+    setCycles(preset.cycles);
   };
 
   const schedulePhase = (label: string, seconds: number) => {
@@ -193,7 +223,7 @@ function BreathingCoach() {
   };
 
   const breathe = () => {
-    if (isNaN(inhalationCount) || isNaN(holdAfterInhaleCount) || isNaN(exhalationCount) || isNaN(repetitions)) {
+    if (isNaN(inhalationCount) || isNaN(holdAfterInhaleCount) || isNaN(exhalationCount) || isNaN(cycles)) {
       alert("Please enter valid numbers.");
       return;
     }
@@ -203,7 +233,7 @@ function BreathingCoach() {
 
     eventQueueRef.current = [];
 
-    for (let i = 0; i < repetitions; i++) {
+    for (let i = 0; i < cycles; i++) {
       eventQueueRef.current.push(...schedulePhase("Inhale", inhalationCount));
       eventQueueRef.current.push(...schedulePhase("Hold", holdAfterInhaleCount));
       eventQueueRef.current.push(...schedulePhase("Exhale", exhalationCount));
@@ -211,7 +241,9 @@ function BreathingCoach() {
     }
 
     eventQueueRef.current.push({ text: "Good work.", interrupt: false, volume: 1, pacing: false });
-    speak("Let's begin.", true, 1, startScheduler);
+    const startText =
+      activePresetIndex !== null ? `Let's begin ${PRESETS[activePresetIndex].name.toLowerCase()}.` : "Let's begin.";
+    speak(startText, true, 1, startScheduler);
   };
 
   return (
@@ -227,6 +259,30 @@ function BreathingCoach() {
 
       <div className="grid gap-4 lg:grid-cols-[1fr_360px]">
         <section className="rounded-3xl border border-slate-200 bg-slate-50 p-4">
+          <div className="mb-3 flex flex-wrap items-center gap-2 border-b border-slate-200 pb-2">
+            <div className="text-sm font-semibold text-slate-500 uppercase">Presets</div>
+            {activePresetIndex === null && (
+              <span className="rounded-full bg-slate-200 px-2 py-0.5 text-xs font-medium text-slate-600">Custom</span>
+            )}
+          </div>
+          <div className="mb-4 flex flex-wrap gap-2">
+            {PRESETS.map((preset, index) => (
+              <button
+                key={preset.name}
+                type="button"
+                onClick={() => applyPreset(index)}
+                disabled={isRunning}
+                className={`rounded-3xl px-4 py-2 text-sm font-semibold transition ${
+                  activePresetIndex === index
+                    ? "bg-blue-800 text-white"
+                    : "border border-slate-300 text-slate-700 hover:border-slate-400 hover:bg-slate-100"
+                } disabled:cursor-not-allowed disabled:opacity-50`}
+              >
+                {preset.name}
+              </button>
+            ))}
+          </div>
+
           <div className="mb-3 border-b border-slate-200 pb-2">
             <div className="text-sm font-semibold text-slate-500 uppercase">Breath timing</div>
           </div>
@@ -291,9 +347,9 @@ function BreathingCoach() {
               <span className="text-xs font-semibold text-slate-500 uppercase">Number of Counting Cycles</span>
               <input
                 type="number"
-                value={repetitions}
+                value={cycles}
                 min={1}
-                onChange={(e) => setRepetitions(Number(e.target.value))}
+                onChange={(e) => setCycles(Number(e.target.value))}
                 className="w-20 rounded-xl border border-slate-300 px-3 py-2"
               />
             </label>
