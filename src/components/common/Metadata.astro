@@ -1,0 +1,22 @@
+---
+import { METADATA } from '~/utils/config';
+
+export interface Props {
+  title?: string;
+  ignoreTitleTemplate?: boolean;
+  canonical?: string;
+  description?: string;
+}
+
+const { title, ignoreTitleTemplate, canonical, description } = Astro.props;
+
+const defaultTitle = METADATA.title?.default || "kevinashworth.com";
+const pageTitle = !ignoreTitleTemplate && title
+  ? `${title} — ${defaultTitle}`
+  : defaultTitle;
+const canonicalUrl = canonical || String(new URL(Astro.url.pathname, Astro.site));
+const metaDescription = description || METADATA.description;
+---
+<title>{pageTitle}</title>
+<meta name="description" content={metaDescription} />
+<link rel="canonical" href={canonicalUrl} />
