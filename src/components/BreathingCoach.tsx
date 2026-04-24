@@ -19,6 +19,7 @@ type ScheduledEvent = {
   interrupt: boolean;
   volume: number;
   pacing: boolean;
+  transcriptOffset?: number;
 };
 
 // Some voices are "synthetic" and unpleasant, so we filter them out. We also prefer certain voices when available.
@@ -40,6 +41,70 @@ const getPreferredVoice = (voices: SpeechSynthesisVoice[]) => {
   return englishVoices.find((voice) => voice.name.toLowerCase().includes("karen")) || englishVoices[0] || null;
 };
 
+type TranscriptWord = {
+  word: string;
+  lineBreakBefore: boolean;
+  lineBreakAfter: boolean;
+  volume: number;
+};
+
+const getWordOffsets = (text: string) => {
+  const offsets: Array<{ word: string; index: number }> = [];
+  const regex = /\S+/g;
+  let match: RegExpExecArray | null;
+
+  while ((match = regex.exec(text)) !== null) {
+    offsets.push({ word: match[0], index: match.index });
+  }
+
+  return offsets;
+};
+
+const isNumeric = (text: string) => /^\d+$/.test(text);
+
+const buildTranscriptWords = (events: ScheduledEvent[]) => {
+  const tokens: TranscriptWord[] = [];
+
+  for (let i = 0; i < events.length; i += 1) {
+    const event = events[i];
+    const words = getWordOffsets(event.text);
+    const nextEvent = events[i + 1];
+    const isStartText = i === 0 && event.text.includes(" ");
+    const isGoodWork = event.text.toLowerCase().startsWith("good work");
+    const isCycleStart = event.text === "Inhale" && i > 1;
+    const isNextGoodWork = nextEvent?.text.toLowerCase().startsWith("good work");
+
+    for (let wordIndex = 0; wordIndex < words.length; wordIndex += 1) {
+      const isLastWord = wordIndex === words.length - 1;
+      let lineBreakAfter = false;
+      let lineBreakBefore = isCycleStart && wordIndex === 0;
+
+      if (isLastWord && (isStartText || isGoodWork || isNextGoodWork)) {
+        lineBreakAfter = true;
+      }
+
+      if (
+        isLastWord &&
+        isNumeric(event.text) &&
+        i > 0 &&
+        events[i - 1].text === "Exhale" &&
+        (!nextEvent || !isNumeric(nextEvent.text))
+      ) {
+        lineBreakAfter = true;
+      }
+
+      tokens.push({
+        word: words[wordIndex].word,
+        lineBreakBefore,
+        lineBreakAfter,
+        volume: event.volume,
+      });
+    }
+  }
+
+  return tokens;
+};
+
 function BreathingCoach() {
   const [inhalationCount, setInhalationCount] = useState<number>(4);
   const [holdAfterInhaleCount, setHoldAfterInhaleCount] = useState<number>(7);
@@ -55,6 +120,10 @@ function BreathingCoach() {
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [selectedVoiceName, setSelectedVoiceName] = useState<string>("");
 
+  const [transcriptWords, setTranscriptWords] = useState<TranscriptWord[]>([]);
+  const [currentWordIndex, setCurrentWordIndex] = useState<number | null>(null);
+
+  const transcriptContainerRef = useRef<HTMLDivElement | null>(null);
   const beatDurationRef = useRef<number>(1000);
   const eventQueueRef = useRef<ScheduledEvent[]>([]);
   const intervalIdRef = useRef<number | null>(null);
@@ -102,6 +171,34 @@ function BreathingCoach() {
   }, [beatDuration]);
 
   useEffect(() => {
+    if (transcriptWords.length === 0) return;
+    transcriptContainerRef.current?.scrollTo({ top: 0 });
+  }, [transcriptWords]);
+
+  useEffect(() => {
+    if (currentWordIndex === null || currentWordIndex === 0) return;
+    const container = transcriptContainerRef.current;
+    if (!container) return;
+    if (container.scrollHeight <= container.clientHeight) return;
+
+    const currentElement = container.querySelector<HTMLElement>(`[data-transcript-index='${currentWordIndex}']`);
+    const nextElement = container.querySelector<HTMLElement>(`[data-transcript-index='${currentWordIndex + 1}']`);
+    if (!currentElement || !nextElement) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const nextRect = nextElement.getBoundingClientRect();
+
+    const nextVisibleBottom = containerRect.bottom - container.clientHeight * 0.05;
+    if (nextRect.top <= nextVisibleBottom) {
+      return;
+    }
+
+    const targetTop = currentElement.offsetTop - container.clientHeight * 0.5;
+    const normalizedTop = Math.max(0, Math.min(targetTop, container.scrollHeight - container.clientHeight));
+    container.scrollTo({ top: normalizedTop, behavior: "smooth" });
+  }, [currentWordIndex]);
+
+  useEffect(() => {
     const matchedIndex = PRESETS.findIndex(
       (p) =>
         p.inhale === inhalationCount &&
@@ -119,7 +216,7 @@ function BreathingCoach() {
     return availableVoices.find((voice) => voice.name === selectedVoiceName) || null;
   };
 
-  const speak = (text: string, interrupt = false, volume = 1, onEnd?: () => void) => {
+  const speak = (text: string, interrupt = false, volume = 1, onEnd?: () => void, transcriptOffset = 0) => {
     if (!speechSynthesisRef.current) return;
     if (interrupt) {
       speechSynthesisRef.current.cancel();
@@ -127,6 +224,7 @@ function BreathingCoach() {
 
     const utterance = new SpeechSynthesisUtterance(text);
     const selectedVoice = getSelectedVoice();
+    const wordOffsets = getWordOffsets(text);
 
     if (selectedVoice) {
       utterance.voice = selectedVoice;
@@ -138,9 +236,29 @@ function BreathingCoach() {
     utterance.rate = 1;
     utterance.pitch = 1;
     utterance.volume = volume;
+
+    utterance.onstart = () => {
+      if (wordOffsets.length > 0) {
+        setCurrentWordIndex(transcriptOffset);
+      }
+    };
+
+    utterance.onboundary = (event: SpeechSynthesisEvent) => {
+      if (typeof event.charIndex !== "number") return;
+      const wordIndex = wordOffsets.findIndex((word, index) => {
+        const start = word.index;
+        const end = index + 1 < wordOffsets.length ? wordOffsets[index + 1].index : text.length;
+        return event.charIndex >= start && event.charIndex < end;
+      });
+      if (wordIndex !== -1) {
+        setCurrentWordIndex(transcriptOffset + wordIndex);
+      }
+    };
+
     if (onEnd) {
       utterance.onend = onEnd;
     }
+
     speechSynthesisRef.current.speak(utterance);
   };
 
@@ -150,12 +268,19 @@ function BreathingCoach() {
       intervalIdRef.current = null;
     }
     eventQueueRef.current = [];
+    setCurrentWordIndex(null);
   };
 
   const stop = () => {
     clearScheduled();
     speechSynthesisRef.current?.cancel();
     setIsRunning(false);
+    setCurrentWordIndex(null);
+  };
+
+  const clearTranscript = () => {
+    setTranscriptWords([]);
+    setCurrentWordIndex(null);
   };
 
   const applyPreset = (index: number) => {
@@ -197,7 +322,7 @@ function BreathingCoach() {
         }
 
         eventQueueRef.current.shift();
-        speak(nextEvent.text, nextEvent.interrupt, nextEvent.volume);
+        speak(nextEvent.text, nextEvent.interrupt, nextEvent.volume, undefined, nextEvent.transcriptOffset ?? 0);
         if (eventQueueRef.current.length === 0) {
           clearScheduled();
           setIsRunning(false);
@@ -210,7 +335,7 @@ function BreathingCoach() {
 
       if (now - lastTickRef.current >= beatDurationRef.current) {
         eventQueueRef.current.shift();
-        speak(nextEvent.text, nextEvent.interrupt, nextEvent.volume);
+        speak(nextEvent.text, nextEvent.interrupt, nextEvent.volume, undefined, nextEvent.transcriptOffset ?? 0);
         if (eventQueueRef.current.length === 0) {
           clearScheduled();
           setIsRunning(false);
@@ -229,21 +354,49 @@ function BreathingCoach() {
     }
 
     stop();
-    setIsRunning(true);
 
-    eventQueueRef.current = [];
-
-    for (let i = 0; i < cycles; i++) {
-      eventQueueRef.current.push(...schedulePhase("Inhale", inhalationCount));
-      eventQueueRef.current.push(...schedulePhase("Hold", holdAfterInhaleCount));
-      eventQueueRef.current.push(...schedulePhase("Exhale", exhalationCount));
-      eventQueueRef.current.push(...schedulePhase("Hold", holdAfterExhaleCount));
-    }
-
-    eventQueueRef.current.push({ text: "Good work.", interrupt: false, volume: 1, pacing: false });
     const startText =
       activePresetIndex !== null ? `Let's begin ${PRESETS[activePresetIndex].name.toLowerCase()}.` : "Let's begin.";
-    speak(startText, true, 1, startScheduler);
+    const events: ScheduledEvent[] = [];
+    let transcriptOffset = 0;
+
+    events.push({
+      text: startText,
+      interrupt: true,
+      volume: 1,
+      pacing: false,
+      transcriptOffset,
+    });
+    transcriptOffset += getWordOffsets(startText).length;
+
+    for (let i = 0; i < cycles; i++) {
+      for (const phase of [
+        schedulePhase("Inhale", inhalationCount),
+        schedulePhase("Hold", holdAfterInhaleCount),
+        schedulePhase("Exhale", exhalationCount),
+        schedulePhase("Hold", holdAfterExhaleCount),
+      ]) {
+        for (const event of phase) {
+          events.push({ ...event, transcriptOffset });
+          transcriptOffset += getWordOffsets(event.text).length;
+        }
+      }
+    }
+
+    events.push({
+      text: "Good work.",
+      interrupt: false,
+      volume: 1,
+      pacing: false,
+      transcriptOffset,
+    });
+
+    setTranscriptWords(buildTranscriptWords(events));
+    setCurrentWordIndex(0);
+    eventQueueRef.current = events;
+    transcriptContainerRef.current?.scrollTo({ top: 0 });
+    setIsRunning(true);
+    startScheduler();
   };
 
   return (
@@ -410,6 +563,44 @@ function BreathingCoach() {
         </section>
       </div>
 
+      <div className="rounded-3xl border border-slate-200 bg-white p-4">
+        <div className="text-sm font-semibold text-slate-500 uppercase">Spoken text</div>
+        <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-slate-50">
+          <div
+            ref={transcriptContainerRef}
+            style={{ height: "7rem" }}
+            className="overflow-y-auto px-3 py-2 text-sm wrap-break-word whitespace-pre-wrap text-slate-700"
+          >
+            {transcriptWords.length === 0 ? (
+              <span className="text-slate-500">The spoken transcript will appear here when you start a session.</span>
+            ) : (
+              transcriptWords.map((token, index) => {
+                const volumeClass =
+                  token.volume >= 1
+                    ? "text-slate-900"
+                    : token.volume >= 0.9
+                      ? "text-slate-700"
+                      : token.volume >= 0.8
+                        ? "text-slate-500"
+                        : "text-slate-400";
+
+                return (
+                  <span key={`${token.word}-${index}`} data-transcript-index={index}>
+                    {token.lineBreakBefore ? <br /> : null}
+                    <span
+                      className={`${volumeClass} ${index === currentWordIndex ? "font-semibold text-slate-900" : ""}`}
+                    >
+                      {token.word}
+                    </span>
+                    {token.lineBreakAfter ? <br /> : " "}
+                  </span>
+                );
+              })
+            )}
+          </div>
+        </div>
+      </div>
+
       <div className="flex flex-wrap items-center gap-3">
         <button
           className="rounded-3xl bg-blue-800 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-900 disabled:cursor-not-allowed disabled:opacity-50"
@@ -425,6 +616,14 @@ function BreathingCoach() {
           type="button"
         >
           Stop
+        </button>
+        <button
+          className="rounded-3xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+          disabled={isRunning || transcriptWords.length === 0}
+          onClick={clearTranscript}
+          type="button"
+        >
+          Clear text
         </button>
       </div>
     </div>
