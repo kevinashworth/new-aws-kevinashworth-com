@@ -20,14 +20,6 @@ const { page, category } = Astro.props as Props;
 
 const currentPage = page.currentPage ?? 1;
 
-const metadata = {
-  title: `Blog posts by category — ${category} ${currentPage > 1 ? ` — page ${currentPage}` : ""}`,
-  robots: {
-    index: blogCategoryRobots?.index,
-    follow: blogCategoryRobots?.follow,
-  },
-};
-
 // Currently, I only have two categories: "Acting" and "Blog", and it's lowercased by the time it gets here.
 let categoryString = category.replaceAll("-", " ");
 switch (category) {
@@ -40,6 +32,14 @@ switch (category) {
   default:
     break;
 }
+
+const metadata = {
+  title: `${categoryString}${currentPage > 1 ? ` — page ${currentPage}` : ""}`,
+  robots: {
+    index: blogCategoryRobots?.index,
+    follow: blogCategoryRobots?.follow,
+  },
+};
 
 const rubric = "Blog Posts by Category";
 const headline = categoryString;
