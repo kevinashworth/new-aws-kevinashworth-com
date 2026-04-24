@@ -1,8 +1,10 @@
 {
   "css.customData": ["./vscode.tailwind.json"],
+  "editor.defaultFormatter": "oxc.oxc-vscode",
   "files.associations": {
     "*.mdx": "markdown",
     "*.css": "tailwindcss"
   },
-  "editor.defaultFormatter": "oxc.oxc-vscode"
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true
 }

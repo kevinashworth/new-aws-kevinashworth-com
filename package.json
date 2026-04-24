@@ -1,8 +1,9 @@
 {
   "name": "kevinashworth.com",
-  "description": "My website, as powered by Astro",
   "version": "2.2.0",
   "private": true,
+  "description": "My website, as powered by Astro",
+  "type": "module",
   "scripts": {
     "dev": "astro dev --host",
     "start": "astro dev",
@@ -16,7 +17,6 @@
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check"
   },
-  "type": "module",
   "dependencies": {
     "@astrojs/check": "0.9.8",
     "@astrojs/react": "5.0.3",

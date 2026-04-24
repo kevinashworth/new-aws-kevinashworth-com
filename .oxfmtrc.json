@@ -11,6 +11,5 @@
     "functions": ["clsx", "cn"],
     "preserveWhitespace": true
   },
-  "sortPackageJson": false,
-  "ignorePatterns": ["dist", "node_modules", ".github", ".changeset", "package.json", "public/_hidden/**/*"]
+  "ignorePatterns": ["public/_hidden/**/*"]
 }
