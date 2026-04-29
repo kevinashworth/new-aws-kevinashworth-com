@@ -1,4 +1,8 @@
-dist
-node_modules
-.github
-.changeset
+# Ignore everything by default
+*
+
+# Re-include the astro files that should be formatted
+!src
+!src/pages
+!src/pages/resume.astro
+!src/pages/web.astro
