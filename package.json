@@ -14,8 +14,14 @@
     "check:types": "tsc --noEmit",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
-    "fmt": "oxfmt",
-    "fmt:check": "oxfmt --check"
+    "fmt": "npm run format:oxc",
+    "fmt:check": "npm run format:oxc:check",
+    "format": "npm run format:oxc && npm run format:prettier",
+    "format:check": "npm run format:oxc:check && npm run format:prettier:check",
+    "format:oxc": "oxfmt --ignore-path .gitignore .",
+    "format:oxc:check": "oxfmt --check --ignore-path .gitignore .",
+    "format:prettier": "prettier --write .",
+    "format:prettier:check": "prettier --check ."
   },
   "dependencies": {
     "@astrojs/check": "0.9.8",
@@ -48,6 +54,8 @@
     "mdast-util-to-string": "4.0.0",
     "oxfmt": "0.44.0",
     "oxlint": "1.59.0",
+    "prettier": "3.8.3",
+    "prettier-plugin-astro": "0.14.1",
     "reading-time": "1.5.0",
     "sass": "1.93.3",
     "tailwind-merge": "3.3.1",
