@@ -2,11 +2,11 @@ import { getPermalink } from "./utils/permalinks";
 
 export const textLinks = [
   { text: "About", href: "/about" },
-  { text: "Acting Resumé", href: "/resume" },
+  { text: "Acting Resumé", href: "/resume/acting" },
   { text: "Acting Updates", href: "/category/acting" },
   { text: "Blog", href: "/blog" },
   { text: "Videos", href: "/videos" },
-  { text: "Web Resumé", href: "/web" },
+  { text: "Web Resumé", href: "/resume/web" },
   { text: "Search", href: "/search" },
 ];
 
