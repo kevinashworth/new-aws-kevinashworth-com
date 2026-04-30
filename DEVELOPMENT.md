@@ -29,9 +29,7 @@ Aliases:
 - `npm run lint:fix` — auto-fix lint issues
 - `npm run check:astro` — run Astro diagnostics
 - `npm run check:types` — run TypeScript checks
-- `npm run check:spell` — run spellcheck with `cspell`
-
-Install CSpell globally. See <https://cspell.org/docs/installation>. If CSpell is not installed globally, use `npx cspell --config cspell.json --no-progress --relative .`.
+- `npm run check:spell` — run spellcheck with CSpell
 
 ## Notes
 
