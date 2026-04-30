@@ -42,7 +42,7 @@ import { UI } from "~/utils/config";
 
   const onLoad = function () {
     let lastKnownScrollPosition = window.scrollY;
-    let ticking = true;
+    let sticking = true;
 
     attachEvent("#header nav", "click", function () {
       document.querySelector("[data-aw-toggle-menu]")?.classList.remove("expanded");
@@ -72,58 +72,29 @@ import { UI } from "~/utils/config";
       localStorage.theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
     });
 
-    attachEvent("[data-aw-social-share]", "click", function (_, elem) {
-      const network = elem.getAttribute("data-aw-social-share");
-      const url = encodeURIComponent(elem.getAttribute("data-aw-url"));
-      const text = encodeURIComponent(elem.getAttribute("data-aw-text"));
-
-      let href;
-      switch (network) {
-        case "facebook":
-          href = `https://www.facebook.com/sharer.php?u=${url}`;
-          break;
-        case "linkedin":
-          href = `https://www.linkedin.com/shareArticle?mini=true&url=${url}&title=${text}`;
-          break;
-        case "whatsapp":
-          href = `https://wa.me/?text=${text}%20${url}`;
-          break;
-        case "mail":
-          href = `mailto:?subject=%22${text}%22&body=${text}%20${url}`;
-          break;
-
-        default:
-          return;
-      }
-
-      const newlink = document.createElement("a");
-      newlink.target = "_blank";
-      newlink.href = href;
-      newlink.click();
-    });
-
     function applyHeaderStylesOnScroll() {
+      const scrollTriggerThreshold = 20;
       const header = document.querySelector("#header[data-aw-sticky-header]");
-      if (lastKnownScrollPosition > 60 && !header.classList.contains("scroll")) {
+      if (lastKnownScrollPosition > scrollTriggerThreshold && !header.classList.contains("scroll")) {
         document.getElementById("header").classList.add("scroll");
-      } else if (lastKnownScrollPosition <= 60 && header.classList.contains("scroll")) {
+      } else if (lastKnownScrollPosition <= scrollTriggerThreshold && header.classList.contains("scroll")) {
         document.getElementById("header").classList.remove("scroll");
       }
-      ticking = false;
+      sticking = false;
     }
     applyHeaderStylesOnScroll();
 
     attachEvent([document], "scroll", function () {
       lastKnownScrollPosition = window.scrollY;
-
-      if (!ticking) {
+      if (!sticking) {
         window.requestAnimationFrame(() => {
           applyHeaderStylesOnScroll();
         });
-        ticking = true;
+        sticking = true;
       }
     });
   };
+
   const onPageShow = function () {
     document.documentElement.classList.add("motion-safe:scroll-smooth");
     const elem = document.querySelector("[data-aw-toggle-menu]");

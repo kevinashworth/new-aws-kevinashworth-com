@@ -3,6 +3,10 @@
 
 # Re-include the astro files that should be formatted
 !src
+!src/components/
+!src/components/common
+!src/components/common/BasicScripts.astro
 !src/pages
-!src/pages/resume.astro
-!src/pages/web.astro
+!src/pages/resume
+!src/pages/resume/acting.astro
+!src/pages/resume/web.astro

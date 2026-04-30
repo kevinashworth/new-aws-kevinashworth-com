@@ -3,7 +3,7 @@ import Layout from "~/layouts/PageLayout.astro";
 
 import "./_web.css";
 
-const lastModified = "October 4, 2025";
+const lastModified = "April 4, 2026";
 
 const metadata = {
   title: "My web resumé",
@@ -12,75 +12,78 @@ const metadata = {
 ---
 
 <Layout metadata={metadata}>
-  <div class="mx-2">
-    <div class="mx-auto mb-4 max-w-3xl">
-      <div class="resume">
-        <div class="mt-4 text-sm">
-          <span class="text-xl font-bold"><a href="/">Kevin Ashworth</a></span><br />
-          <span class="text-base">Front-End Developer</span><br />
+  <div class="resume-page">
+    <div class="resume-container">
+      <div class="resume-block">
+        <div class="resume-intro">
+          <span class="resume-name"><a href="/">Kevin Ashworth</a></span><br />
+          <span class="resume-title">Front-End Developer</span><br />
           <a href="mailto:kevinashworth@gmail.com">kevinashworth@gmail.com</a><br />
           310-993-7136<br />
           <a href="https://github.com/kevinashworth">GitHub</a>,
           <a href="https://www.linkedin.com/in/iamkevinashworth/">LinkedIn</a>
         </div>
-        <div class="heading">Objective</div>
-        <p>Seeking full-time opportunities to apply my varied background to web projects and mobile apps.</p>
-        <div class="heading">Summary of Qualifications</div>
-        <p class="mb-2">
+        <div class="resume-section-heading">Objective</div>
+        <p class="resume-body">
+          Seeking full-time opportunities to apply my varied background to web projects and mobile apps.
+        </p>
+        <div class="resume-section-heading">Summary of Qualifications</div>
+        <p class="resume-body">
           Adept at <span class="font-semibold">React and the modern web</span>, full-stack JavaScript. Reliant on good
           code structure, patience, reference to documentation.
         </p>
-        <p class="mb-2">
+        <p class="resume-body">
           Passionate about user interfaces, an advocate for designing user experience first and foremost. An engineer
           who can design, a designer who can build.
         </p>
-        <p>
+        <p class="resume-body">
           Quick learner, able to take on problems outside direct area of expertise and be successful. Easy-going,
           skillful communicator, empathetic and thoughtful, in technical and non-technical communication.
           Detail-oriented, zealous about quality.
         </p>
-        <div class="heading">Education</div>
-        <p><b>Cornell University</b>, Master of Engineering, 3.86 GPA</p>
-        <p>
+        <div class="resume-section-heading">Education</div>
+        <p class="resume-body">
+          <b>Cornell University</b>, Master of Engineering, 3.86 GPA<br />
           <b>Brigham Young University</b>, Bachelor of Science in Electrical Engineering, cum laude, 3.78 GPA<br />
         </p>
-        <div class="heading">Skills</div>
+        <div class="resume-section-heading">Skills</div>
         <div>
-          <p>
-            <span class="font-semibold">Front-End Development:</span> CSS, HTML, JavaScript; TypeScript, React, <span
-              class="text-nowrap">Tailwind CSS</span
-            >, <span class="text-nowrap">TanStack Query</span> and <span class="text-nowrap">TanStack Table</span>,
-            React Hook Form, Zod, Zustand
+          <p class="resume-body">
+            <span class="font-semibold">Front-End Development:</span> CSS, HTML, JavaScript; TypeScript, React,
+            <span class="text-nowrap">Tailwind CSS</span>, <span class="text-nowrap">TanStack Query</span> and
+            <span class="text-nowrap">TanStack Table</span>, React Hook Form, Zod, Zustand
           </p>
 
-          <p><span class="font-semibold">Mobile Development:</span> React-Native, Expo</p>
+          <p class="resume-body"><span class="font-semibold">Mobile Development:</span> React-Native, Expo</p>
 
-          <p><span class="font-semibold">Testing &amp; Debugging:</span> Cypress, Vitest, Jest, DevTools, Postman</p>
+          <p class="resume-body">
+            <span class="font-semibold">Testing &amp; Debugging:</span> Cypress, Vitest, Jest, DevTools, Postman
+          </p>
 
-          <p>
+          <p class="resume-body">
             <span class="font-semibold">Development Tools:</span> Git, Docker, Bitbucket, GitHub, NodeJS, Agile/Scrum methodologies
           </p>
         </div>
       </div>
 
-      <div class="resume">
-        <div class="heading">Full-Time Experience</div>
+      <div class="resume-block">
+        <div class="resume-section-heading">Experience</div>
       </div>
 
-      <div class="resume flex flex-col gap-8">
+      <div class="resume-stack resume-entry-stack">
         <div>
-          <div class="flex flex-row justify-between">
-            <div class="text-base font-bold">FreshLime &amp; GotYou, Lehi UT (full-time, remote)</div>
-            <div class="text-sm font-medium">2021 &ndash; current position</div>
+          <div class="resume-row">
+            <div class="resume-item-title">FreshLime &amp; GotYou, Lehi UT (full-time, remote)</div>
+            <div class="resume-item-date">2021 &ndash; current position</div>
           </div>
 
-          <div class="font-medium">Mobile App Developer</div>
-          <p class="font-serif text-base">
+          <div class="resume-item-subtitle">Mobile App Developer</div>
+          <p class="resume-body">
             Successfully transitioned to mobile app development utilizing React Native and Expo, contributing
             significantly to the re-launch of our flagship iOS/Android app for the customers of GotYou businesses.
           </p>
-          <p class="font-serif text-base">Played a key role in modernizing the UI and improving performance:</p>
-          <ul class="mb-4 font-serif text-base">
+          <p class="resume-body">Played a key role in modernizing the UI and improving performance:</p>
+          <ul class="resume-list">
             <li>
               Designed and implemented a new section of the mobile app called the Daily Deal, resulting in <span
                 class="font-semibold"
@@ -89,15 +92,14 @@ const metadata = {
               </span>.
             </li>
             <li>
-              Migrated our process from Expo Go to development builds, incorporating <code class="text-sm text-nowrap"
-                >expo-font</code
-              >, <code class="text-sm text-nowrap">expo-notifications</code>, and other libraries not available in Expo
-              Go.
+              Migrated our process from Expo Go to development builds, incorporating <code class="text-sm text-nowrap">
+                expo-font
+              </code>, <code class="text-sm text-nowrap">expo-notifications</code>, and other libraries not available in
+              Expo Go.
             </li>
             <li>Migrated app from email authentication to mobile OTP sign in.</li>
             <li>
-              Used state management with <code class="text-sm text-nowrap">easy-peasy</code> to improve code quality and
-              maintainability.
+              Used state management with <code class="text-sm text-nowrap">easy-peasy</code> to improve code quality and maintainability.
             </li>
             <li>
               Contributed to the documentation of new features and best practices for React Native development within
@@ -105,22 +107,22 @@ const metadata = {
             </li>
           </ul>
 
-          <div class="font-medium">Front-End Web Developer</div>
-          <p class="font-serif text-base">
-            In a challenging, under-funded startup environment, <span class="font-semibold"
-              >selected the front-end tech stack, built, and maintained</span
-            >
+          <div class="resume-item-subtitle">Front-End Web Developer</div>
+          <p class="resume-body">
+            In a challenging, under-funded startup environment, <span class="font-semibold">
+              selected the front-end tech stack, built, and maintained
+            </span>
             a new web application to manage small-business owner accounts and billing.
           </p>
-          <p class="mb-0 pb-0 font-serif text-base">
+          <p class="resume-body">
             Also maintained and improved a pre-existing React JavaScript Material-UI web app from the sister business,
             which had been built for similar purposes.
           </p>
-          <p class="font-serif text-base">
+          <p class="resume-body">
             Led the development of a completely new, fully-type-checked React TypeScript Tailwind web app, proactively
             addressing design gaps and implementing missing UI elements to ensure a polished UX:
           </p>
-          <ul class="font-serif text-base">
+          <ul class="resume-list">
             <li>Ensured front-end launched successfully and on time.</li>
             <li>
               Filled in design details such as missing icons and overlooked UI elements, and error handling and most of
@@ -135,12 +137,12 @@ const metadata = {
         </div>
 
         <div>
-          <b>Ab Initio Software, Lexington MA</b><br />
-          <span class="font-medium">User-Interface Designer</span><br />
-          <p class="font-serif text-base">
+          <div class="resume-item-title">Ab Initio Software, Lexington MA</div>
+          <div class="resume-item-subtitle">User-Interface Designer</div>
+          <p class="resume-body">
             Responsible for design of software applications, internal and external web sites, and web applications.
           </p>
-          <ul class="font-serif text-base">
+          <ul class="resume-list">
             <li>
               <span class="font-semibold">Improved the previously-engineer-designed interface</span> of main web application,
               resulting in a good-looking UI loved by managers, customers, and even engineers.
@@ -155,10 +157,10 @@ const metadata = {
         </div>
 
         <div>
-          <b>Circle.com, New York NY</b><br />
-          <span class="font-medium">Production Manager</span><br />
-          <p class="font-serif text-base">Responsible for workload and personal growth of programmers.</p>
-          <ul class="mb-0 list-inside list-disc pb-0 font-serif text-base">
+          <div class="resume-item-title">Circle.com, New York NY</div>
+          <div class="resume-item-subtitle">Production Manager</div>
+          <p class="resume-body">Responsible for workload and personal growth of programmers.</p>
+          <ul class="resume-list">
             <li>Managed group of 5 programmers.</li>
             <li>Hired 1 full-time and 6 freelance programmers.</li>
             <li>
@@ -166,20 +168,20 @@ const metadata = {
               design directors, technologists at other offices and many client representatives.
             </li>
           </ul>
-          <div class="font-serif text-base">
+          <div class="resume-body">
             Partial client list: Schlumberger, Newsweek, HBO Screening Room, AOL @ School, Goldman Sachs intranet,
             NetMarket, IBM intranet, Datek, Univision, Gateway.
           </div>
         </div>
 
         <div>
-          <b>Hewlett-Packard, San Diego CA</b><br />
-          <span class="font-medium">Electrical Engineer, Design</span>
-          <p class="font-serif text-base">
+          <div class="resume-item-title">Hewlett-Packard, San Diego CA</div>
+          <div class="resume-item-subtitle">Electrical Engineer, Design</div>
+          <p class="resume-body">
             Responsible for design of power supply for a new color copier product, prototype electronics, design of
             copy-controlling functionality and mechanical interface for sensors and heater.
           </p>
-          <ul class="list-inside list-disc font-serif text-base">
+          <ul class="resume-list">
             <li>
               Created performance and regulatory specification and defined technical criteria to evaluate vendor
               qualifications, resulting in selection and implementation of a power supply used world-wide.
@@ -192,14 +194,14 @@ const metadata = {
               Redesigned paper sensor circuit, thus ensuring a smooth production ramp with no shutdowns for this sensor.
             </li>
           </ul>
-          <br />
-          <span class="font-medium">Electrical Engineer, Manufacturing</span>
-          <p class="font-serif text-base">
+
+          <div class="resume-item-subtitle">Electrical Engineer, Manufacturing</div>
+          <p class="resume-body">
             Responsible for main electronics boards for three printer and copier products, seeing to design quality,
             cost and reliability improvements, warranty performance and support issues; also responsible for
             production-line issues.
           </p>
-          <ul class="list-inside list-disc font-serif text-base">
+          <ul class="resume-list">
             <li>
               Improved functional test of electronics board at contract manufacturer through improvements to test
               software, eliminating 2 failure modes of the board at top-level factory.
@@ -213,39 +215,41 @@ const metadata = {
         </div>
       </div>
 
-      <div class="resume">
-        <div class="heading">Side Projects</div>
+      <div class="resume-block">
+        <div class="resume-section-heading">Side Projects</div>
       </div>
 
-      <div class="resume flex flex-col gap-8">
+      <div class="resume-stack resume-entry-stack">
         <div>
-          <b>Civic Tech Index</b><br />
-          <span class="font-medium">Front-End Developer</span><br />
-          <p class="font-serif text-base">
+          <div class="resume-item-title">Civic Tech Index</div>
+          <div class="resume-item-subtitle">Front-End Developer</div>
+          <p class="resume-body">
             Open-source React project from <a href="https://www.hackforla.org">Hack For LA</a>
           </p>
-          <ul class="font-serif text-base">
+          <ul class="resume-list">
             <li>Brought cohesion to team’s use of Material-UI</li>
             <li>Wrote Cypress tests, expanding code coverage from 50% to 91%</li>
             <li>Wrote and edited documentation</li>
             <li>
               Within a month, became <a
-                href="https://github.com/civictechindex/CTI-website-frontend/graphs/contributors">main contributor</a
+                href="https://github.com/civictechindex/CTI-website-frontend/graphs/contributors"
               >
+                main contributor
+              </a>
             </li>
           </ul>
         </div>
 
         <div>
-          “<b><a href="https://github.com/kevinashworth/Octave">Octave</a></b>”<br />
-          <span class="font-medium">Full-stack developer</span><br />
-          <p class="font-serif text-base">React+GraphQL SPA, large side project</p>
-          <ul class="font-serif text-base">
+          <div class="resume-item-title"><a href="https://github.com/kevinashworth/Octave">Octave</a></div>
+          <div class="resume-item-subtitle">Full-Stack Developer</div>
+          <p class="resume-body">React+GraphQL SPA, large side project</p>
+          <ul class="resume-list">
             <li>Built with Vulcan, which uses Meteor</li>
             <li>
-              Wrote 71 React <a href="https://github.com/kevinashworth/Octave/tree/main/packages/octave/lib/components"
-                >components</a
-              >
+              Wrote 71 React <a href="https://github.com/kevinashworth/Octave/tree/main/packages/octave/lib/components">
+                components
+              </a>
             </li>
             <li>Used Redux, Apollo, Twilio, and many npm libraries</li>
             <li>Used MongoDB with server-side data denormalization</li>
@@ -253,29 +257,28 @@ const metadata = {
         </div>
       </div>
 
-      <div class="resume">
-        <div class="heading">Additional Skills, Experiences &amp; Interests</div>
+      <div class="resume-block">
+        <div class="resume-section-heading">Additional Skills, Experiences &amp; Interests</div>
       </div>
 
-      <div class="resume flex flex-col gap-8">
+      <div class="resume-stack">
         <div>
-          <div class="smallcaps mb-1 block">LANGUAGES</div>
-          <div class="font-serif text-base">Conversational Spanish</div>
+          <div class="resume-smallcaps">Languages</div>
+          <div class="resume-body">Conversational Spanish</div>
         </div>
 
         <div>
-          <div class="smallcaps mb-5 block">OTHER PROFESSIONAL EXPERIENCES</div>
-          <ul class="font-serif text-base">
-            <li>Acting teacher in Los Angeles.</li>
-            <li>Television, theater, and commercial actor in Los Angeles.</li>
+          <div class="resume-smallcaps">Other Professional Experiences</div>
+          <ul class="resume-list">
             <li>Electronics teacher at Middlesex Community College.</li>
+            <li>Acting teacher in Los Angeles.</li>
             <li>
-              Music director for Methodist church, chorus member of Boston Symphony Orchestra and
+              Actor in Los Angeles, music director for Methodist church, chorus member of Boston Symphony Orchestra and
               <span class="text-nowrap">La Jolla Symphony</span>, piano teacher, theater administrator in New York.
             </li>
           </ul>
         </div>
-        <div id="centerfoot">Last modified: {lastModified}</div>
+        <div class="resume-footnote">Last modified: {lastModified}</div>
       </div>
     </div>
   </div>

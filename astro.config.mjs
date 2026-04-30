@@ -53,6 +53,11 @@ export default defineConfig({
     },
   },
 
+  redirects: {
+    "/resume": "/resume/acting",
+    "/web": "/resume/web",
+  },
+
   vite: {
     plugins: [tailwindcss()],
     resolve: {
