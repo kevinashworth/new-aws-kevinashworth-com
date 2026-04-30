@@ -1,24 +1,16 @@
 # kevinashworth.com
 
-Personal website and blog built with Astro and a few interactive React islands.
+Personal website and blog built with Astro, Tailwind, and TypeScript. The site includes a blog, static content pages, and a small set of React interactive islands.
 
-## Formatting
+Live site: https://kevinashworth.com
 
-This project intentionally uses **two** formatters:
+## What’s included
 
-- `oxfmt` for fast formatting on supported file types.
-- `prettier` for file types and cases `oxfmt` does not cover (including `.astro`).
+- Astro content pages with Markdown and MDX
+- React / TypeScript interactive widgets in selected sections
+- Tailwind CSS styling
+- `oxfmt` + `prettier` formatting
 
-Use these scripts based on intent:
+## Developer notes
 
-- `npm run format` - run both formatters (`oxfmt` first, then `prettier`).
-- `npm run format:check` - check formatting with both formatters without writing changes.
-- `npm run format:oxc` - run only `oxfmt`.
-- `npm run format:oxc:check` - check only `oxfmt`.
-- `npm run format:prettier` - run only `prettier`.
-- `npm run format:prettier:check` - check only `prettier`.
-
-Compatibility aliases:
-
-- `npm run fmt` -> `npm run format:oxc`
-- `npm run fmt:check` -> `npm run format:oxc:check`
+Tooling and workflow details are kept in [DEVELOPMENT.md](./DEVELOPMENT.md). This README is kept public-facing and concise.

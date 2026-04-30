@@ -1,5 +1,4 @@
 {
-  "css.customData": ["./vscode.tailwind.json"],
   "editor.defaultFormatter": "oxc.oxc-vscode",
   "files.associations": {
     "*.mdx": "markdown",
