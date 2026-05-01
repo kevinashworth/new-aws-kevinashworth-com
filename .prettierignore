@@ -9,4 +9,4 @@
 !src/pages
 !src/pages/resume
 !src/pages/resume/acting.astro
-!src/pages/resume/web.astro
+!src/pages/resume/developer.astro

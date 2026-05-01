@@ -1,13 +1,11 @@
-import { getPermalink } from "./utils/permalinks";
-
 export const textLinks = [
   { text: "About", href: "/about" },
   { text: "Acting Resumé", href: "/resume/acting" },
   { text: "Acting Updates", href: "/category/acting" },
   { text: "Blog", href: "/blog" },
-  { text: "Videos", href: "/videos" },
-  { text: "Web Resumé", href: "/resume/web" },
+  { text: "Developer Resumé", href: "/resume/developer" },
   { text: "Search", href: "/search" },
+  { text: "Videos", href: "/videos" },
 ];
 
 export const headerData = {
@@ -17,11 +15,6 @@ export const headerData = {
 const currentYear = new Date().getFullYear();
 
 export const footerData = {
-  links: [],
-  secondaryLinks: [
-    { text: "Terms", href: getPermalink("/terms") },
-    { text: "Privacy Policy", href: getPermalink("/privacy") },
-  ],
   socialLinks: [
     { ariaLabel: "Bitbucket", icon: "tabler:brand-bitbucket", href: "https://bitbucket.org/kevinashworth" },
     { ariaLabel: "Facebook", icon: "tabler:brand-facebook", href: "https://facebook.com/kevinashworth" },
