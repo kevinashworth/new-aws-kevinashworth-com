@@ -1,151 +1,149 @@
-@layer components {
-  .resume-page {
-    margin-left: 0.5rem;
-    margin-right: 0.5rem;
-    margin-bottom: 2rem;
-  }
+.resume-page {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  margin-bottom: 2rem;
+}
 
-  .resume-container {
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 1rem;
-    max-width: 48rem;
-  }
+.resume-container {
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 1rem;
+  max-width: 48rem;
+}
 
-  .resume-block {
-    font-family: var(--font-sans);
-  }
+.resume-block {
+  font-family: var(--font-sans);
+}
 
-  .resume-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    font-family: var(--font-sans);
-  }
+.resume-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  font-family: var(--font-sans);
+}
 
-  .resume-entry-stack > div > :last-child {
-    margin-bottom: 0;
-  }
+.resume-entry-stack > div > :last-child {
+  margin-bottom: 0;
+}
 
-  .resume-entry-stack > div > .resume-body {
-    margin-top: 0;
-  }
+.resume-entry-stack > div > .resume-body {
+  margin-top: 0;
+}
 
-  .resume-entry-stack > div > .resume-list {
-    margin-top: 0.25rem;
-  }
+.resume-entry-stack > div > .resume-list {
+  margin-top: 0.25rem;
+}
 
-  .resume-entry-stack > div > .resume-list + .resume-item-subtitle,
-  .resume-entry-stack > div > .resume-body + .resume-item-subtitle {
-    margin-top: 0.35rem;
-  }
+.resume-entry-stack > div > .resume-list + .resume-item-subtitle,
+.resume-entry-stack > div > .resume-body + .resume-item-subtitle {
+  margin-top: 0.35rem;
+}
 
-  .resume-intro {
-    margin-top: 1rem;
-    margin-bottom: 1.5rem;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-  }
+.resume-intro {
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
 
-  .resume-name {
-    font-size: 1.25rem;
-    font-weight: 700;
-    line-height: 1.75rem;
-  }
+.resume-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.75rem;
+}
 
-  .resume-title {
-    font-size: 1rem;
-    line-height: 1.5rem;
-    font-weight: 500;
-  }
+.resume-title {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+}
 
-  .resume-section-heading {
-    border-top: 1px solid var(--color-secondary);
-    color: var(--color-secondary);
-    margin-top: 2rem;
-    margin-bottom: 0.5rem;
-    font-size: 0.875rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
+.resume-section-heading {
+  border-top: 1px solid var(--color-secondary);
+  color: var(--color-secondary);
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
 
-  .resume-item-title {
-    font-size: 1.125rem;
-    font-weight: 700;
-    margin-bottom: 0.1rem;
-  }
+.resume-item-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 0.1rem;
+}
 
-  .resume-item-date {
-    font-size: 0.875rem;
-    font-weight: 400;
-  }
+.resume-item-date {
+  font-size: 0.875rem;
+  font-weight: 400;
+}
 
-  .resume-item-subtitle {
-    font-family: var(--font-serif);
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.1rem;
-  }
+.resume-item-subtitle {
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.1rem;
+}
 
-  .resume-row {
-    display: flex;
-    flex-direction: row;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 0.35rem;
-  }
+.resume-row {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.35rem;
+}
 
-  .resume-smallcaps {
-    font-size: 0.875rem;
-    font-weight: 500;
-    text-transform: uppercase;
-  }
+.resume-smallcaps {
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
 
-  .resume-body {
-    margin-bottom: 0.5rem;
-    font-family: var(--font-serif);
-    font-size: 1rem;
-    line-height: 1.4;
-  }
+.resume-body {
+  margin-bottom: 0.5rem;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  line-height: 1.4;
+}
 
-  .resume-body:last-child {
-    margin-bottom: 0;
-  }
+.resume-body:last-child {
+  margin-bottom: 0;
+}
 
-  .resume-list {
-    margin-bottom: 0.5rem;
-    padding-left: 2rem;
-    font-family: var(--font-serif);
-    font-size: 1rem;
-    line-height: 1.625;
-    list-style: circle;
-  }
+.resume-list {
+  margin-bottom: 0.5rem;
+  padding-left: 2rem;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  line-height: 1.625;
+  list-style: circle;
+}
 
-  .resume-footnote {
-    color: #666;
-    font-size: 0.75rem;
-    line-height: 1rem;
-  }
+.resume-footnote {
+  color: #666;
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
 
-  .resume-block a,
-  .resume-stack a {
-    text-decoration: underline;
-    text-underline-offset: 0.12em;
-    text-decoration-thickness: 0.08em;
-  }
+.resume-block a,
+.resume-stack a {
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+  text-decoration-thickness: 0.08em;
+}
 
-  .resume-block a:hover,
-  .resume-stack a:hover {
-    text-decoration-thickness: 0.11em;
-  }
+.resume-block a:hover,
+.resume-stack a:hover {
+  text-decoration-thickness: 0.11em;
+}
 
-  .resume-block code,
-  .resume-stack code {
-    font-family: var(--font-mono);
-    font-size: 0.875em;
-  }
+.resume-block code,
+.resume-stack code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
 }
 
 @media (max-width: 640px) {
