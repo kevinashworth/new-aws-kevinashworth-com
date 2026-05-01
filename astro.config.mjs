@@ -55,7 +55,11 @@ export default defineConfig({
 
   redirects: {
     "/resume": "/resume/acting",
-    "/web": "/resume/web",
+    "/dev": "/resume/developer",
+    "/developer-resume": "/resume/developer",
+    "/developer": "/resume/developer",
+    "/resume/web": "/resume/developer",
+    "/web": "/resume/developer",
   },
 
   vite: {
