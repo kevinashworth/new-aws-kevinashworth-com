@@ -21,7 +21,8 @@
     "format:oxc": "oxfmt --ignore-path .gitignore .",
     "format:oxc:check": "oxfmt --check --ignore-path .gitignore .",
     "format:prettier": "prettier --write .",
-    "format:prettier:check": "prettier --check ."
+    "format:prettier:check": "prettier --check .",
+    "knip": "knip"
   },
   "dependencies": {
     "@astrojs/check": "0.9.9",
@@ -48,9 +49,11 @@
     "@tailwindcss/vite": "4.2.4",
     "@types/js-yaml": "4.0.9",
     "@types/lodash.merge": "4.6.9",
+    "@types/node": "25.6.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "js-yaml": "4.1.1",
+    "knip": "6.11.0",
     "mdast-util-to-string": "4.0.0",
     "oxfmt": "0.47.0",
     "oxlint": "1.62.0",
