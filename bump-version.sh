@@ -5,7 +5,7 @@ set -e
 
 BUMP_TYPE=${1:-patch}
 npm --no-git-tag-version version "$BUMP_TYPE"
-npx genversion --es6 --double --semi version.ts
-git add package.json package-lock.json version.ts
-version=$(node -p 'require("./package.json").version')
+npx genversion --es6 --double --semi src/version.ts
+git add package.json package-lock.json src/version.ts
+version=$(sed -n 's/export const version = "\([^"]*\)";/\1/p' src/version.ts)
 git commit -m "update version to $version"

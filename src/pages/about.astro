@@ -1,16 +1,11 @@
 ---
 import { Icon } from "astro-icon/components";
-import fs from "fs";
-import path from "path";
 
 import Layout from "~/layouts/PageLayout.astro";
 import Rubric from "~/components/blog/Rubric.astro";
 import EmailSignup from "~/components/EmailSignup.astro";
 import { getAsset } from "~/utils/permalinks";
-
-const packageJsonPath = path.resolve(process.cwd(), "package.json");
-const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
-const version = packageJson.version;
+import { version } from "~/version.ts";
 
 const metadata = {
   title: "About me",
