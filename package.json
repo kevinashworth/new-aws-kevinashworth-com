@@ -33,6 +33,7 @@
     "astro": "6.2.1",
     "astro-icon": "1.1.5",
     "astro-pagefind": "1.8.6",
+    "clsx": "2.1.1",
     "limax": "4.2.3",
     "lodash.merge": "4.6.2",
     "react": "19.2.5",
@@ -63,7 +64,8 @@
     "sass": "1.99.0",
     "tailwind-merge": "3.5.0",
     "tailwindcss": "4.2.4",
-    "typescript": "6.0.3"
+    "typescript": "6.0.3",
+    "vite": "^7.3.2"
   },
   "engines": {
     "node": ">=18.14.1"
