@@ -1,14 +1,14 @@
 ---
 import Layout from "~/layouts/PageLayout.astro";
-
+import { fileLastModified } from "~/utils/file";
 import "./developer.css";
-
-const lastModified = "April 30, 2026";
 
 const metadata = {
   title: "Developer Resumé",
   description: "Kevin Ashworth’s Developer Resumé (Front-End Dev)",
 };
+
+const lastModified = fileLastModified(import.meta.url);
 ---
 
 <Layout metadata={metadata}>
