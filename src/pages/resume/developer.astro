@@ -1,14 +1,14 @@
 ---
 import Layout from "~/layouts/PageLayout.astro";
-
+import { fileLastModified } from "~/utils/file";
 import "./developer.css";
-
-const lastModified = "April 30, 2026";
 
 const metadata = {
   title: "Developer Resumé",
   description: "Kevin Ashworth’s Developer Resumé (Front-End Dev)",
 };
+
+const lastModified = fileLastModified(import.meta.url);
 ---
 
 <Layout metadata={metadata}>
@@ -16,10 +16,10 @@ const metadata = {
     <div class="resume-container">
       <div class="resume-block">
         <div class="resume-intro">
-          <span class="resume-name"><a href="/">Kevin Ashworth</a></span><br />
+          <span class="resume-name">Kevin Ashworth</span><br />
           <span class="resume-title">Front-End Developer</span><br />
           <a href="mailto:kevinashworth@gmail.com">kevinashworth@gmail.com</a><br />
-          310-993-7136<br />
+          424-476-6247<br />
           <a href="https://github.com/kevinashworth">GitHub</a>,
           <a href="https://www.linkedin.com/in/iamkevinashworth/">LinkedIn</a>
         </div>
@@ -43,21 +43,28 @@ const metadata = {
         </p>
         <div class="resume-section-heading">Education</div>
         <p class="resume-body">
-          <b>Cornell University</b>, Master of Engineering, 3.86 GPA<br />
-          <b>Brigham Young University</b>, Bachelor of Science in Electrical Engineering, cum laude, 3.78 GPA<br />
+          <b>Cornell University</b>, Master of Engineering, <span class="text-nowrap">3.86 GPA</span><br />
+          <b>Brigham Young University</b>, Bachelor of Science in Electrical Engineering, cum laude, <span
+            class="text-nowrap"
+          >
+            3.78 GPA
+          </span><br />
         </p>
         <div class="resume-section-heading">Skills</div>
         <div>
           <p class="resume-body">
             <span class="font-semibold">Front-End Development:</span> CSS, HTML, JavaScript; TypeScript, React,
             <span class="text-nowrap">Tailwind CSS</span>, <span class="text-nowrap">TanStack Query</span> and
-            <span class="text-nowrap">TanStack Table</span>, React Hook Form, Zod, Zustand
+            <span class="text-nowrap">TanStack Table</span>, <span class="text-nowrap">React Hook Form</span>, Zod,
+            Zustand
           </p>
 
           <p class="resume-body"><span class="font-semibold">Mobile Development:</span> React-Native, Expo</p>
 
           <p class="resume-body">
-            <span class="font-semibold">AI / LLM:</span> Opencode, GitHub Copilot, Cursor, LM Studio
+            <span class="font-semibold">AI / LLM:</span> Opencode, GitHub Copilot, Cursor, <span class="text-nowrap">
+              LM Studio
+            </span>
           </p>
 
           <p class="resume-body">
@@ -75,13 +82,17 @@ const metadata = {
       </div>
 
       <div class="resume-stack resume-entry-stack">
-        <div>
-          <div class="resume-row">
-            <div class="resume-item-title">FreshLime &amp; GotYou, Lehi UT (full-time, remote)</div>
-            <div class="resume-item-date">2021 &ndash; current position</div>
-          </div>
+        <div class="resume-entry">
+          <div class="resume-entry-header">
+            <div class="resume-row">
+              <div class="resume-item-title">
+                FreshLime &amp; GotYou, Lehi UT <span class="text-nowrap">(full-time, remote)</span>
+              </div>
+              <div class="resume-item-date">2021 &ndash; current position</div>
+            </div>
 
-          <div class="resume-item-subtitle">Front-End Web Developer</div>
+            <div class="resume-item-subtitle">Front-End Web Developer</div>
+          </div>
           <p class="resume-body">
             In a challenging, under-funded startup environment, <span class="font-semibold">
               selected the front-end tech stack, built, and maintained
@@ -109,7 +120,9 @@ const metadata = {
             <li>Collaborated with the backend team, and built type-checking for all endpoints.</li>
           </ul>
 
-          <div class="resume-item-subtitle">Mobile App Developer</div>
+          <div class="resume-entry-header">
+            <div class="resume-item-subtitle">Mobile App Developer</div>
+          </div>
           <p class="resume-body">
             Successfully transitioned to mobile app development utilizing React Native and Expo, contributing
             significantly to the re-launch of our flagship iOS/Android app for the customers of GotYou businesses.
@@ -124,14 +137,15 @@ const metadata = {
               </span>.
             </li>
             <li>
-              Migrated our process from Expo Go to development builds, incorporating <code class="text-sm text-nowrap">
-                expo-font
-              </code>, <code class="text-sm text-nowrap">expo-notifications</code>, and other libraries not available in
-              Expo Go.
+              Migrated our process from Expo Go to development builds, incorporating
+              <span class="font-mono text-sm text-nowrap">expo-font</span>,
+              <span class="font-mono text-sm text-nowrap">expo-notifications</span>, and other libraries not available
+              in <span class="text-nowrap">Expo Go</span>.
             </li>
             <li>Migrated app from email authentication to mobile OTP sign in.</li>
             <li>
-              Used state management with <code class="text-sm text-nowrap">easy-peasy</code> to improve code quality and maintainability.
+              Used state management with <span class="font-mono text-sm text-nowrap">easy-peasy</span> to improve code quality
+              and maintainability.
             </li>
             <li>
               Contributed to the documentation of new features and best practices for React Native development within
@@ -140,9 +154,11 @@ const metadata = {
           </ul>
         </div>
 
-        <div>
-          <div class="resume-item-title">Ab Initio Software, Lexington MA</div>
-          <div class="resume-item-subtitle">User-Interface Designer</div>
+        <div class="resume-entry">
+          <div class="resume-entry-header">
+            <div class="resume-item-title">Ab Initio Software, Lexington MA</div>
+            <div class="resume-item-subtitle">User-Interface Designer</div>
+          </div>
           <p class="resume-body">
             Responsible for design of software applications, internal and external web sites, and web applications.
           </p>
@@ -160,9 +176,11 @@ const metadata = {
           </ul>
         </div>
 
-        <div>
-          <div class="resume-item-title">Circle.com, New York NY</div>
-          <div class="resume-item-subtitle">Production Manager</div>
+        <div class="resume-entry">
+          <div class="resume-entry-header">
+            <div class="resume-item-title">Circle.com, New York NY</div>
+            <div class="resume-item-subtitle">Production Manager</div>
+          </div>
           <p class="resume-body">Responsible for workload and personal growth of programmers.</p>
           <ul class="resume-list">
             <li>Managed group of 5 programmers.</li>
@@ -178,9 +196,11 @@ const metadata = {
           </div>
         </div>
 
-        <div>
-          <div class="resume-item-title">Hewlett-Packard, San Diego CA</div>
-          <div class="resume-item-subtitle">Electrical Engineer, Design</div>
+        <div class="resume-entry">
+          <div class="resume-entry-header">
+            <div class="resume-item-title">Hewlett-Packard, San Diego CA</div>
+            <div class="resume-item-subtitle">Electrical Engineer, Design</div>
+          </div>
           <p class="resume-body">
             Responsible for design of power supply for a new color copier product, prototype electronics, design of
             copy-controlling functionality and mechanical interface for sensors and heater.
@@ -199,7 +219,9 @@ const metadata = {
             </li>
           </ul>
 
-          <div class="resume-item-subtitle">Electrical Engineer, Manufacturing</div>
+          <div class="resume-entry-header">
+            <div class="resume-item-subtitle">Electrical Engineer, Manufacturing</div>
+          </div>
           <p class="resume-body">
             Responsible for main electronics boards for three printer and copier products, seeing to design quality,
             cost and reliability improvements, warranty performance and support issues; also responsible for
