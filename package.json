@@ -1,6 +1,6 @@
 {
   "name": "kevinashworth.com",
-  "version": "2.3.7",
+  "version": "2.3.8",
   "private": true,
   "description": "My website, as powered by Astro",
   "type": "module",
@@ -22,7 +22,10 @@
     "format:oxc:check": "oxfmt --check --ignore-path .gitignore .",
     "format:prettier": "prettier --write .",
     "format:prettier:check": "prettier --check .",
-    "knip": "knip"
+    "knip": "knip",
+    "version:patch": "./bump-version.sh patch",
+    "version:minor": "./bump-version.sh minor",
+    "version:major": "./bump-version.sh major"
   },
   "dependencies": {
     "@astrojs/check": "0.9.9",
