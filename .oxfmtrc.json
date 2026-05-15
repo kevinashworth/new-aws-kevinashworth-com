@@ -1,11 +1,37 @@
 {
   "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "bracketSameLine": true,
   "printWidth": 120,
   "semi": true,
   "singleQuote": false,
   "tabWidth": 2,
   "trailingComma": "all",
   "useTabs": false,
+  "sortImports": {
+    "customGroups": [
+      {
+        "groupName": "react-libs",
+        "elementNamePattern": ["react", "react-dom"]
+      }
+    ],
+    "groups": [
+      "react-libs",
+      ["value-builtin", "value-external"],
+      "value-internal",
+      "value-parent",
+      { "newlinesBetween": true },
+      ["value-sibling", "value-index"],
+      "type-import",
+      "type-internal",
+      ["type-parent", "type-sibling", "type-index"],
+      "unknown"
+    ],
+    "ignoreCase": true,
+    "internalPattern": ["~/"],
+    "newlinesBetween": true,
+    "order": "asc",
+    "sortSideEffects": false
+  },
   "sortTailwindcss": {
     "stylesheet": "./src/assets/styles/tailwind.css",
     "functions": ["clsx", "cn"],

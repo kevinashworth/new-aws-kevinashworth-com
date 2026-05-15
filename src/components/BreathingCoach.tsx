@@ -429,8 +429,7 @@ function BreathingCoach() {
                   activePresetIndex === index
                     ? "bg-blue-800 text-white"
                     : "border border-slate-300 text-slate-700 hover:border-slate-400 hover:bg-slate-100"
-                } disabled:cursor-not-allowed disabled:opacity-50`}
-              >
+                } disabled:cursor-not-allowed disabled:opacity-50`}>
                 {preset.name}
               </button>
             ))}
@@ -545,8 +544,7 @@ function BreathingCoach() {
                   className="w-full rounded-xl border border-slate-300 text-sm disabled:cursor-not-allowed disabled:opacity-50"
                   disabled={isRunning}
                   onChange={(e) => setSelectedVoiceName(e.target.value)}
-                  value={selectedVoiceName}
-                >
+                  value={selectedVoiceName}>
                   {voices.length === 0 ? (
                     <option>Loading voices...</option>
                   ) : (
@@ -569,8 +567,7 @@ function BreathingCoach() {
           <div
             ref={transcriptContainerRef}
             style={{ height: "7rem" }}
-            className="overflow-y-auto px-3 py-2 text-sm wrap-break-word whitespace-pre-wrap text-slate-700"
-          >
+            className="overflow-y-auto px-3 py-2 text-sm wrap-break-word whitespace-pre-wrap text-slate-700">
             {transcriptWords.length === 0 ? (
               <span className="text-slate-500">The spoken transcript will appear here when you start a session.</span>
             ) : (
@@ -588,8 +585,7 @@ function BreathingCoach() {
                   <span key={`${token.word}-${index}`} data-transcript-index={index}>
                     {token.lineBreakBefore ? <br /> : null}
                     <span
-                      className={`${volumeClass} ${index === currentWordIndex ? "font-semibold text-slate-900" : ""}`}
-                    >
+                      className={`${volumeClass} ${index === currentWordIndex ? "font-semibold text-slate-900" : ""}`}>
                       {token.word}
                     </span>
                     {token.lineBreakAfter ? <br /> : " "}
@@ -606,23 +602,20 @@ function BreathingCoach() {
           className="rounded-3xl bg-blue-800 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-900 disabled:cursor-not-allowed disabled:opacity-50"
           disabled={isRunning}
           onClick={breathe}
-          type="button"
-        >
+          type="button">
           Start
         </button>
         <button
           className="rounded-3xl bg-red-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-800"
           onClick={stop}
-          type="button"
-        >
+          type="button">
           Stop
         </button>
         <button
           className="rounded-3xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
           disabled={isRunning || transcriptWords.length === 0}
           onClick={clearTranscript}
-          type="button"
-        >
+          type="button">
           Clear text
         </button>
       </div>
