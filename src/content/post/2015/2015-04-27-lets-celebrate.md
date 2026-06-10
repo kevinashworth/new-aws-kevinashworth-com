@@ -26,7 +26,7 @@ tags:
   from.
 </p>
 <p>
-  So now I'm wondering which theater will be the first to use SPT now that it&rsquo;s available here in Los Angeles?
+  So now I'm wondering which theater will be the first to use SPT now that it's available here in Los Angeles?
   Which theater will be the first to use the new 99-Seat Agreement? Who will be the first to use the LA Self-Produced
   Project Code or the new LA 50-Seat Showcase Code? (Hollywood Fringe Festival, perhaps?)
 </p>

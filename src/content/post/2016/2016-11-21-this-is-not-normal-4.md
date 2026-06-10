@@ -11,5 +11,5 @@ tags:
 The Orange-elect eats wheatgrass whole\
 (Not as a juice), from a glass bowl.\
 If we give him a chance,\
-And don&rsquo;t move to France,\
+And don't move to France,\
 We can all say buh-bye to our greenhouse gas goal.
