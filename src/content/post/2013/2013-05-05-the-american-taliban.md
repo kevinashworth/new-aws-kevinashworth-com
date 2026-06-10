@@ -18,7 +18,7 @@ tags:
   <li>Undeterred by new information</li>
   <li>A hostile fear of progress</li>
   <li>A demonization of education</li>
-  <li>A need to control women&rsquo;s bodies</li>
+  <li>A need to control women's bodies</li>
   <li>Severe xenophobia</li>
   <li>Tribal mentality</li>
   <li>Intolerance of dissent</li>
