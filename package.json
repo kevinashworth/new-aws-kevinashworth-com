@@ -28,12 +28,12 @@
     "version:major": "./bump-version.sh major"
   },
   "dependencies": {
-    "@astrojs/check": "0.9.9",
-    "@astrojs/react": "5.0.4",
-    "@astrojs/rss": "4.0.18",
-    "@astrojs/sitemap": "3.7.2",
+    "@astrojs/check": "0.9.12",
+    "@astrojs/react": "7.1.1",
+    "@astrojs/rss": "4.0.19",
+    "@astrojs/sitemap": "3.7.4",
     "@fontsource-variable/inter": "5.2.8",
-    "astro": "6.2.1",
+    "astro": "7.4.2",
     "astro-icon": "1.1.5",
     "astro-pagefind": "1.8.6",
     "clsx": "2.1.1",
@@ -45,7 +45,7 @@
     "unpic": "4.2.2"
   },
   "devDependencies": {
-    "@astrojs/mdx": "5.0.4",
+    "@astrojs/mdx": "8.1.1",
     "@iconify-json/tabler": "1.2.42",
     "@shikijs/transformers": "4.5.0",
     "@tailwindcss/forms": "0.5.11",
@@ -67,7 +67,7 @@
     "sass": "1.105.1",
     "tailwind-merge": "3.7.0",
     "tailwindcss": "4.3.3",
-    "typescript": "7.0.2",
+    "typescript": "6.0.3",
     "vite": "8.3.3"
   },
   "engines": {
