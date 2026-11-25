@@ -1,6 +1,6 @@
 ---
 import Layout from "~/layouts/PageLayoutSansFooter.astro";
-import SearchComponent from "astro-pagefind/components/Search";
+import PagefindConfig from "astro-pagefind/components/PagefindConfig.astro";
 
 const metadata = {
   title: "Search",
@@ -8,62 +8,52 @@ const metadata = {
 ---
 
 <script>
-  // Pagefind search just works out of the box, but these functions are for
-  // updating the URL as well, using the `q` query param as state.
-  function getQueryParam() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const searchQuery = urlParams.get("q");
-    if (searchQuery) {
-      const searchInput = document.querySelector(".pagefind-ui input") as HTMLInputElement;
-      if (searchInput) {
-        searchInput.value = searchQuery;
-        searchInput.dispatchEvent(new Event("input")); // Trigger the input event to start the search
-      }
-    }
-  }
+  // Pagefind search works out of the box; this keeps the `q` query param in
+  // sync with the search box so searches can be linked and survive reloads.
+  const INPUT_SELECTOR = "pagefind-input input.pf-input";
 
-  function handleChange(e: Event) {
-    const input = e.target as HTMLInputElement;
-    const value = input.value;
-    if (value) {
-      const url = new URL(window.location.href);
-      const params = new URLSearchParams(url.search);
-      params.set("q", value);
-      window.history.replaceState({}, "", `${url.pathname}?${params}`);
-    } else {
-      handleClear();
-    }
-  }
-
-  function handleClear() {
+  function syncUrl(value: string) {
     const url = new URL(window.location.href);
-    window.history.replaceState({}, "", `${url.pathname}`);
-  }
-
-  function initializeInput() {
-    const searchInput = document.querySelector(".pagefind-ui input") as HTMLInputElement;
-    if (searchInput) {
-      searchInput.addEventListener("input", handleChange);
+    if (value) {
+      url.searchParams.set("q", value);
+    } else {
+      url.searchParams.delete("q");
     }
+    window.history.replaceState({}, "", url);
   }
 
-  function initializeButton() {
-    const clearButton = document.querySelector(".pagefind-ui button") as HTMLButtonElement;
-    if (clearButton) {
-      clearButton.addEventListener("click", handleClear);
-    }
-  }
-
-  function onPageLoad() {
-    getQueryParam();
+  // The clear button and Escape key empty the input without firing an
+  // `input` event, so read the value after any of these interactions.
+  function syncFromInput() {
     setTimeout(() => {
-      initializeInput();
-      initializeButton();
-    }, 100);
+      const input = document.querySelector<HTMLInputElement>(INPUT_SELECTOR);
+      if (input) syncUrl(input.value);
+    });
   }
 
-  // This method of adding event listeners is copied from what
-  // node_modules/astro-pagefind/src/components/Search.astro does
+  async function onPageLoad() {
+    const host = document.querySelector("pagefind-input");
+    if (!host || host.hasAttribute("data-q-sync")) return;
+    host.setAttribute("data-q-sync", "");
+
+    host.addEventListener("input", syncFromInput);
+    host.addEventListener("click", syncFromInput);
+    host.addEventListener("keydown", (e) => {
+      if ((e as KeyboardEvent).key === "Escape") syncFromInput();
+    });
+
+    const query = new URLSearchParams(window.location.search).get("q");
+    if (!query) return;
+    await customElements.whenDefined("pagefind-input");
+    // The input is rendered once the element connects; wait a frame for it.
+    await new Promise(requestAnimationFrame);
+    const input = document.querySelector<HTMLInputElement>(INPUT_SELECTOR);
+    if (input) {
+      input.value = query;
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+  }
+
   document.addEventListener("astro:page-load", onPageLoad);
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", onPageLoad);
@@ -71,6 +61,39 @@ const metadata = {
     onPageLoad();
   }
 </script>
+
+<style is:global>
+  /* Follow the site's `.dark` class (Pagefind's own hook is data-pf-theme). */
+  .search-pagefind {
+    --pf-font: inherit;
+    --pf-input-height: 52px;
+  }
+  /* Pagefind clips excerpts to one line; let them wrap to show the full
+     excerpt-length of context. Matches Pagefind's specificity boost. */
+  :is(*, #\#):is(*, #\#):is(*, #\#) .search-pagefind .pf-result-excerpt,
+  :is(*, #\#):is(*, #\#):is(*, #\#) .search-pagefind .pf-heading-excerpt {
+    white-space: normal;
+    overflow: visible;
+  }
+  .dark .search-pagefind {
+    --pf-text: #e5e5e5;
+    --pf-text-secondary: #a0a0a0;
+    --pf-text-muted: #949494;
+    --pf-background: transparent;
+    --pf-border: #333;
+    --pf-border-focus: #555;
+    --pf-skeleton: #2a2a2a;
+    --pf-skeleton-shine: #333;
+    --pf-hover: #252525;
+    --pf-mark: #e5e5e5;
+    --pf-scroll-shadow: rgba(255, 255, 255, 0.1);
+    --pf-outline-focus: #58a6ff;
+    --pf-error-bg: #2a1a1a;
+    --pf-error-border: #5c2828;
+    --pf-error-text: #f87171;
+    --pf-error-text-secondary: #ef4444;
+  }
+</style>
 
 <Layout metadata={metadata} disablePagefind={true}>
   <section class="not-prose">
@@ -82,18 +105,12 @@ const metadata = {
         </h1>
       </div>
       <div class="mx-auto mb-12 min-h-48">
-        <SearchComponent
-          id="search"
-          className="pagefind-ui"
-          uiOptions={{
-            autofocus: true,
-            excerptLength: 50,
-            showImages: false,
-            translations: {
-              placeholder: "search my site",
-            },
-          }}
-        />
+        <PagefindConfig excerpt-length={50} />
+        <div class="search-pagefind flex flex-col gap-4">
+          <pagefind-input placeholder="search my site" autofocus></pagefind-input>
+          <pagefind-summary></pagefind-summary>
+          <pagefind-results show-images="false" hide-sub-results></pagefind-results>
+        </div>
       </div>
     </div>
   </section>

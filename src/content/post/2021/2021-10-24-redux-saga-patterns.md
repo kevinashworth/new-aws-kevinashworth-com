@@ -261,8 +261,7 @@ In this case, we are coupled to the service error, so we need to create a servic
 function* rootSagas() {
   yield [
     takeEvery("fetchSomeData_events_error", yourErrorHandlerService),
-    /* ... \*/
-    ,
+    /* ... \*/,
   ];
 }
 ```

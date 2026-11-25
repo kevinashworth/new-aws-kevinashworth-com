@@ -1,5 +1,5 @@
 import fs from "fs";
-import yaml from "js-yaml";
+import { load as loadYaml } from "js-yaml";
 import merge from "lodash.merge";
 
 import type { MetaData } from "~/types";
@@ -59,7 +59,7 @@ export interface AppBlogConfig {
   };
 }
 
-const config = yaml.load(fs.readFileSync("src/config.yaml", "utf8")) as {
+const config = loadYaml(fs.readFileSync("src/config.yaml", "utf8")) as {
   site?: SiteConfig;
   metadata?: MetaDataConfig;
   i18n?: I18NConfig;
