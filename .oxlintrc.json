@@ -4,7 +4,9 @@
   "categories": {
     "correctness": "error"
   },
-  "rules": {},
+  "rules": {
+    "no-unused-vars": ["error", { "ignoreRestSiblings": true }]
+  },
   "env": {
     "builtin": true
   }
