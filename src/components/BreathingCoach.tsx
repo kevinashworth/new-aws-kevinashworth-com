@@ -22,24 +22,50 @@ type ScheduledEvent = {
   transcriptOffset?: number;
 };
 
-// Some voices are "synthetic" and unpleasant, so we filter them out. We also prefer certain voices when available.
+// macOS novelty and Eloquence voices are "synthetic" and unpleasant, so we filter them out by name.
+// (Filtering by voiceURI is unreliable: Firefox and older Safari report every macOS voice, good or bad,
+// as com.apple.speech.synthesis.voice.*, while Chrome uses com.apple.voice.* for the good ones.)
+const DISALLOWED_VOICE_NAMES = new Set([
+  "albert",
+  "bad news",
+  "bahh",
+  "bells",
+  "boing",
+  "bubbles",
+  "cellos",
+  "good news",
+  "jester",
+  "organ",
+  "superstar",
+  "trinoids",
+  "whisper",
+  "wobble",
+  "zarvox",
+  "eddy",
+  "flo",
+  "grandma",
+  "grandpa",
+  "reed",
+  "rocko",
+  "sandy",
+  "shelley",
+]);
+
+const isEnglishVoice = (voice: SpeechSynthesisVoice) => voice.lang.toLowerCase().startsWith("en");
+
 const isAllowedVoice = (voice: SpeechSynthesisVoice) => {
-  const isEnglish = voice.lang.toLowerCase().startsWith("en");
-  if (!isEnglish) return false;
+  if (!isEnglishVoice(voice)) return false;
 
   const uri = (voice.voiceURI ?? "").toLowerCase();
-  if (uri.includes("com.apple")) {
-    if (uri.includes("com.apple.voice")) return true;
-    return false;
-  }
+  if (uri.includes("com.apple.eloquence")) return false;
 
-  return true;
+  // Names may carry a suffix such as "Grandma (English (US))"
+  const baseName = voice.name.split(" (")[0].trim().toLowerCase();
+  return !DISALLOWED_VOICE_NAMES.has(baseName);
 };
 
-const getPreferredVoice = (voices: SpeechSynthesisVoice[]) => {
-  const englishVoices = voices.filter(isAllowedVoice);
-  return englishVoices.find((voice) => voice.name.toLowerCase().includes("karen")) || englishVoices[0] || null;
-};
+const getPreferredVoice = (voices: SpeechSynthesisVoice[]) =>
+  voices.find((voice) => voice.name.toLowerCase().includes("karen")) || voices[0] || null;
 
 type TranscriptWord = {
   word: string;
@@ -59,6 +85,13 @@ const getWordOffsets = (text: string) => {
 
   return offsets;
 };
+
+// Speech-end watchdog: "Let's begin 4-7-8 breathing." (28 chars) gets 3s + 28 * 150ms = 7.2s.
+const UTTERANCE_TIMEOUT_BASE_MS = 3000;
+const UTTERANCE_TIMEOUT_PER_CHAR_MS = 150;
+
+// Pause after cancel() before the next utterance; speaking immediately after a cancel() is unreliable in Firefox.
+const CANCEL_SETTLE_MS = 400;
 
 const isNumeric = (text: string) => /^\d+$/.test(text);
 
@@ -119,6 +152,7 @@ function BreathingCoach() {
 
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [selectedVoiceName, setSelectedVoiceName] = useState<string>("");
+  const [voicesLoaded, setVoicesLoaded] = useState<boolean>(false);
 
   const [transcriptWords, setTranscriptWords] = useState<TranscriptWord[]>([]);
   const [currentWordIndex, setCurrentWordIndex] = useState<number | null>(null);
@@ -129,17 +163,29 @@ function BreathingCoach() {
   const intervalIdRef = useRef<number | null>(null);
   const lastTickRef = useRef<number>(0);
   const speechSynthesisRef = useRef<SpeechSynthesis | null>(null);
+  // The utterance we're waiting on. We track this ourselves rather than trusting synth.speaking, because Firefox
+  // updates speaking asynchronously, and queueing a second utterance while the first is starting hangs its macOS engine.
+  const activeUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  // When we last called cancel(). Firefox needs a moment after cancel() before it will speak again.
+  const lastCancelAtRef = useRef<number>(-Infinity);
+  // Bumped on every Start and Stop, so a word still finishing from an old session can't move the transcript highlight.
+  const sessionIdRef = useRef<number>(0);
 
   const quarterNoteBpm = Math.round(60000 / beatDuration);
 
   const loadVoices = useCallback(() => {
     if (!speechSynthesisRef.current) return;
     const loadedVoices = speechSynthesisRef.current.getVoices();
-    const englishVoices = loadedVoices.filter(isAllowedVoice).sort((a, b) => a.name.localeCompare(b.name));
+    let englishVoices = loadedVoices.filter(isAllowedVoice);
+    // Never let the filter leave the dropdown empty when the browser does have voices.
+    if (englishVoices.length === 0) englishVoices = loadedVoices.filter(isEnglishVoice);
+    if (englishVoices.length === 0) englishVoices = [...loadedVoices];
+    englishVoices.sort((a, b) => a.name.localeCompare(b.name));
     console.group("Available English Voices");
     englishVoices.forEach(logVoice);
     console.groupEnd();
     setVoices(englishVoices);
+    if (loadedVoices.length > 0) setVoicesLoaded(true);
     if (englishVoices.length > 0) {
       const preferred = getPreferredVoice(englishVoices);
       if (preferred) {
@@ -157,7 +203,11 @@ function BreathingCoach() {
       }
     }
 
+    // If the browser never reports any voices, stop showing "Loading voices..." and use its default voice.
+    const voicesTimeoutId = window.setTimeout(() => setVoicesLoaded(true), 3000);
+
     return () => {
+      window.clearTimeout(voicesTimeoutId);
       clearScheduled();
       speechSynthesisRef.current?.cancel();
       if (speechSynthesisRef.current) {
@@ -217,14 +267,16 @@ function BreathingCoach() {
   };
 
   const speak = (text: string, interrupt = false, volume = 1, onEnd?: () => void, transcriptOffset = 0) => {
-    if (!speechSynthesisRef.current) return;
+    const synth = speechSynthesisRef.current;
+    if (!synth) return;
     if (interrupt) {
-      speechSynthesisRef.current.cancel();
+      cancelSpeech();
     }
 
     const utterance = new SpeechSynthesisUtterance(text);
     const selectedVoice = getSelectedVoice();
     const wordOffsets = getWordOffsets(text);
+    const sessionId = sessionIdRef.current;
 
     if (selectedVoice) {
       utterance.voice = selectedVoice;
@@ -238,12 +290,14 @@ function BreathingCoach() {
     utterance.volume = volume;
 
     utterance.onstart = () => {
+      if (sessionId !== sessionIdRef.current) return;
       if (wordOffsets.length > 0) {
         setCurrentWordIndex(transcriptOffset);
       }
     };
 
     utterance.onboundary = (event: SpeechSynthesisEvent) => {
+      if (sessionId !== sessionIdRef.current) return;
       if (typeof event.charIndex !== "number") return;
       const wordIndex = wordOffsets.findIndex((word, index) => {
         const start = word.index;
@@ -255,11 +309,49 @@ function BreathingCoach() {
       }
     };
 
-    if (onEnd) {
-      utterance.onend = onEnd;
-    }
+    let watchdogId: number | undefined;
+    const finish = () => {
+      window.clearTimeout(watchdogId);
+      if (activeUtteranceRef.current === utterance) activeUtteranceRef.current = null;
+    };
 
-    speechSynthesisRef.current.speak(utterance);
+    utterance.onerror = (event: SpeechSynthesisErrorEvent) => {
+      finish();
+      if (event.error === "canceled" || event.error === "interrupted") return;
+      console.warn(
+        `Speech error "${event.error}" speaking "${text}" with`,
+        utterance.voice?.voiceURI ?? "default voice",
+      );
+    };
+
+    utterance.onend = () => {
+      finish();
+      onEnd?.();
+    };
+
+    activeUtteranceRef.current = utterance;
+    synth.speak(utterance);
+
+    // If the engine never reports the end of this utterance (seen with Firefox on macOS), give up on it after a
+    // generous allowance for its length so the session moves on instead of stalling.
+    watchdogId = window.setTimeout(
+      () => {
+        if (activeUtteranceRef.current !== utterance) return;
+        console.warn(`Speech timed out speaking "${text}"; moving on`);
+        cancelSpeech(true);
+      },
+      UTTERANCE_TIMEOUT_BASE_MS + text.length * UTTERANCE_TIMEOUT_PER_CHAR_MS,
+    );
+  };
+
+  // Only cancel when one of our utterances is in flight. We don't trust synth.speaking: Firefox can keep reporting
+  // true after a cancel(), and a second cancel() right before speak() leaves its macOS engine silent.
+  const cancelSpeech = (force = false) => {
+    const synth = speechSynthesisRef.current;
+    if (!synth || (!force && !activeUtteranceRef.current)) return;
+    activeUtteranceRef.current = null;
+    synth.cancel();
+    lastCancelAtRef.current = performance.now();
   };
 
   const clearScheduled = () => {
@@ -271,9 +363,11 @@ function BreathingCoach() {
     setCurrentWordIndex(null);
   };
 
+  // Stop doesn't cancel() the word being spoken: cancelling mid-word leaves Firefox's macOS engine permanently
+  // silent. We stop scheduling and let that one short word finish; a new Start waits for it (see activeUtteranceRef).
   const stop = () => {
+    sessionIdRef.current += 1;
     clearScheduled();
-    speechSynthesisRef.current?.cancel();
     setIsRunning(false);
     setCurrentWordIndex(null);
   };
@@ -316,10 +410,18 @@ function BreathingCoach() {
         return;
       }
 
+      // Never queue a second utterance behind one that hasn't finished (see activeUtteranceRef).
+      if (activeUtteranceRef.current) {
+        return;
+      }
+
+      // Let the engine settle after a cancel() (Stop, then Start again) before speaking.
+      if (now - lastCancelAtRef.current < CANCEL_SETTLE_MS) {
+        lastTickRef.current = now;
+        return;
+      }
+
       if (!nextEvent.pacing) {
-        if (speechSynthesisRef.current?.speaking) {
-          return;
-        }
 
         eventQueueRef.current.shift();
         speak(nextEvent.text, nextEvent.interrupt, nextEvent.volume, undefined, nextEvent.transcriptOffset ?? 0);
@@ -343,6 +445,10 @@ function BreathingCoach() {
         }
 
         lastTickRef.current += beatDurationRef.current;
+        // If a slow utterance made us fall behind, resync instead of rushing through the backlog.
+        if (now - lastTickRef.current > beatDurationRef.current) {
+          lastTickRef.current = now;
+        }
       }
     }, 50);
   };
@@ -546,7 +652,7 @@ function BreathingCoach() {
                   onChange={(e) => setSelectedVoiceName(e.target.value)}
                   value={selectedVoiceName}>
                   {voices.length === 0 ? (
-                    <option>Loading voices...</option>
+                    <option value="">{voicesLoaded ? "Default voice" : "Loading voices..."}</option>
                   ) : (
                     voices.map((voice) => (
                       <option key={voice.voiceURI} value={voice.name}>
