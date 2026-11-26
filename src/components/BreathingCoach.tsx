@@ -155,6 +155,35 @@ const buildTranscriptWords = (events: ScheduledEvent[]) => {
   return tokens;
 };
 
+// Media-player icons (Tabler shapes, inlined: astro-icon can't be used in a React island). Each fills most of its
+// circular button (size-[78%]), so they scale with the button.
+const PlayIcon = () => (
+  <svg aria-hidden="true" viewBox="0 0 24 24" className="size-[75%]" fill="currentColor">
+    <path d="M7 4v16l13 -8z" />
+  </svg>
+);
+const PauseIcon = () => (
+  <svg aria-hidden="true" viewBox="0 0 24 24" className="size-[75%]" fill="currentColor">
+    <rect x="6" y="5" width="4" height="14" rx="1" />
+    <rect x="14" y="5" width="4" height="14" rx="1" />
+  </svg>
+);
+const StopIcon = () => (
+  <svg aria-hidden="true" viewBox="0 0 24 24" className="size-[75%]" fill="currentColor">
+    <rect x="5" y="5" width="14" height="14" rx="1" />
+  </svg>
+);
+
+// Where Resume picks up: the start of the phase that was interrupted, so the listener hears "Exhale, 8, 7…"
+// again rather than a bare "3". If we paused exactly at a phase boundary, that's simply the next phase.
+const getResumeIndex = (events: ScheduledEvent[], nextIndex: number) => {
+  if (nextIndex >= events.length || !events[nextIndex].pacing) return nextIndex;
+  for (let i = nextIndex - 1; i >= 0; i -= 1) {
+    if (!events[i].pacing) return i;
+  }
+  return 0;
+};
+
 function BreathingCoach() {
   const [inhalationCount, setInhalationCount] = useState<number>(4);
   const [holdAfterInhaleCount, setHoldAfterInhaleCount] = useState<number>(7);
@@ -166,6 +195,10 @@ function BreathingCoach() {
   const [activePresetIndex, setActivePresetIndex] = useState<number | null>(0);
 
   const [isRunning, setIsRunning] = useState<boolean>(false);
+  // isRunning stays true while paused: the session still exists and its settings stay locked.
+  const [isPaused, setIsPaused] = useState<boolean>(false);
+  // Set between pressing Stop or Pause and the end of the phrase being spoken (see stop() and pause()).
+  const [finishing, setFinishing] = useState<"stop" | "pause" | null>(null);
 
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [selectedVoiceName, setSelectedVoiceName] = useState<string>("");
@@ -176,7 +209,9 @@ function BreathingCoach() {
 
   const transcriptContainerRef = useRef<HTMLDivElement | null>(null);
   const beatDurationRef = useRef<number>(1000);
-  const eventQueueRef = useRef<ScheduledEvent[]>([]);
+  // The whole session's events, and the index of the next one to speak. Kept (not consumed) so Resume can rewind.
+  const eventsRef = useRef<ScheduledEvent[]>([]);
+  const nextEventIndexRef = useRef<number>(0);
   const intervalIdRef = useRef<number | null>(null);
   const lastTickRef = useRef<number>(0);
   const speechSynthesisRef = useRef<SpeechSynthesis | null>(null);
@@ -327,7 +362,10 @@ function BreathingCoach() {
     let watchdogId: number | undefined;
     const finish = () => {
       window.clearTimeout(watchdogId);
-      if (activeUtteranceRef.current === utterance) activeUtteranceRef.current = null;
+      if (activeUtteranceRef.current === utterance) {
+        activeUtteranceRef.current = null;
+        setFinishing(null);
+      }
     };
 
     utterance.onerror = (event: SpeechSynthesisErrorEvent) => {
@@ -365,26 +403,59 @@ function BreathingCoach() {
     const synth = speechSynthesisRef.current;
     if (!synth || (!force && !activeUtteranceRef.current)) return;
     activeUtteranceRef.current = null;
+    setFinishing(null);
     synth.cancel();
     lastCancelAtRef.current = performance.now();
   };
 
-  const clearScheduled = () => {
+  const stopScheduler = () => {
     if (intervalIdRef.current !== null) {
       window.clearInterval(intervalIdRef.current);
       intervalIdRef.current = null;
     }
-    eventQueueRef.current = [];
+  };
+
+  const clearScheduled = () => {
+    stopScheduler();
+    eventsRef.current = [];
+    nextEventIndexRef.current = 0;
     setCurrentWordIndex(null);
+  };
+
+  const endSession = () => {
+    clearScheduled();
+    setIsRunning(false);
+    setIsPaused(false);
   };
 
   // Stop doesn't cancel() the word being spoken: cancelling mid-word leaves Firefox's macOS engine permanently
   // silent. We stop scheduling and let that one short word finish; a new Start waits for it (see activeUtteranceRef).
   const stop = () => {
     sessionIdRef.current += 1;
-    clearScheduled();
-    setIsRunning(false);
-    setCurrentWordIndex(null);
+    endSession();
+    setFinishing(activeUtteranceRef.current !== null ? "stop" : null);
+  };
+
+  // Pause works like Stop (the current word finishes; no cancel(), see above) but keeps the session's events.
+  const pause = () => {
+    if (!isRunning || isPaused) return;
+    stopScheduler();
+    setIsPaused(true);
+    setFinishing(activeUtteranceRef.current !== null ? "pause" : null);
+  };
+
+  const resume = () => {
+    if (!isRunning || !isPaused) return;
+    const resumeIndex = getResumeIndex(eventsRef.current, nextEventIndexRef.current);
+    nextEventIndexRef.current = resumeIndex;
+    const resumeEvent = eventsRef.current[resumeIndex];
+    if (!resumeEvent) {
+      endSession();
+      return;
+    }
+    setCurrentWordIndex(resumeEvent.transcriptOffset ?? 0);
+    setIsPaused(false);
+    startScheduler();
   };
 
   const applyPreset = (index: number) => {
@@ -413,10 +484,10 @@ function BreathingCoach() {
     lastTickRef.current = performance.now();
     intervalIdRef.current = window.setInterval(() => {
       const now = performance.now();
-      const nextEvent = eventQueueRef.current[0];
+      const events = eventsRef.current;
+      const nextEvent = events[nextEventIndexRef.current];
       if (!nextEvent) {
-        clearScheduled();
-        setIsRunning(false);
+        endSession();
         return;
       }
 
@@ -431,28 +502,26 @@ function BreathingCoach() {
         return;
       }
 
-      if (!nextEvent.pacing) {
-
-        eventQueueRef.current.shift();
+      // Speak the next event; returns false once that was the last one and the session has ended.
+      const speakNext = () => {
+        nextEventIndexRef.current += 1;
         speak(nextEvent.text, nextEvent.interrupt, nextEvent.volume, undefined, nextEvent.transcriptOffset ?? 0);
-        if (eventQueueRef.current.length === 0) {
-          clearScheduled();
-          setIsRunning(false);
-          return;
+        if (nextEventIndexRef.current >= events.length) {
+          endSession();
+          return false;
         }
+        return true;
+      };
+
+      if (!nextEvent.pacing) {
+        if (!speakNext()) return;
 
         lastTickRef.current = now;
         return;
       }
 
       if (now - lastTickRef.current >= beatDurationRef.current) {
-        eventQueueRef.current.shift();
-        speak(nextEvent.text, nextEvent.interrupt, nextEvent.volume, undefined, nextEvent.transcriptOffset ?? 0);
-        if (eventQueueRef.current.length === 0) {
-          clearScheduled();
-          setIsRunning(false);
-          return;
-        }
+        if (!speakNext()) return;
 
         lastTickRef.current += beatDurationRef.current;
         // If a slow utterance made us fall behind, resync instead of rushing through the backlog.
@@ -470,6 +539,7 @@ function BreathingCoach() {
     }
 
     stop();
+    setFinishing(null);
 
     const startText =
       activePresetIndex !== null ? `Let's begin ${PRESETS[activePresetIndex].name.toLowerCase()}.` : "Let's begin.";
@@ -509,11 +579,16 @@ function BreathingCoach() {
 
     setTranscriptWords(buildTranscriptWords(events));
     setCurrentWordIndex(0);
-    eventQueueRef.current = events;
+    eventsRef.current = events;
+    nextEventIndexRef.current = 0;
     transcriptContainerRef.current?.scrollTo({ top: 0 });
     setIsRunning(true);
     startScheduler();
   };
+
+  const playLabel = !isRunning ? "Start" : finishing === "pause" ? "Pausing…" : isPaused ? "Resume" : "Pause";
+  const showPlay = !isRunning || isPaused;
+  const stopLabel = finishing === "stop" ? "Stopping…" : "Stop";
 
   return (
     <div className="space-y-6 rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm shadow-slate-200/20">
@@ -658,7 +733,7 @@ function BreathingCoach() {
               <div className="w-full px-2">
                 <select
                   className="w-full rounded-xl border border-slate-300 text-sm disabled:cursor-not-allowed disabled:opacity-50"
-                  disabled={isRunning}
+                  disabled={isRunning && !isPaused}
                   onChange={(e) => setSelectedVoiceName(e.target.value)}
                   value={selectedVoiceName}>
                   {voices.length === 0 ? (
@@ -713,20 +788,33 @@ function BreathingCoach() {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-3">
+      {/* Media-player style controls: one Play/Pause button (Start, Pause and Resume) plus Stop. */}
+      <div className="flex items-center gap-3 px-6">
         <button
-          className="rounded-3xl bg-blue-800 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-900 disabled:cursor-not-allowed disabled:opacity-50"
-          disabled={isRunning}
-          onClick={breathe}
+          aria-label={playLabel}
+          title={playLabel}
+          className={`flex size-10 items-center justify-center rounded-full bg-blue-700 text-white shadow-sm transition hover:bg-blue-900 disabled:cursor-not-allowed disabled:opacity-50 ${
+            finishing === "pause" ? "animate-pulse disabled:opacity-100" : ""
+          }`}
+          disabled={finishing !== null}
+          onClick={!isRunning ? breathe : isPaused ? resume : pause}
           type="button">
-          Start
+          {showPlay ? <PlayIcon /> : <PauseIcon />}
         </button>
         <button
-          className="rounded-3xl bg-red-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-800"
+          aria-label={stopLabel}
+          title={stopLabel}
+          className={`flex size-10 items-center justify-center rounded-full bg-red-700 text-white shadow-sm transition hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-40 ${
+            finishing === "stop" ? "animate-pulse disabled:opacity-100" : ""
+          }`}
+          disabled={finishing === "stop" || (!isRunning && finishing === null)}
           onClick={stop}
           type="button">
-          Stop
+          <StopIcon />
         </button>
+        <span aria-live="polite" className="text-sm text-slate-500">
+          {finishing === "pause" ? "Pausing…" : finishing === "stop" ? "Stopping…" : isPaused ? "Paused" : ""}
+        </span>
       </div>
     </div>
   );
