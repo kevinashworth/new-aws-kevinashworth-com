@@ -20,26 +20,80 @@ type ScheduledEvent = {
   volume: number;
   pacing: boolean;
   transcriptOffset?: number;
+  rate?: number;
+  pitch?: number;
+  // Which phase a label starts (unset for counts and the opening/closing lines).
+  phase?: Phase;
+  // For a non-pacing event: wait this many beats after the last spoken count before speaking it.
+  delayBeats?: number;
 };
 
-// Some voices are "synthetic" and unpleasant, so we filter them out. We also prefer certain voices when available.
+type Phase = "inhale" | "holdIn" | "exhale" | "holdOut";
+
+// Voice settings for a calmer delivery. Phase labels and the opening/closing lines are slowed and lowered a little.
+// Counts keep the normal rate so they finish within a beat even at fast tempos, and are quieter so the labels lead.
+const CALM_RATE = 0.85;
+const CALM_PITCH = 0.9;
+const COUNT_VOLUME = 0.6;
+
+// Phase labels: the full form for the first FULL_LABEL_CYCLES cycles, then the short form once the listener has
+// the rhythm, as a live coach would. The trailing ellipsis gives a softer, trailing delivery than a full stop
+// (see toSpokenWord). "Exhale" rather than "Breathe out", whose final "t" is a harsh plosive in some voices.
+const FULL_LABEL_CYCLES = 2;
+const PHASE_LABELS: Record<Phase, { full: string; short: string }> = {
+  inhale: { full: "Breathe in…", short: "In…" },
+  holdIn: { full: "Hold…", short: "Hold…" },
+  exhale: { full: "Exhale…", short: "Out…" },
+  holdOut: { full: "Hold…", short: "Hold…" },
+};
+const CLOSING_TEXT = "Well done…";
+// A silent beat after the last count before the closing line, so it doesn't follow the final "1" too closely.
+const CLOSING_DELAY_BEATS = 2;
+
+// macOS novelty and Eloquence voices are "synthetic" and unpleasant, so we filter them out by name.
+// (Filtering by voiceURI is unreliable: Firefox and older Safari report every macOS voice, good or bad,
+// as com.apple.speech.synthesis.voice.*, while Chrome uses com.apple.voice.* for the good ones.)
+const DISALLOWED_VOICE_NAMES = new Set([
+  "albert",
+  "bad news",
+  "bahh",
+  "bells",
+  "boing",
+  "bubbles",
+  "cellos",
+  "good news",
+  "jester",
+  "organ",
+  "superstar",
+  "trinoids",
+  "whisper",
+  "wobble",
+  "zarvox",
+  "eddy",
+  "flo",
+  "grandma",
+  "grandpa",
+  "reed",
+  "rocko",
+  "sandy",
+  "shelley",
+]);
+
+const isEnglishVoice = (voice: SpeechSynthesisVoice) => voice.lang.toLowerCase().startsWith("en");
+
 const isAllowedVoice = (voice: SpeechSynthesisVoice) => {
-  const isEnglish = voice.lang.toLowerCase().startsWith("en");
-  if (!isEnglish) return false;
+  if (!isEnglishVoice(voice)) return false;
 
   const uri = (voice.voiceURI ?? "").toLowerCase();
-  if (uri.includes("com.apple")) {
-    if (uri.includes("com.apple.voice")) return true;
-    return false;
-  }
+  if (uri.includes("com.apple.eloquence")) return false;
 
-  return true;
+  // Names may carry a suffix such as "Grandma (English (US))"
+  const baseName = voice.name.split(" (")[0].trim().toLowerCase();
+  return !DISALLOWED_VOICE_NAMES.has(baseName);
 };
 
-const getPreferredVoice = (voices: SpeechSynthesisVoice[]) => {
-  const englishVoices = voices.filter(isAllowedVoice);
-  return englishVoices.find((voice) => voice.name.toLowerCase().includes("karen")) || englishVoices[0] || null;
-};
+const getPreferredVoice = (voices: SpeechSynthesisVoice[]) =>
+  voices.find((voice) => voice.name.toLowerCase().includes("karen")) || voices[0] || null;
 
 type TranscriptWord = {
   word: string;
@@ -60,6 +114,32 @@ const getWordOffsets = (text: string) => {
   return offsets;
 };
 
+// Speech-end watchdog: "Let's begin 4-7-8 breathing." (28 chars) gets 3s + 28 * 150ms = 7.2s.
+const UTTERANCE_TIMEOUT_BASE_MS = 3000;
+const UTTERANCE_TIMEOUT_PER_CHAR_MS = 150;
+
+// Pause after cancel() before the next utterance; speaking immediately after a cancel() is unreliable in Firefox.
+const CANCEL_SETTLE_MS = 400;
+
+// What the voice is given for one displayed word. Hyphens between digits become spaces, because some voices read
+// "4-7-8" as "four seven dash eight"; "4 7 8" is read as "four seven eight".
+// A trailing "…" becomes a comma: a comma reliably gives a soft, continuing intonation, while some voices may
+// read an ellipsis character aloud or treat it as a hard stop.
+const toSpokenWord = (word: string) => word.replace(/(\d)-(?=\d)/g, "$1 ").replace(/…$/, ",");
+
+// Builds the text to speak from the displayed text, and records where each displayed word starts in it, so boundary
+// events (whose charIndex refers to the spoken text) still highlight the right displayed word.
+const toSpeech = (text: string) => {
+  const spokenStarts: number[] = [];
+  let spokenText = "";
+  for (const { word } of getWordOffsets(text)) {
+    if (spokenText) spokenText += " ";
+    spokenStarts.push(spokenText.length);
+    spokenText += toSpokenWord(word);
+  }
+  return { spokenText, spokenStarts };
+};
+
 const isNumeric = (text: string) => /^\d+$/.test(text);
 
 const buildTranscriptWords = (events: ScheduledEvent[]) => {
@@ -70,16 +150,16 @@ const buildTranscriptWords = (events: ScheduledEvent[]) => {
     const words = getWordOffsets(event.text);
     const nextEvent = events[i + 1];
     const isStartText = i === 0 && event.text.includes(" ");
-    const isGoodWork = event.text.toLowerCase().startsWith("good work");
-    const isCycleStart = event.text === "Inhale" && i > 1;
-    const isNextGoodWork = nextEvent?.text.toLowerCase().startsWith("good work");
+    const isClosing = event.text === CLOSING_TEXT;
+    const isCycleStart = event.phase === "inhale" && i > 1;
+    const isNextClosing = nextEvent?.text === CLOSING_TEXT;
 
     for (let wordIndex = 0; wordIndex < words.length; wordIndex += 1) {
       const isLastWord = wordIndex === words.length - 1;
       let lineBreakAfter = false;
       let lineBreakBefore = isCycleStart && wordIndex === 0;
 
-      if (isLastWord && (isStartText || isGoodWork || isNextGoodWork)) {
+      if (isLastWord && (isStartText || isClosing || isNextClosing)) {
         lineBreakAfter = true;
       }
 
@@ -87,7 +167,7 @@ const buildTranscriptWords = (events: ScheduledEvent[]) => {
         isLastWord &&
         isNumeric(event.text) &&
         i > 0 &&
-        events[i - 1].text === "Exhale" &&
+        events[i - 1].phase === "exhale" &&
         (!nextEvent || !isNumeric(nextEvent.text))
       ) {
         lineBreakAfter = true;
@@ -105,41 +185,89 @@ const buildTranscriptWords = (events: ScheduledEvent[]) => {
   return tokens;
 };
 
+// Media-player icons (Tabler shapes, inlined: astro-icon can't be used in a React island). Each fills most of its
+// circular button (size-[78%]), so they scale with the button.
+const PlayIcon = () => (
+  <svg aria-hidden="true" viewBox="0 0 24 24" className="size-[75%]" fill="currentColor">
+    <path d="M7 4v16l13 -8z" />
+  </svg>
+);
+const PauseIcon = () => (
+  <svg aria-hidden="true" viewBox="0 0 24 24" className="size-[75%]" fill="currentColor">
+    <rect x="6" y="5" width="4" height="14" rx="1" />
+    <rect x="14" y="5" width="4" height="14" rx="1" />
+  </svg>
+);
+const StopIcon = () => (
+  <svg aria-hidden="true" viewBox="0 0 24 24" className="size-[75%]" fill="currentColor">
+    <rect x="5" y="5" width="14" height="14" rx="1" />
+  </svg>
+);
+
+// Where Resume picks up: the start of the phase that was interrupted, so the listener hears "Exhale, 8, 7…"
+// again rather than a bare "3". If we paused exactly at a phase boundary, that's simply the next phase.
+const getResumeIndex = (events: ScheduledEvent[], nextIndex: number) => {
+  if (nextIndex >= events.length || !events[nextIndex].pacing) return nextIndex;
+  for (let i = nextIndex - 1; i >= 0; i -= 1) {
+    if (!events[i].pacing) return i;
+  }
+  return 0;
+};
+
 function BreathingCoach() {
   const [inhalationCount, setInhalationCount] = useState<number>(4);
   const [holdAfterInhaleCount, setHoldAfterInhaleCount] = useState<number>(7);
   const [exhalationCount, setExhalationCount] = useState<number>(8);
   const [holdAfterExhaleCount, setHoldAfterExhaleCount] = useState<number>(0);
-  const [cycles, setCycles] = useState<number>(2);
+  const [cycles, setCycles] = useState<number>(10);
   const [beatDuration, setBeatDuration] = useState<number>(1000);
 
   const [activePresetIndex, setActivePresetIndex] = useState<number | null>(0);
 
   const [isRunning, setIsRunning] = useState<boolean>(false);
+  // isRunning stays true while paused: the session still exists and its settings stay locked.
+  const [isPaused, setIsPaused] = useState<boolean>(false);
+  // Set between pressing Stop or Pause and the end of the phrase being spoken (see stop() and pause()).
+  const [finishing, setFinishing] = useState<"stop" | "pause" | null>(null);
 
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
   const [selectedVoiceName, setSelectedVoiceName] = useState<string>("");
+  const [voicesLoaded, setVoicesLoaded] = useState<boolean>(false);
 
   const [transcriptWords, setTranscriptWords] = useState<TranscriptWord[]>([]);
   const [currentWordIndex, setCurrentWordIndex] = useState<number | null>(null);
 
   const transcriptContainerRef = useRef<HTMLDivElement | null>(null);
   const beatDurationRef = useRef<number>(1000);
-  const eventQueueRef = useRef<ScheduledEvent[]>([]);
+  // The whole session's events, and the index of the next one to speak. Kept (not consumed) so Resume can rewind.
+  const eventsRef = useRef<ScheduledEvent[]>([]);
+  const nextEventIndexRef = useRef<number>(0);
   const intervalIdRef = useRef<number | null>(null);
   const lastTickRef = useRef<number>(0);
   const speechSynthesisRef = useRef<SpeechSynthesis | null>(null);
+  // The utterance we're waiting on. We track this ourselves rather than trusting synth.speaking, because Firefox
+  // updates speaking asynchronously, and queueing a second utterance while the first is starting hangs its macOS engine.
+  const activeUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  // When we last called cancel(). Firefox needs a moment after cancel() before it will speak again.
+  const lastCancelAtRef = useRef<number>(-Infinity);
+  // Bumped on every Start and Stop, so a word still finishing from an old session can't move the transcript highlight.
+  const sessionIdRef = useRef<number>(0);
 
   const quarterNoteBpm = Math.round(60000 / beatDuration);
 
   const loadVoices = useCallback(() => {
     if (!speechSynthesisRef.current) return;
     const loadedVoices = speechSynthesisRef.current.getVoices();
-    const englishVoices = loadedVoices.filter(isAllowedVoice).sort((a, b) => a.name.localeCompare(b.name));
+    let englishVoices = loadedVoices.filter(isAllowedVoice);
+    // Never let the filter leave the dropdown empty when the browser does have voices.
+    if (englishVoices.length === 0) englishVoices = loadedVoices.filter(isEnglishVoice);
+    if (englishVoices.length === 0) englishVoices = [...loadedVoices];
+    englishVoices.sort((a, b) => a.name.localeCompare(b.name));
     console.group("Available English Voices");
     englishVoices.forEach(logVoice);
     console.groupEnd();
     setVoices(englishVoices);
+    if (loadedVoices.length > 0) setVoicesLoaded(true);
     if (englishVoices.length > 0) {
       const preferred = getPreferredVoice(englishVoices);
       if (preferred) {
@@ -157,7 +285,11 @@ function BreathingCoach() {
       }
     }
 
+    // If the browser never reports any voices, stop showing "Loading voices..." and use its default voice.
+    const voicesTimeoutId = window.setTimeout(() => setVoicesLoaded(true), 3000);
+
     return () => {
+      window.clearTimeout(voicesTimeoutId);
       clearScheduled();
       speechSynthesisRef.current?.cancel();
       if (speechSynthesisRef.current) {
@@ -216,15 +348,25 @@ function BreathingCoach() {
     return availableVoices.find((voice) => voice.name === selectedVoiceName) || null;
   };
 
-  const speak = (text: string, interrupt = false, volume = 1, onEnd?: () => void, transcriptOffset = 0) => {
-    if (!speechSynthesisRef.current) return;
+  const speak = (
+    text: string,
+    interrupt = false,
+    volume = 1,
+    onEnd?: () => void,
+    transcriptOffset = 0,
+    rate = 1,
+    pitch = 1,
+  ) => {
+    const synth = speechSynthesisRef.current;
+    if (!synth) return;
     if (interrupt) {
-      speechSynthesisRef.current.cancel();
+      cancelSpeech();
     }
 
-    const utterance = new SpeechSynthesisUtterance(text);
+    const { spokenText, spokenStarts } = toSpeech(text);
+    const utterance = new SpeechSynthesisUtterance(spokenText);
     const selectedVoice = getSelectedVoice();
-    const wordOffsets = getWordOffsets(text);
+    const sessionId = sessionIdRef.current;
 
     if (selectedVoice) {
       utterance.voice = selectedVoice;
@@ -233,54 +375,125 @@ function BreathingCoach() {
       utterance.lang = "en-US";
     }
 
-    utterance.rate = 1;
-    utterance.pitch = 1;
+    utterance.rate = rate;
+    utterance.pitch = pitch;
     utterance.volume = volume;
 
     utterance.onstart = () => {
-      if (wordOffsets.length > 0) {
+      if (sessionId !== sessionIdRef.current) return;
+      if (spokenStarts.length > 0) {
         setCurrentWordIndex(transcriptOffset);
       }
     };
 
     utterance.onboundary = (event: SpeechSynthesisEvent) => {
+      if (sessionId !== sessionIdRef.current) return;
       if (typeof event.charIndex !== "number") return;
-      const wordIndex = wordOffsets.findIndex((word, index) => {
-        const start = word.index;
-        const end = index + 1 < wordOffsets.length ? wordOffsets[index + 1].index : text.length;
-        return event.charIndex >= start && event.charIndex < end;
-      });
+      // The displayed word is the last one starting at or before charIndex in the spoken text.
+      let wordIndex = -1;
+      for (let i = 0; i < spokenStarts.length && spokenStarts[i] <= event.charIndex; i += 1) wordIndex = i;
       if (wordIndex !== -1) {
         setCurrentWordIndex(transcriptOffset + wordIndex);
       }
     };
 
-    if (onEnd) {
-      utterance.onend = onEnd;
-    }
+    let watchdogId: number | undefined;
+    const finish = () => {
+      window.clearTimeout(watchdogId);
+      if (activeUtteranceRef.current === utterance) {
+        activeUtteranceRef.current = null;
+        setFinishing(null);
+      }
+    };
 
-    speechSynthesisRef.current.speak(utterance);
+    utterance.onerror = (event: SpeechSynthesisErrorEvent) => {
+      finish();
+      if (event.error === "canceled" || event.error === "interrupted") return;
+      console.warn(
+        `Speech error "${event.error}" speaking "${text}" with`,
+        utterance.voice?.voiceURI ?? "default voice",
+      );
+    };
+
+    utterance.onend = () => {
+      finish();
+      onEnd?.();
+    };
+
+    activeUtteranceRef.current = utterance;
+    synth.speak(utterance);
+
+    // If the engine never reports the end of this utterance (seen with Firefox on macOS), give up on it after a
+    // generous allowance for its length so the session moves on instead of stalling.
+    watchdogId = window.setTimeout(
+      () => {
+        if (activeUtteranceRef.current !== utterance) return;
+        console.warn(`Speech timed out speaking "${text}"; moving on`);
+        cancelSpeech(true);
+      },
+      UTTERANCE_TIMEOUT_BASE_MS + text.length * UTTERANCE_TIMEOUT_PER_CHAR_MS,
+    );
   };
 
-  const clearScheduled = () => {
+  // Only cancel when one of our utterances is in flight. We don't trust synth.speaking: Firefox can keep reporting
+  // true after a cancel(), and a second cancel() right before speak() leaves its macOS engine silent.
+  const cancelSpeech = (force = false) => {
+    const synth = speechSynthesisRef.current;
+    if (!synth || (!force && !activeUtteranceRef.current)) return;
+    activeUtteranceRef.current = null;
+    setFinishing(null);
+    synth.cancel();
+    lastCancelAtRef.current = performance.now();
+  };
+
+  const stopScheduler = () => {
     if (intervalIdRef.current !== null) {
       window.clearInterval(intervalIdRef.current);
       intervalIdRef.current = null;
     }
-    eventQueueRef.current = [];
+  };
+
+  const clearScheduled = () => {
+    stopScheduler();
+    eventsRef.current = [];
+    nextEventIndexRef.current = 0;
     setCurrentWordIndex(null);
   };
 
-  const stop = () => {
+  const endSession = () => {
     clearScheduled();
-    speechSynthesisRef.current?.cancel();
     setIsRunning(false);
-    setCurrentWordIndex(null);
+    setIsPaused(false);
   };
 
-  const clearTranscript = () => {
-    setTranscriptWords([]);
-    setCurrentWordIndex(null);
+  // Stop doesn't cancel() the word being spoken: cancelling mid-word leaves Firefox's macOS engine permanently
+  // silent. We stop scheduling and let that one short word finish; a new Start waits for it (see activeUtteranceRef).
+  const stop = () => {
+    sessionIdRef.current += 1;
+    endSession();
+    setFinishing(activeUtteranceRef.current !== null ? "stop" : null);
+  };
+
+  // Pause works like Stop (the current word finishes; no cancel(), see above) but keeps the session's events.
+  const pause = () => {
+    if (!isRunning || isPaused) return;
+    stopScheduler();
+    setIsPaused(true);
+    setFinishing(activeUtteranceRef.current !== null ? "pause" : null);
+  };
+
+  const resume = () => {
+    if (!isRunning || !isPaused) return;
+    const resumeIndex = getResumeIndex(eventsRef.current, nextEventIndexRef.current);
+    nextEventIndexRef.current = resumeIndex;
+    const resumeEvent = eventsRef.current[resumeIndex];
+    if (!resumeEvent) {
+      endSession();
+      return;
+    }
+    setCurrentWordIndex(resumeEvent.transcriptOffset ?? 0);
+    setIsPaused(false);
+    startScheduler();
   };
 
   const applyPreset = (index: number) => {
@@ -293,12 +506,16 @@ function BreathingCoach() {
     setCycles(preset.cycles);
   };
 
-  const schedulePhase = (label: string, seconds: number) => {
+  const schedulePhase = (phase: Phase, seconds: number, cycleIndex: number) => {
     if (seconds <= 0) return [];
 
-    const events: ScheduledEvent[] = [{ text: label, interrupt: true, volume: 1, pacing: false }];
+    const labels = PHASE_LABELS[phase];
+    const label = cycleIndex < FULL_LABEL_CYCLES ? labels.full : labels.short;
+    const events: ScheduledEvent[] = [
+      { text: label, interrupt: true, volume: 1, pacing: false, rate: CALM_RATE, pitch: CALM_PITCH, phase },
+    ];
     for (let i = seconds; i >= 1; i--) {
-      events.push({ text: String(i), interrupt: false, volume: 0.8, pacing: true });
+      events.push({ text: String(i), interrupt: false, volume: COUNT_VOLUME, pacing: true });
     }
     return events;
   };
@@ -309,40 +526,61 @@ function BreathingCoach() {
     lastTickRef.current = performance.now();
     intervalIdRef.current = window.setInterval(() => {
       const now = performance.now();
-      const nextEvent = eventQueueRef.current[0];
+      const events = eventsRef.current;
+      const nextEvent = events[nextEventIndexRef.current];
       if (!nextEvent) {
-        clearScheduled();
-        setIsRunning(false);
+        endSession();
         return;
       }
 
-      if (!nextEvent.pacing) {
-        if (speechSynthesisRef.current?.speaking) {
-          return;
-        }
+      // Never queue a second utterance behind one that hasn't finished (see activeUtteranceRef).
+      if (activeUtteranceRef.current) {
+        return;
+      }
 
-        eventQueueRef.current.shift();
-        speak(nextEvent.text, nextEvent.interrupt, nextEvent.volume, undefined, nextEvent.transcriptOffset ?? 0);
-        if (eventQueueRef.current.length === 0) {
-          clearScheduled();
-          setIsRunning(false);
+      // Let the engine settle after a cancel() (Stop, then Start again) before speaking.
+      if (now - lastCancelAtRef.current < CANCEL_SETTLE_MS) {
+        lastTickRef.current = now;
+        return;
+      }
+
+      // Speak the next event; returns false once that was the last one and the session has ended.
+      const speakNext = () => {
+        nextEventIndexRef.current += 1;
+        speak(
+          nextEvent.text,
+          nextEvent.interrupt,
+          nextEvent.volume,
+          undefined,
+          nextEvent.transcriptOffset ?? 0,
+          nextEvent.rate,
+          nextEvent.pitch,
+        );
+        if (nextEventIndexRef.current >= events.length) {
+          endSession();
+          return false;
+        }
+        return true;
+      };
+
+      if (!nextEvent.pacing) {
+        if (nextEvent.delayBeats && now - lastTickRef.current < nextEvent.delayBeats * beatDurationRef.current) {
           return;
         }
+        if (!speakNext()) return;
 
         lastTickRef.current = now;
         return;
       }
 
       if (now - lastTickRef.current >= beatDurationRef.current) {
-        eventQueueRef.current.shift();
-        speak(nextEvent.text, nextEvent.interrupt, nextEvent.volume, undefined, nextEvent.transcriptOffset ?? 0);
-        if (eventQueueRef.current.length === 0) {
-          clearScheduled();
-          setIsRunning(false);
-          return;
-        }
+        if (!speakNext()) return;
 
         lastTickRef.current += beatDurationRef.current;
+        // If a slow utterance made us fall behind, resync instead of rushing through the backlog.
+        if (now - lastTickRef.current > beatDurationRef.current) {
+          lastTickRef.current = now;
+        }
       }
     }, 50);
   };
@@ -354,9 +592,12 @@ function BreathingCoach() {
     }
 
     stop();
+    setFinishing(null);
 
     const startText =
-      activePresetIndex !== null ? `Let's begin ${PRESETS[activePresetIndex].name.toLowerCase()}.` : "Let's begin.";
+      activePresetIndex !== null
+        ? `Let's begin ${PRESETS[activePresetIndex].name.toLowerCase()}…`
+        : "Let's begin…";
     const events: ScheduledEvent[] = [];
     let transcriptOffset = 0;
 
@@ -366,15 +607,17 @@ function BreathingCoach() {
       volume: 1,
       pacing: false,
       transcriptOffset,
+      rate: CALM_RATE,
+      pitch: CALM_PITCH,
     });
     transcriptOffset += getWordOffsets(startText).length;
 
     for (let i = 0; i < cycles; i++) {
       for (const phase of [
-        schedulePhase("Inhale", inhalationCount),
-        schedulePhase("Hold", holdAfterInhaleCount),
-        schedulePhase("Exhale", exhalationCount),
-        schedulePhase("Hold", holdAfterExhaleCount),
+        schedulePhase("inhale", inhalationCount, i),
+        schedulePhase("holdIn", holdAfterInhaleCount, i),
+        schedulePhase("exhale", exhalationCount, i),
+        schedulePhase("holdOut", holdAfterExhaleCount, i),
       ]) {
         for (const event of phase) {
           events.push({ ...event, transcriptOffset });
@@ -384,20 +627,28 @@ function BreathingCoach() {
     }
 
     events.push({
-      text: "Good work.",
+      text: CLOSING_TEXT,
       interrupt: false,
       volume: 1,
       pacing: false,
+      delayBeats: CLOSING_DELAY_BEATS,
       transcriptOffset,
+      rate: CALM_RATE,
+      pitch: CALM_PITCH,
     });
 
     setTranscriptWords(buildTranscriptWords(events));
     setCurrentWordIndex(0);
-    eventQueueRef.current = events;
+    eventsRef.current = events;
+    nextEventIndexRef.current = 0;
     transcriptContainerRef.current?.scrollTo({ top: 0 });
     setIsRunning(true);
     startScheduler();
   };
+
+  const playLabel = !isRunning ? "Start" : finishing === "pause" ? "Pausing…" : isPaused ? "Resume" : "Pause";
+  const showPlay = !isRunning || isPaused;
+  const stopLabel = finishing === "stop" ? "Stopping…" : "Stop";
 
   return (
     <div className="space-y-6 rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-sm shadow-slate-200/20">
@@ -542,11 +793,11 @@ function BreathingCoach() {
               <div className="w-full px-2">
                 <select
                   className="w-full rounded-xl border border-slate-300 text-sm disabled:cursor-not-allowed disabled:opacity-50"
-                  disabled={isRunning}
+                  disabled={isRunning && !isPaused}
                   onChange={(e) => setSelectedVoiceName(e.target.value)}
                   value={selectedVoiceName}>
                   {voices.length === 0 ? (
-                    <option>Loading voices...</option>
+                    <option value="">{voicesLoaded ? "Default voice" : "Loading voices..."}</option>
                   ) : (
                     voices.map((voice) => (
                       <option key={voice.voiceURI} value={voice.name}>
@@ -597,27 +848,33 @@ function BreathingCoach() {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-3">
+      {/* Media-player style controls: one Play/Pause button (Start, Pause and Resume) plus Stop. */}
+      <div className="flex items-center gap-3 px-6">
         <button
-          className="rounded-3xl bg-blue-800 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-900 disabled:cursor-not-allowed disabled:opacity-50"
-          disabled={isRunning}
-          onClick={breathe}
+          aria-label={playLabel}
+          title={playLabel}
+          className={`flex size-10 items-center justify-center rounded-full bg-blue-700 text-white shadow-sm transition hover:bg-blue-900 disabled:cursor-not-allowed disabled:opacity-50 ${
+            finishing === "pause" ? "animate-pulse disabled:opacity-100" : ""
+          }`}
+          disabled={finishing !== null}
+          onClick={!isRunning ? breathe : isPaused ? resume : pause}
           type="button">
-          Start
+          {showPlay ? <PlayIcon /> : <PauseIcon />}
         </button>
         <button
-          className="rounded-3xl bg-red-700 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-800"
+          aria-label={stopLabel}
+          title={stopLabel}
+          className={`flex size-10 items-center justify-center rounded-full bg-red-700 text-white shadow-sm transition hover:bg-red-800 disabled:cursor-not-allowed disabled:opacity-40 ${
+            finishing === "stop" ? "animate-pulse disabled:opacity-100" : ""
+          }`}
+          disabled={finishing === "stop" || (!isRunning && finishing === null)}
           onClick={stop}
           type="button">
-          Stop
+          <StopIcon />
         </button>
-        <button
-          className="rounded-3xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
-          disabled={isRunning || transcriptWords.length === 0}
-          onClick={clearTranscript}
-          type="button">
-          Clear text
-        </button>
+        <span aria-live="polite" className="text-sm text-slate-500">
+          {finishing === "pause" ? "Pausing…" : finishing === "stop" ? "Stopping…" : isPaused ? "Paused" : ""}
+        </span>
       </div>
     </div>
   );
