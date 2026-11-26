@@ -93,6 +93,23 @@ const UTTERANCE_TIMEOUT_PER_CHAR_MS = 150;
 // Pause after cancel() before the next utterance; speaking immediately after a cancel() is unreliable in Firefox.
 const CANCEL_SETTLE_MS = 400;
 
+// What the voice is given for one displayed word. Hyphens between digits become spaces, because some voices read
+// "4-7-8" as "four seven dash eight"; "4 7 8" is read as "four seven eight".
+const toSpokenWord = (word: string) => word.replace(/(\d)-(?=\d)/g, "$1 ");
+
+// Builds the text to speak from the displayed text, and records where each displayed word starts in it, so boundary
+// events (whose charIndex refers to the spoken text) still highlight the right displayed word.
+const toSpeech = (text: string) => {
+  const spokenStarts: number[] = [];
+  let spokenText = "";
+  for (const { word } of getWordOffsets(text)) {
+    if (spokenText) spokenText += " ";
+    spokenStarts.push(spokenText.length);
+    spokenText += toSpokenWord(word);
+  }
+  return { spokenText, spokenStarts };
+};
+
 const isNumeric = (text: string) => /^\d+$/.test(text);
 
 const buildTranscriptWords = (events: ScheduledEvent[]) => {
@@ -273,9 +290,9 @@ function BreathingCoach() {
       cancelSpeech();
     }
 
-    const utterance = new SpeechSynthesisUtterance(text);
+    const { spokenText, spokenStarts } = toSpeech(text);
+    const utterance = new SpeechSynthesisUtterance(spokenText);
     const selectedVoice = getSelectedVoice();
-    const wordOffsets = getWordOffsets(text);
     const sessionId = sessionIdRef.current;
 
     if (selectedVoice) {
@@ -291,7 +308,7 @@ function BreathingCoach() {
 
     utterance.onstart = () => {
       if (sessionId !== sessionIdRef.current) return;
-      if (wordOffsets.length > 0) {
+      if (spokenStarts.length > 0) {
         setCurrentWordIndex(transcriptOffset);
       }
     };
@@ -299,11 +316,9 @@ function BreathingCoach() {
     utterance.onboundary = (event: SpeechSynthesisEvent) => {
       if (sessionId !== sessionIdRef.current) return;
       if (typeof event.charIndex !== "number") return;
-      const wordIndex = wordOffsets.findIndex((word, index) => {
-        const start = word.index;
-        const end = index + 1 < wordOffsets.length ? wordOffsets[index + 1].index : text.length;
-        return event.charIndex >= start && event.charIndex < end;
-      });
+      // The displayed word is the last one starting at or before charIndex in the spoken text.
+      let wordIndex = -1;
+      for (let i = 0; i < spokenStarts.length && spokenStarts[i] <= event.charIndex; i += 1) wordIndex = i;
       if (wordIndex !== -1) {
         setCurrentWordIndex(transcriptOffset + wordIndex);
       }
