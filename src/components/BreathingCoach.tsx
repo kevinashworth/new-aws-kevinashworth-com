@@ -20,7 +20,35 @@ type ScheduledEvent = {
   volume: number;
   pacing: boolean;
   transcriptOffset?: number;
+  rate?: number;
+  pitch?: number;
+  // Which phase a label starts (unset for counts and the opening/closing lines).
+  phase?: Phase;
+  // For a non-pacing event: wait this many beats after the last spoken count before speaking it.
+  delayBeats?: number;
 };
+
+type Phase = "inhale" | "holdIn" | "exhale" | "holdOut";
+
+// Voice settings for a calmer delivery. Phase labels and the opening/closing lines are slowed and lowered a little.
+// Counts keep the normal rate so they finish within a beat even at fast tempos, and are quieter so the labels lead.
+const CALM_RATE = 0.85;
+const CALM_PITCH = 0.9;
+const COUNT_VOLUME = 0.6;
+
+// Phase labels: the full form for the first FULL_LABEL_CYCLES cycles, then the short form once the listener has
+// the rhythm, as a live coach would. The trailing ellipsis gives a softer, trailing delivery than a full stop
+// (see toSpokenWord). "Exhale" rather than "Breathe out", whose final "t" is a harsh plosive in some voices.
+const FULL_LABEL_CYCLES = 2;
+const PHASE_LABELS: Record<Phase, { full: string; short: string }> = {
+  inhale: { full: "Breathe in…", short: "In…" },
+  holdIn: { full: "Hold…", short: "Hold…" },
+  exhale: { full: "Exhale…", short: "Out…" },
+  holdOut: { full: "Hold…", short: "Hold…" },
+};
+const CLOSING_TEXT = "Well done…";
+// A silent beat after the last count before the closing line, so it doesn't follow the final "1" too closely.
+const CLOSING_DELAY_BEATS = 2;
 
 // macOS novelty and Eloquence voices are "synthetic" and unpleasant, so we filter them out by name.
 // (Filtering by voiceURI is unreliable: Firefox and older Safari report every macOS voice, good or bad,
@@ -95,7 +123,9 @@ const CANCEL_SETTLE_MS = 400;
 
 // What the voice is given for one displayed word. Hyphens between digits become spaces, because some voices read
 // "4-7-8" as "four seven dash eight"; "4 7 8" is read as "four seven eight".
-const toSpokenWord = (word: string) => word.replace(/(\d)-(?=\d)/g, "$1 ");
+// A trailing "…" becomes a comma: a comma reliably gives a soft, continuing intonation, while some voices may
+// read an ellipsis character aloud or treat it as a hard stop.
+const toSpokenWord = (word: string) => word.replace(/(\d)-(?=\d)/g, "$1 ").replace(/…$/, ",");
 
 // Builds the text to speak from the displayed text, and records where each displayed word starts in it, so boundary
 // events (whose charIndex refers to the spoken text) still highlight the right displayed word.
@@ -120,16 +150,16 @@ const buildTranscriptWords = (events: ScheduledEvent[]) => {
     const words = getWordOffsets(event.text);
     const nextEvent = events[i + 1];
     const isStartText = i === 0 && event.text.includes(" ");
-    const isGoodWork = event.text.toLowerCase().startsWith("good work");
-    const isCycleStart = event.text === "Inhale" && i > 1;
-    const isNextGoodWork = nextEvent?.text.toLowerCase().startsWith("good work");
+    const isClosing = event.text === CLOSING_TEXT;
+    const isCycleStart = event.phase === "inhale" && i > 1;
+    const isNextClosing = nextEvent?.text === CLOSING_TEXT;
 
     for (let wordIndex = 0; wordIndex < words.length; wordIndex += 1) {
       const isLastWord = wordIndex === words.length - 1;
       let lineBreakAfter = false;
       let lineBreakBefore = isCycleStart && wordIndex === 0;
 
-      if (isLastWord && (isStartText || isGoodWork || isNextGoodWork)) {
+      if (isLastWord && (isStartText || isClosing || isNextClosing)) {
         lineBreakAfter = true;
       }
 
@@ -137,7 +167,7 @@ const buildTranscriptWords = (events: ScheduledEvent[]) => {
         isLastWord &&
         isNumeric(event.text) &&
         i > 0 &&
-        events[i - 1].text === "Exhale" &&
+        events[i - 1].phase === "exhale" &&
         (!nextEvent || !isNumeric(nextEvent.text))
       ) {
         lineBreakAfter = true;
@@ -189,7 +219,7 @@ function BreathingCoach() {
   const [holdAfterInhaleCount, setHoldAfterInhaleCount] = useState<number>(7);
   const [exhalationCount, setExhalationCount] = useState<number>(8);
   const [holdAfterExhaleCount, setHoldAfterExhaleCount] = useState<number>(0);
-  const [cycles, setCycles] = useState<number>(2);
+  const [cycles, setCycles] = useState<number>(10);
   const [beatDuration, setBeatDuration] = useState<number>(1000);
 
   const [activePresetIndex, setActivePresetIndex] = useState<number | null>(0);
@@ -318,7 +348,15 @@ function BreathingCoach() {
     return availableVoices.find((voice) => voice.name === selectedVoiceName) || null;
   };
 
-  const speak = (text: string, interrupt = false, volume = 1, onEnd?: () => void, transcriptOffset = 0) => {
+  const speak = (
+    text: string,
+    interrupt = false,
+    volume = 1,
+    onEnd?: () => void,
+    transcriptOffset = 0,
+    rate = 1,
+    pitch = 1,
+  ) => {
     const synth = speechSynthesisRef.current;
     if (!synth) return;
     if (interrupt) {
@@ -337,8 +375,8 @@ function BreathingCoach() {
       utterance.lang = "en-US";
     }
 
-    utterance.rate = 1;
-    utterance.pitch = 1;
+    utterance.rate = rate;
+    utterance.pitch = pitch;
     utterance.volume = volume;
 
     utterance.onstart = () => {
@@ -468,12 +506,16 @@ function BreathingCoach() {
     setCycles(preset.cycles);
   };
 
-  const schedulePhase = (label: string, seconds: number) => {
+  const schedulePhase = (phase: Phase, seconds: number, cycleIndex: number) => {
     if (seconds <= 0) return [];
 
-    const events: ScheduledEvent[] = [{ text: label, interrupt: true, volume: 1, pacing: false }];
+    const labels = PHASE_LABELS[phase];
+    const label = cycleIndex < FULL_LABEL_CYCLES ? labels.full : labels.short;
+    const events: ScheduledEvent[] = [
+      { text: label, interrupt: true, volume: 1, pacing: false, rate: CALM_RATE, pitch: CALM_PITCH, phase },
+    ];
     for (let i = seconds; i >= 1; i--) {
-      events.push({ text: String(i), interrupt: false, volume: 0.8, pacing: true });
+      events.push({ text: String(i), interrupt: false, volume: COUNT_VOLUME, pacing: true });
     }
     return events;
   };
@@ -505,7 +547,15 @@ function BreathingCoach() {
       // Speak the next event; returns false once that was the last one and the session has ended.
       const speakNext = () => {
         nextEventIndexRef.current += 1;
-        speak(nextEvent.text, nextEvent.interrupt, nextEvent.volume, undefined, nextEvent.transcriptOffset ?? 0);
+        speak(
+          nextEvent.text,
+          nextEvent.interrupt,
+          nextEvent.volume,
+          undefined,
+          nextEvent.transcriptOffset ?? 0,
+          nextEvent.rate,
+          nextEvent.pitch,
+        );
         if (nextEventIndexRef.current >= events.length) {
           endSession();
           return false;
@@ -514,6 +564,9 @@ function BreathingCoach() {
       };
 
       if (!nextEvent.pacing) {
+        if (nextEvent.delayBeats && now - lastTickRef.current < nextEvent.delayBeats * beatDurationRef.current) {
+          return;
+        }
         if (!speakNext()) return;
 
         lastTickRef.current = now;
@@ -542,7 +595,9 @@ function BreathingCoach() {
     setFinishing(null);
 
     const startText =
-      activePresetIndex !== null ? `Let's begin ${PRESETS[activePresetIndex].name.toLowerCase()}.` : "Let's begin.";
+      activePresetIndex !== null
+        ? `Let's begin ${PRESETS[activePresetIndex].name.toLowerCase()}…`
+        : "Let's begin…";
     const events: ScheduledEvent[] = [];
     let transcriptOffset = 0;
 
@@ -552,15 +607,17 @@ function BreathingCoach() {
       volume: 1,
       pacing: false,
       transcriptOffset,
+      rate: CALM_RATE,
+      pitch: CALM_PITCH,
     });
     transcriptOffset += getWordOffsets(startText).length;
 
     for (let i = 0; i < cycles; i++) {
       for (const phase of [
-        schedulePhase("Inhale", inhalationCount),
-        schedulePhase("Hold", holdAfterInhaleCount),
-        schedulePhase("Exhale", exhalationCount),
-        schedulePhase("Hold", holdAfterExhaleCount),
+        schedulePhase("inhale", inhalationCount, i),
+        schedulePhase("holdIn", holdAfterInhaleCount, i),
+        schedulePhase("exhale", exhalationCount, i),
+        schedulePhase("holdOut", holdAfterExhaleCount, i),
       ]) {
         for (const event of phase) {
           events.push({ ...event, transcriptOffset });
@@ -570,11 +627,14 @@ function BreathingCoach() {
     }
 
     events.push({
-      text: "Good work.",
+      text: CLOSING_TEXT,
       interrupt: false,
       volume: 1,
       pacing: false,
+      delayBeats: CLOSING_DELAY_BEATS,
       transcriptOffset,
+      rate: CALM_RATE,
+      pitch: CALM_PITCH,
     });
 
     setTranscriptWords(buildTranscriptWords(events));
