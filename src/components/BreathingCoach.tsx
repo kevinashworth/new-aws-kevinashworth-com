@@ -387,11 +387,6 @@ function BreathingCoach() {
     setCurrentWordIndex(null);
   };
 
-  const clearTranscript = () => {
-    setTranscriptWords([]);
-    setCurrentWordIndex(null);
-  };
-
   const applyPreset = (index: number) => {
     const preset = PRESETS[index];
     setInhalationCount(preset.inhale);
@@ -731,13 +726,6 @@ function BreathingCoach() {
           onClick={stop}
           type="button">
           Stop
-        </button>
-        <button
-          className="rounded-3xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
-          disabled={isRunning || transcriptWords.length === 0}
-          onClick={clearTranscript}
-          type="button">
-          Clear text
         </button>
       </div>
     </div>
